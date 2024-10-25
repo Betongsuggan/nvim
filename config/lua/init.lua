@@ -1,6 +1,6 @@
 return {
   require('settings'),
-  require('theme'),
+  --  require('theme'),
 
   --  -- LSP configs
   --  require('lsp/lsp-config'),
@@ -26,8 +26,8 @@ return {
   --  require('editor/keymappings'),
   --  require('editor/cmp-config'),
   --  require('editor/instant-config'),
-  --  require('editor/telescope-config'),
-  --  require('editor/keymappings'),
+  require('editor/telescope-config'),
+  require('editor/keymappings'),
   --  require('editor/render-markdown'),
   --
   --  -- Buffer configs

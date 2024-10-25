@@ -1,5 +1,5 @@
 {
-  description = "Betongsuggan Neovim flake";
+  description = "Betongsuggan's Neovim flake";
   inputs = {
     nixpkgs = {
       url = "github:NixOS/nixpkgs";
@@ -8,11 +8,13 @@
       url = "github:nix-community/neovim-nightly-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    flake-utils.url = "github:numtide/flake-utils";
   };
-  outputs = { self, nixpkgs, neovim }: 
+  outputs = { self, nixpkgs, neovim, flake-utils }: 
+  flake-utils.lib.eachDefaultSystem (system:
     let
       overlayFlakeInputs = prev: final: {
-        inherit (neovim.packages.x86_64-linux) neovim;
+        inherit (neovim.packages.${system}) neovim;
       };
 
       overlayThisNeovim = prev: final: {
@@ -22,15 +24,17 @@
       };
 
       pkgs = import nixpkgs {
-        system = "x86_64-linux";
+        inherit system;
         overlays = [ overlayFlakeInputs overlayThisNeovim ];
       };
 
+      packageSet = builtins.getAttr system pkgs.packages;
     in {
-      packages.x86_64-linux.default = neovim.packages.x86_64-linux.neovim;
-      apps.x86_64-linux.default = {
+      packages.default = pkgs.myNeovim;
+      apps.default = {
         type = "app";
-        program = "${neovim.packages.x86_64-linux.neovim}/bin/nvim";
+        program = "${pkgs.myNeovim}/bin/nvim";
       };
-    };
+    }
+  );
 }

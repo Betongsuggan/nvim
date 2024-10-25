@@ -1,6 +1,6 @@
 return {
   require('settings'),
-  --  require('theme'),
+  -- require('theme'),
 
   --  -- LSP configs
   --  require('lsp/lsp-config'),

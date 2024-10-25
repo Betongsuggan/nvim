@@ -1,103 +1,156 @@
 { pkgs }:
-with pkgs.vimPlugins; [
-  # Navigation
-  ctrlp
-  bufferline-nvim
-  vim-smoothie
-  telescope-nvim
-  nvim-scrollbar
+{
+  vimPlugins = with pkgs.vimPlugins; [
+    # Navigation
+    ctrlp
+    bufferline-nvim
+    vim-smoothie
+    telescope-nvim
+    nvim-scrollbar
+  
+    # Editor plugins
+    nvim-autopairs
+    feline-nvim
+    nvim-notify
+    vim-illuminate
+  
+    # File tree
+    nvim-tree-lua
+    nvim-web-devicons
+  
+    # Syntax highlighting
+    nvim-treesitter.withAllGrammars
+    nvim-treesitter-textobjects
+  
+    # Keybindings
+    legendary-nvim
+  
+    # Indentation
+    #indent-blankline-nvim
+  
+    # Collaboration
+    #(plugin "jbyuki/instant.nvim")
+  
+    # AI stuff
+    ChatGPT-nvim
+    #pkgs.avante
+  
+    # LSP
+    nvim-lspconfig
+  
+    # null-ls
+    none-ls-nvim
+  
+    ## Show references in a popup
+    #(plugin "wiliamks/nice-reference.nvim")
+    ## Show code actions icon
+    nvim-lightbulb
+    ## Show code actions in popup
+    #(plugin "aznhe21/actions-preview.nvim")
+  
+    # LSP Testing
+    nvim-dap
+    nvim-dap-go
+    neotest
+    neotest-go
+    neotest-plenary
+    vimspector
+  
+    ## Show LSP Processes
+    fidget-nvim
+  
+    # Completions
+    nvim-cmp
+    cmp-nvim-lsp
+    cmp-buffer
+    cmp-path
+    cmp-cmdline
+    cmp-nvim-lua
+    cmp-vsnip
+    cmp-nvim-lsp-signature-help
+    lspkind-nvim
+  
+    # Snippets
+    luasnip
+    cmp_luasnip
+  
+    # Go plugins
+    #(plugin "ray-x/go.nvim")
+    #(plugin "ray-x/guihua.lua")
+  
+    # Haskell plugins
+    haskell-tools-nvim
+  
+    # Nix plugins
+    vim-nix
+  
+    # Rust plugins
+    rust-tools-nvim
+  
+    # Themes
+    #(plugin "ellisonleao/gruvbox.nvim")
+  
+    # Typescript
+    vim-prettier
+  
+    # Lua
+    neodev-nvim
+  
+    # Utils
+    FixCursorHold-nvim
+    plenary-nvim
+    #(plugin "MeanderingProgrammer/render-markdown.nvim")
+  ];
 
-  # Editor plugins
-  nvim-autopairs
-  feline-nvim
-  nvim-notify
-  vim-illuminate
+  runtimeDependencies =with pkgs; [
+    tree-sitter
+    ripgrep
+    curl
 
-  # File tree
-  nvim-tree-lua
-  nvim-web-devicons
+    # Bash
+    nodePackages.bash-language-server
 
-  # Syntax highlighting
-  nvim-treesitter.withAllGrammars
-  nvim-treesitter-textobjects
+    # Go
+    gopls
+    gofumpt
+    gotools
+    golines
+    golangci-lint
+    golangci-lint-langserver
+    #nilaway
 
-  # Keybindings
-  legendary-nvim
+    # Haskell
+    haskell-language-server
+    haskellPackages.hoogle
 
-  # Indentation
-  #indent-blankline-nvim
+    # Java
+    java-language-server
 
-  # Collaboration
-  #(plugin "jbyuki/instant.nvim")
+    # Json
+    nodePackages.vscode-json-languageserver
 
-  # AI stuff
-  ChatGPT-nvim
-  pkgs.avante
+    # Kotlin
+    kotlin-language-server
 
-  # LSP
-  nvim-lspconfig
+    # Lua
+    lua-language-server
 
-  # null-ls
-  none-ls-nvim
+    # Nix
+    nil
+    nixfmt-classic
+    statix
 
-  ## Show references in a popup
-  #(plugin "wiliamks/nice-reference.nvim")
-  ## Show code actions icon
-  nvim-lightbulb
-  ## Show code actions in popup
-  #(plugin "aznhe21/actions-preview.nvim")
+    # Rust
+    rust-analyzer
+    rustfmt
 
-  # LSP Testing
-  nvim-dap
-  nvim-dap-go
-  neotest
-  neotest-go
-  neotest-plenary
-  vimspector
+    # Terraform
+    terraform-ls
 
-  ## Show LSP Processes
-  fidget-nvim
+    # Typescript
+    nodePackages.typescript
+    nodePackages.prettier
+    nodePackages.typescript-language-server
+  ];
+}
 
-  # Completions
-  nvim-cmp
-  cmp-nvim-lsp
-  cmp-buffer
-  cmp-path
-  cmp-cmdline
-  cmp-nvim-lua
-  cmp-vsnip
-  cmp-nvim-lsp-signature-help
-  lspkind-nvim
-
-  # Snippets
-  luasnip
-  cmp_luasnip
-
-  # Go plugins
-  #(plugin "ray-x/go.nvim")
-  #(plugin "ray-x/guihua.lua")
-
-  # Haskell plugins
-  haskell-tools-nvim
-
-  # Nix plugins
-  vim-nix
-
-  # Rust plugins
-  rust-tools-nvim
-
-  # Themes
-  #gruvbox
-  #(plugin "ellisonleao/gruvbox.nvim")
-
-  # Typescript
-  vim-prettier
-
-  # Lua
-  neodev-nvim
-
-  # Utils
-  FixCursorHold-nvim
-  plenary-nvim
-  #(plugin "MeanderingProgrammer/render-markdown.nvim")
-]

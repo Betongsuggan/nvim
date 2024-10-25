@@ -9,12 +9,23 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     flake-utils.url = "github:numtide/flake-utils";
+    plugin-instant = {
+      url = "github:jbyuki/instant.nvim";
+      flake = false;
+    };
   };
-  outputs = { self, nixpkgs, neovim, flake-utils }: 
+  outputs = { self, nixpkgs, neovim, flake-utils, ... }@inputs: 
   flake-utils.lib.eachDefaultSystem (system:
     let
       overlayFlakeInputs = prev: final: {
         inherit (neovim.packages.${system}) neovim;
+
+        vimPlugins = final.vimPlugins // {
+          instant = import ./packages/vimPlugins/instant.nix {
+            src = plugin-instant;
+            pkgs = prev;
+          };
+        };
       };
 
       overlayThisNeovim = prev: final: {

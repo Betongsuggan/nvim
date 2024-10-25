@@ -29,11 +29,11 @@
     #indent-blankline-nvim
   
     # Collaboration
-    #(plugin "jbyuki/instant.nvim")
+    instant
   
     # AI stuff
     ChatGPT-nvim
-    #pkgs.avante
+    pkgs.avante
   
     # LSP
     nvim-lspconfig
@@ -42,11 +42,12 @@
     none-ls-nvim
   
     ## Show references in a popup
-    #(plugin "wiliamks/nice-reference.nvim")
+    nice-reference
+
     ## Show code actions icon
     nvim-lightbulb
     ## Show code actions in popup
-    #(plugin "aznhe21/actions-preview.nvim")
+    actions-preview
   
     # LSP Testing
     nvim-dap
@@ -75,8 +76,8 @@
     cmp_luasnip
   
     # Go plugins
-    #(plugin "ray-x/go.nvim")
-    #(plugin "ray-x/guihua.lua")
+    go-nvim
+    guihua
   
     # Haskell plugins
     haskell-tools-nvim
@@ -88,7 +89,7 @@
     rust-tools-nvim
   
     # Themes
-    #(plugin "ellisonleao/gruvbox.nvim")
+    gruvbox
   
     # Typescript
     vim-prettier
@@ -99,7 +100,7 @@
     # Utils
     FixCursorHold-nvim
     plenary-nvim
-    #(plugin "MeanderingProgrammer/render-markdown.nvim")
+    render-markdown
   ];
 
   runtimeDependencies =with pkgs; [

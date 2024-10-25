@@ -6,9 +6,9 @@ let
     name = "neovimRuntimeDependencies";
     paths = plugins.runtimeDependencies;
   };
-  neovim = pkgs.wrapNeovim pkgs.neovim {
+  neovim = pkgs.wrapNeovim pkgs.neovim-unwrapped {
     configure = {
-      customRC = configuration;
+      customRC = configuration.luaConfig;
       packages.all.start = plugins.vimPlugins;
     };
   };
@@ -16,6 +16,6 @@ in pkgs.writeShellApplication {
   name = "nvim";
   runtimeInputs = [ dependencies ];
   text = ''
-    ${neovim}/bin/nvim "$@"
+    env XDG_CONFIG_HOME=${configuration.configHome} ${neovim}/bin/nvim "$@"
   '';
 }

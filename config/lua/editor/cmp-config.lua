@@ -38,7 +38,7 @@ cmp.setup({
       elseif has_words_before() then
         cmp.complete()
       else
-        fallback()       -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
+        fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
       end
     end, { "i", "s" }),
     ['<S-Tab>'] = cmp.mapping(function()
@@ -50,13 +50,13 @@ cmp.setup({
     end, { "i", "s" })
   }),
   sources = {
-    { name = 'path' },                           -- file paths
-    { name = 'nvim_lsp' },                       -- from language server
-    { name = 'nvim_lsp_signature_help' },        -- display function signatures with current parameter emphasized
+    { name = 'path' },                                       -- file paths
+    { name = 'nvim_lsp' },                                   -- from language server
+    { name = 'nvim_lsp_signature_help' },                    -- display function signatures with current parameter emphasized
     { name = 'nvim_lua',               keyword_length = 2 }, -- complete neovim's Lua runtime API such vim.lsp.*
     { name = 'buffer',                 keyword_length = 2 }, -- source current buffer
     { name = 'vsnip',                  keyword_length = 2 }, -- nvim-cmp source for vim-vsnip
-    { name = 'calc' },                           -- source for math calculation
+    { name = 'calc' },                                       -- source for math calculation
   },
   formatting = {
     fields = { 'menu', 'abbr', 'kind' },

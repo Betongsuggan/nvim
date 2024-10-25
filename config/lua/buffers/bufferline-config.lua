@@ -2,13 +2,13 @@
 
 local keymaps = require('editor/keymappings')
 
-require("bufferline").setup{
-    options = {
-        always_show_bufferline = true,
-        show_buffer_close_icons = true,
-        show_close_icon = false,
-        diagnostics = "nvim_lsp",
-    }
+require("bufferline").setup {
+  options = {
+    always_show_bufferline = true,
+    show_buffer_close_icons = true,
+    show_close_icon = false,
+    diagnostics = "nvim_lsp",
+  }
 }
 
 local function split_buffer(direction)

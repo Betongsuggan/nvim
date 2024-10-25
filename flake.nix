@@ -4,42 +4,87 @@
     nixpkgs = {
       url = "github:NixOS/nixpkgs";
     };
-    neovim = {
-      url = "github:nix-community/neovim-nightly-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     flake-utils.url = "github:numtide/flake-utils";
     plugin-instant = {
       url = "github:jbyuki/instant.nvim";
       flake = false;
     };
+    plugin-gruvbox = {
+      url = "github:ellisonleao/gruvbox.nvim";
+      flake = false;
+    };
+    plugin-render-markdown = {
+      url = "github:MeanderingProgrammer/render-markdown.nvim";
+      flake = false;
+    };
+    plugin-go = {
+      url = "github:ray-x/go.nvim";
+      flake = false;
+    };
+    plugin-guihua = {
+      url = "github:ray-x/guihua.lua";
+      flake = false;
+    };
+    plugin-actions-preview = {
+      url = "github:aznhe21/actions-preview.nvim";
+      flake = false;
+    };
+    plugin-nice-reference = {
+      url = "github:wiliamks/nice-reference.nvim";
+      flake = false;
+    };
+    avante.url = "github:Betongsuggan/avante-nvim-flake/v0.0.8";
   };
-  outputs = { self, nixpkgs, neovim, flake-utils, ... }@inputs: 
+  outputs = { self, nixpkgs, flake-utils, ... }@inputs: 
   flake-utils.lib.eachDefaultSystem (system:
     let
       overlayFlakeInputs = prev: final: {
-        inherit (neovim.packages.${system}) neovim;
-
         vimPlugins = final.vimPlugins // {
-          instant = import ./packages/vimPlugins/instant.nix {
-            src = plugin-instant;
-            pkgs = prev;
+          instant = prev.vimUtils.buildVimPlugin {
+            name = "instant";
+            src = inputs.plugin-instant;
+          };
+          gruvbox = prev.vimUtils.buildVimPlugin {
+            name = "gruvbox";
+            src = inputs.plugin-gruvbox;
+          };
+          render-markdown = prev.vimUtils.buildVimPlugin {
+            name = "render-markdown";
+            src = inputs.plugin-render-markdown;
+          };
+          go-nvim = prev.vimUtils.buildVimPlugin {
+            name = "go-nvim";
+            src = inputs.plugin-go;
+          };
+          guihua = prev.vimUtils.buildVimPlugin {
+            name = "guihua";
+            src = inputs.plugin-guihua;
+          };
+          actions-preview = prev.vimUtils.buildVimPlugin {
+            name = "actions-preview";
+            src = inputs.plugin-actions-preview;
+          };
+          nice-reference = prev.vimUtils.buildVimPlugin {
+            name = "nice-reference";
+            src = inputs.plugin-nice-reference;
           };
         };
       };
 
-      overlayThisNeovim = prev: final: {
+      overlayNeovim = prev: final: {
         myNeovim = import ./packages {
           pkgs = final;
         };
       };
 
-      pkgs = import nixpkgs {
-        inherit system;
-        overlays = [ overlayFlakeInputs overlayThisNeovim ];
+      overlayAvante = prev: final: { 
+        avante = inputs.avante.packages.${prev.system}.default;
       };
 
-      packageSet = builtins.getAttr system pkgs.packages;
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [ overlayFlakeInputs overlayAvante overlayNeovim ];
+      };
     in {
       packages.default = pkgs.myNeovim;
       apps.default = {

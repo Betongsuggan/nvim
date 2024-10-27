@@ -2,15 +2,15 @@ local lsp = require('lspconfig')
 local configs = require 'lspconfig/configs'
 
 if not configs.golangcilsp then
- 	configs.golangcilsp = {
-		default_config = {
-			cmd = {'golangci-lint-langserver'},
-			root_dir = lsp.util.root_pattern('.git', 'go.mod'),
-			init_options = {
-					command = { "golangci-lint", "run", "--out-format", "json", "--issues-exit-code=1" };
-			}
-		};
-	}
+  configs.golangcilsp = {
+    default_config = {
+      cmd = { 'golangci-lint-langserver' },
+      root_dir = lsp.util.root_pattern('.git', 'go.mod'),
+      init_options = {
+        command = { "golangci-lint", "run", "--out-format", "json", "--issues-exit-code=1" },
+      }
+    },
+  }
 end
 
 return function(on_attach, capabilities)
@@ -25,7 +25,7 @@ return function(on_attach, capabilities)
         analyses = {
           unusedparams = true,
           shadow = true,
-          nilaway = true,
+          --nilaway = true,
         },
         staticcheck = true,
       },
@@ -33,6 +33,6 @@ return function(on_attach, capabilities)
   }
 
   lsp.golangci_lint_ls.setup {
-  	filetypes = {'go','gomod'}
+    filetypes = { 'go', 'gomod' }
   }
 end

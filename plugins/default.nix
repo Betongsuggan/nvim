@@ -29,7 +29,7 @@
     #indent-blankline-nvim
   
     # Collaboration
-    instant
+    #instant
   
     # AI stuff
     ChatGPT-nvim
@@ -103,7 +103,7 @@
     render-markdown
   ];
 
-  runtimeDependencies =with pkgs; [
+  runtimeDependencies = with pkgs; [
     tree-sitter
     ripgrep
     curl
@@ -118,7 +118,7 @@
     golines
     golangci-lint
     golangci-lint-langserver
-    #nilaway
+    nilaway
 
     # Haskell
     haskell-language-server

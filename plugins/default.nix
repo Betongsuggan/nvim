@@ -33,7 +33,7 @@
   
     # AI stuff
     ChatGPT-nvim
-    pkgs.avante
+    avante-nvim
   
     # LSP
     nvim-lspconfig

@@ -4,6 +4,9 @@
     nixpkgs = {
       url = "github:NixOS/nixpkgs/nixos-24.11";
     };
+    unstable-nixpkgs = {
+      url = "github:NixOS/nixpkgs/nixos-unstable";
+    };
     flake-utils.url = "github:numtide/flake-utils";
     plugin-instant = {
       url = "github:jbyuki/instant.nvim";
@@ -33,9 +36,8 @@
       url = "github:wiliamks/nice-reference.nvim";
       flake = false;
     };
-    avante.url = "github:Betongsuggan/avante-nvim-flake/v0.0.8";
   };
-  outputs = { self, nixpkgs, flake-utils, ... }@inputs: 
+  outputs = { self, nixpkgs, unstable-nixpkgs, flake-utils, ... }@inputs: 
   flake-utils.lib.eachDefaultSystem (system:
     let
       overlayFlakeInputs = prev: final: {
@@ -71,19 +73,21 @@
         };
       };
 
+      overlayUnstablePackages = prev: final: {
+        avante-nvim = import unstable-nixpkgs {
+          inherit system;
+        }.avante-nvim;
+      };
+
       overlayNeovim = prev: final: {
         myNeovim = import ./packages {
           pkgs = final;
         };
       };
 
-      overlayAvante = prev: final: { 
-        avante = inputs.avante.packages.${prev.system}.default;
-      };
-
       pkgs = import nixpkgs {
         inherit system;
-        overlays = [ overlayFlakeInputs overlayAvante overlayNeovim ];
+        overlays = [ overlayFlakeInputs overlayNeovim overlayUnstablePackages ];
       };
     in {
       packages.default = pkgs.myNeovim;

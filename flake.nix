@@ -2,7 +2,7 @@
   description = "Betongsuggan's Neovim flake";
   inputs = {
     nixpkgs = {
-      url = "github:NixOS/nixpkgs/nixos-24.11";
+      url = "github:NixOS/nixpkgs/nixos-unstable";
     };
     unstable-nixpkgs = {
       url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -73,15 +73,22 @@
         };
       };
 
-      overlayUnstablePackages = prev: final: {
-        avante-nvim = import unstable-nixpkgs {
+      overlayUnstablePackages = prev: final: let 
+        unstables = import unstable-nixpkgs {
           inherit system;
-        }.avante-nvim;
+        };
+      in
+      {
+        avante-nvim = unstables.avante-nvim;
       };
 
-      overlayNeovim = prev: final: {
+      overlayNeovim = prev: final: let 
+        unstables = import unstable-nixpkgs {
+          inherit system;
+        };
+      in{
         myNeovim = import ./packages {
-          pkgs = final;
+          pkgs = unstables;
         };
       };
 

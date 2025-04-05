@@ -1,6 +1,6 @@
 return {
   require('settings'),
-  require('theme'),
+  require('theme').setup(),
 
   -- LSP configs
   require('lsp/lsp-config'),
@@ -16,7 +16,7 @@ return {
   require('visuals/notification-config'),
 
   -- Status bar configs
-  require('statusbar/feline-config'),
+  require('statusbar/lualine-config'),
 
   -- Editor behavior configs
   require('editor/actions-preview-config'),

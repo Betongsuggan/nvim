@@ -2,7 +2,7 @@
 
 local keymaps = require('editor/keymappings')
 
-require 'nvim-tree'.setup {
+require('nvim-tree').setup {
   disable_netrw       = true,
   hijack_netrw        = true,
 
@@ -15,13 +15,14 @@ require 'nvim-tree'.setup {
   update_cwd          = true,
   sync_root_with_cwd  = true,
   respect_buf_cwd     = true,
+
   diagnostics         = {
     enable = true,
     icons = {
-      hint = "",
-      info = "",
-      warning = "",
-      error = "",
+      hint = "💡",
+      info = "💬",
+      warning = "⚠️",
+      error = "🚨",
     }
   },
   update_focused_file = {

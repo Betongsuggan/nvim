@@ -1,92 +1,41 @@
-local gruvbox = require("gruvbox")
--- William Theme
---local backgroundLight = "#191b1d"
---local backgroundDark  = "#111213"
---local borderLight     = "#5e5f60"
---local borderDark      = "#111213"
---local textLight       = "#ffffff"
---local textMid         = "#acacac"
---local textDark        = "#161516"
---local yellowLight     = "#f1f252"
---local yellowDark      = "#1c1d16"
---local redLight        = "#ff5151"
---local redDark         = "#1d1516"
---local organgeLight    = "#71e59f"
---local organgeDark     = "#1d1a17"
---local purpleLight     = "#7f71e5"
---local purpleDark      = "#1f2027"
---local blueLight       = "#71e59f"
---local blueDark        = "#151a1e"
---local greenLight      = "#71e59f"
---local greenDark       = "#151c1a"
+-- theme.lua
+-- Custom theme overrides for Gruvbox + plugin-specific highlight tweaks
 
-gruvbox.setup({
-  palette_overrides = {},
-  overrides = {
-    SignColumn = { bg = "#282828" },
-    DiagnosticSignError = { bg = "#282828" },
-    DiagnosticSignWarn = { bg = "#282828" },
-    DiagnosticSignHint = { bg = "#282828" },
-    DiagnosticSignInfo = { bg = "#282828" },
-    NvimTreeSignColumn = { bg = "#3c3836" },
-  }
-})
-vim.cmd([[ colorscheme gruvbox ]])
+local M = {}
 
-local function set_highlights()
-  local cmd = vim.cmd
+function M.setup()
+  vim.cmd.colorscheme("gruvbox")
 
-  -- Clear existing highlights and set the default background to dark
-  --cmd 'highlight clear'
-  --vim.o.background = 'dark'
-  --cmd 'syntax reset'
+  local colors = require("gruvbox").palette
 
-  -- Define highlight groups
-  --cmd('highlight Title guifg=' .. organgeLight)
-  --cmd('highlight Directory guifg=' .. organgeLight)
-  --cmd('highlight Normal guifg=' .. textLight .. ' guibg=' .. backgroundDark)
-  --cmd('highlight Error guifg=' .. redLight .. ' guibg=' .. backgroundDark)
-  --cmd('highlight StatusLine guifg=' .. textLight .. ' guibg=' .. backgroundDark)
-  --cmd('highlight ScrollBar guifg=' .. textLight .. ' guibg=' .. backgroundLight)
-  --cmd('highlight SignColumn guifg=' .. textLight .. ' guibg=' .. backgroundDark)
+  -- LSP reference highlights (bold + gruvbox colors, no background)
+  vim.api.nvim_set_hl(0, "LspReferenceText", { fg = colors.yellow, bold = true, bg = "NONE" })
+  vim.api.nvim_set_hl(0, "LspReferenceRead", { fg = colors.aqua, bold = true, bg = "NONE" })
+  vim.api.nvim_set_hl(0, "LspReferenceWrite", { fg = colors.orange, bold = true, bg = "NONE" })
 
-  --cmd('highlight Pmenu guifg=' .. textLight .. ' guibg=' .. backgroundDark)
-  --cmd('highlight BufferlienTab guifg=' .. textLight .. ' guibg=' .. backgroundDark)
+  -- Diagnostic sign column background cleanup
+  vim.api.nvim_set_hl(0, "SignColumn", { bg = colors.bg0 })
+  vim.api.nvim_set_hl(0, "DiagnosticSignError", { bg = colors.bg0 })
+  vim.api.nvim_set_hl(0, "DiagnosticSignWarn", { bg = colors.bg0 })
+  vim.api.nvim_set_hl(0, "DiagnosticSignHint", { bg = colors.bg0 })
+  vim.api.nvim_set_hl(0, "DiagnosticSignInfo", { bg = colors.bg0 })
 
-  --cmd('highlight CursorLine guibg=' .. backgroundLight)
-  --cmd('highlight Visual guifg=' .. backgroundDark .. ' guibg=' .. borderLight)
-  --cmd('highlight LineNr guifg=' .. textMid .. ' guibg=' .. backgroundDark)
+  -- NvimTree tweaks to match Gruvbox
+  vim.api.nvim_set_hl(0, "NvimTreeNormal", { bg = colors.bg0, fg = colors.fg1 })
+  vim.api.nvim_set_hl(0, "NvimTreeNormalNC", { bg = colors.bg0, fg = colors.fg1 })
+  vim.api.nvim_set_hl(0, "NvimTreeVertSplit", { bg = colors.bg0, fg = colors.bg1 })
+  vim.api.nvim_set_hl(0, "NvimTreeFolderName", { fg = colors.green, bold = true })
+  vim.api.nvim_set_hl(0, "NvimTreeOpenedFolderName", { fg = colors.yellow, bold = true })
+  vim.api.nvim_set_hl(0, "NvimTreeEmptyFolderName", { fg = colors.gray, italic = true })
 
-  --cmd('highlight Comment guifg=' .. borderLight)
+  vim.api.nvim_set_hl(0, "NvimTreeGitDirty", { fg = colors.yellow })
+  vim.api.nvim_set_hl(0, "NvimTreeGitNew", { fg = colors.green })
+  vim.api.nvim_set_hl(0, "NvimTreeGitDeleted", { fg = colors.red })
+  vim.api.nvim_set_hl(0, "NvimTreeGitStaged", { fg = colors.blue })
+  vim.api.nvim_set_hl(0, "NvimTreeGitMerge", { fg = colors.orange })
 
-  --cmd('highlight Identifier guifg=' .. textLight)
-  --cmd('highlight Constant guifg=' .. blueLight)
-  --cmd('highlight Function guifg=' .. purpleLight)
-  --cmd('highlight Statement guifg=' .. redLight)
-
-  --cmd('highlight Operator guifg=' .. textLight)
-  --cmd('highlight Struct guifg=' .. organgeLight)
-
-  --cmd('highlight Type guifg=' .. organgeLight)
-  --cmd('highlight StorageClass guifg=' .. organgeLight)
-  --cmd('highlight Structure guifg=' .. organgeLight)
-  --cmd('highlight Typedef guifg=' .. organgeLight)
-
-  --cmd('highlight @lsp.type.class guifg=' .. "#ff0000")
-  --cmd('highlight @lsp.type.type guifg=' .. "#ff0000")
-  --cmd('highlight @lsp.type.method guifg=' .. "#ff0000")
-  --cmd('highlight @lsp.type.struct guifg=' .. "#ff0000")
-  --cmd('highlight @lsp.type.comment guifg=' .. "#ff0000")
-  --cmd('highlight @lsp.type.function guifg=' .. "#ff0000")
-  --cmd('highlight @lsp.type.property guifg=' .. "#ff0000")
-  --cmd('highlight @lsp.type.variable guifg=' .. "#ff0000")
-  --cmd('highlight @lsp.type.decorator guifg=' .. "#ff0000")
-  --cmd('highlight @lsp.type.namespace guifg=' .. "#ff0000")
-  --cmd('highlight @lsp.type.parameter guifg=' .. "#ff0000")
-  --cmd('highlight @lsp.type.enumMember guifg=' .. "#ff0000")
-  --cmd('highlight @lsp.type.typeParameter guifg=' .. "#ff0000")
+  vim.api.nvim_set_hl(0, "NvimTreeSymlink", { fg = colors.purple, italic = true })
+  vim.api.nvim_set_hl(0, "NvimTreeExecFile", { fg = colors.aqua, bold = true })
 end
 
--- Apply the highlights when the file is loaded
---set_highlights()
---vim.cmd([[ autocmd ColorScheme * :lua require('vim.lsp.diagnostic')._define_default_signs_and_highlights() ]])
+return M

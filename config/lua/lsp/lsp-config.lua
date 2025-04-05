@@ -1,6 +1,5 @@
 -- Setup lspconfig.
 local augroup                          = vim.api.nvim_create_augroup("LspFormatting", {})
-local nvim_lsp                         = require('lspconfig')
 local telescope                        = require('telescope.builtin')
 local keymaps                          = require('editor/keymappings')
 local languages                        = require('lsp/servers')
@@ -15,14 +14,17 @@ vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
 local on_attach                        = function(client, bufnr)
   require('illuminate').on_attach(client)
 
-  -- Mappings.
+  -- Adds keymappings for common lsp functions
   keymaps.lsp_go_to_declaration(telescope.lsp_type_definitions)
   keymaps.lsp_go_to_definition(telescope.lsp_definitions)
   keymaps.lsp_go_to_implementation(telescope.lsp_implementations)
+
   keymaps.lsp_next_reference(function() require('illuminate').next_reference({ wrap = true }) end)
   keymaps.lsp_previous_reference(function() require('illuminate').next_reference({ reverse = true, wrap = true }) end)
+
   keymaps.lsp_next_diagnostic(function() vim.diagnostic.goto_next({ float = { border = "single" } }) end)
   keymaps.lsp_previous_diagnostic(function() vim.diagnostic.goto_prev({ float = { border = "single" } }) end)
+
   keymaps.lsp_hover(vim.lsp.buf.hover)
   keymaps.lsp_rename(vim.lsp.buf.rename)
   keymaps.lsp_format(vim.lsp.buf.format)

@@ -10,7 +10,7 @@
   
     # Editor plugins
     nvim-autopairs
-    feline-nvim
+    lualine-nvim
     nvim-notify
     vim-illuminate
   
@@ -28,9 +28,6 @@
     # Indentation
     #indent-blankline-nvim
   
-    # Collaboration
-    #instant
-  
     # AI stuff
     ChatGPT-nvim
     avante-nvim
@@ -42,12 +39,12 @@
     none-ls-nvim
   
     ## Show references in a popup
-    nice-reference
+    #nice-reference
 
     ## Show code actions icon
     nvim-lightbulb
     ## Show code actions in popup
-    actions-preview
+    actions-preview-nvim
   
     # LSP Testing
     nvim-dap
@@ -77,7 +74,7 @@
   
     # Go plugins
     go-nvim
-    guihua
+    #guihua
   
     # Haskell plugins
     haskell-tools-nvim
@@ -89,7 +86,7 @@
     rust-tools-nvim
   
     # Themes
-    gruvbox
+    gruvbox-nvim
   
     # Typescript
     vim-prettier
@@ -100,7 +97,7 @@
     # Utils
     FixCursorHold-nvim
     plenary-nvim
-    render-markdown
+    render-markdown-nvim
   ];
 
   runtimeDependencies = with pkgs; [
@@ -140,6 +137,7 @@
     nil
     nixfmt-classic
     statix
+    nixpkgs-fmt
 
     # Rust
     rust-analyzer

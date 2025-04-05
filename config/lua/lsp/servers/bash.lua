@@ -1,8 +1,8 @@
-local nvim_lsp = require('lspconfig')
-
 return function(on_attach, capabilities)
-  nvim_lsp.bashls.setup {
+  vim.lsp.config['bashls'] = {
     on_attach = on_attach,
     capabilities = capabilities
   }
+
+  vim.lsp.enable('gopls')
 end

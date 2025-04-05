@@ -16,7 +16,7 @@ return {
   require('visuals/notification-config'),
 
   -- Status bar configs
-  require('statusbar/feline-config'),
+  require('statusbar/lualine-config'),
 
   -- Editor behavior configs
   require('editor/actions-preview-config'),
@@ -24,11 +24,12 @@ return {
   require('editor/diagnostics-config'),
   require('editor/treesitter-config'),
   require('editor/keymappings'),
-  require('editor/cmp-config'),
-  require('editor/instant-config'),
   require('editor/telescope-config'),
   require('editor/keymappings'),
   require('editor/render-markdown'),
+
+  -- Autocompletion
+  require('editor/cmp-config'),
 
   -- Buffer configs
   require('buffers/bufferline-config'),

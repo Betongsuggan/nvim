@@ -1,10 +1,10 @@
-local ht = require('haskell-tools')
-
 return function(on_attach, capabilities)
-  ht.setup {
+  vim.lsp.config['haskell-tools'] = {
     hls = {
       on_attach = on_attach,
       capabilities = capabilities
     }
   }
+
+  vim.lsp.enable('haskell-tools')
 end

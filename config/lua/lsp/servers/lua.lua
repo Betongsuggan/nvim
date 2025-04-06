@@ -8,6 +8,8 @@ return function(on_attach, capabilities)
   neodev.setup {}
 
   nvim_lsp.lua_ls.setup {
+    filetypes = { "lua" },
+    root_dir = nvim_lsp.util.root_pattern(".luarc.json", ".luacheckrc", ".stylua.toml", "stylua.toml", "selene.toml", ".git"),
     settings = {
       Lua = {
         runtime = {

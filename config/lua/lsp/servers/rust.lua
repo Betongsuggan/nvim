@@ -1,35 +1,31 @@
-local rt = require('rust-tools')
-
 return function(on_attach, capabilities)
-  local opts = {
-    tools = {
-      runnables = {
-        use_telescope = true,
-      },
-      inlay_hints = {
-        auto = true,
-        show_parameter_hints = false,
-        parameter_hints_prefix = "",
-        other_hints_prefix = "",
-      },
-    },
-    server = {
-      on_attach = on_attach,
-      capabilities = capabilities,
-      standalone = true,
-      settings = {
-        ["rust-analyzer"] = {
-          -- enable clippy on save
-          checkOnSave = {
-            command = "clippy",
-          },
-          check = {
-            command = "clippy",
-          },
+  local lspconfig = require('lspconfig')
+
+  lspconfig.rust_analyzer.setup({
+    cmd = { "rust-analyzer" },
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { "rust" },
+    root_dir = lspconfig.util.root_pattern("Cargo.toml", "rust-project.json", ".git"),
+    settings = {
+      ["rust-analyzer"] = {
+        -- enable clippy on save
+        checkOnSave = {
+          command = "clippy",
+        },
+        check = {
+          command = "clippy",
+        },
+        -- Inlay hints configuration
+        inlayHints = {
+          parameterHints = { enable = false },
+          typeHints = { enable = true },
+          chainingHints = { enable = true },
         },
       },
     },
-  }
-
-  rt.setup(opts)
+    flags = {
+      debounce_text_changes = 150,
+    },
+  })
 end

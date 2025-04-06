@@ -1,4 +1,4 @@
-require("actions-preview").setup {
+require("actions-preview").setup({
   -- options for vim.diff(): https://neovim.io/doc/user/lua.html#vim.diff()
   diff = {
     ctxlen = 3,
@@ -34,7 +34,6 @@ require("actions-preview").setup {
     preview = {
       size = "60%",
       border = {
-        style = "rounded",
         padding = { 0, 1 },
       },
     },
@@ -43,9 +42,8 @@ require("actions-preview").setup {
     select = {
       size = "40%",
       border = {
-        style = "rounded",
         padding = { 0, 1 },
       },
     },
   },
-}
+})

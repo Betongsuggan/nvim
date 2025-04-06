@@ -2,12 +2,15 @@ local nvim_lsp = require('lspconfig')
 
 return function(on_attach, capabilities)
   nvim_lsp.terraformls.setup {
-    on_attach = function(arg, bufnr)
+    filetypes = { "terraform", "terraform-vars", "tf" },
+    root_dir = nvim_lsp.util.root_pattern(".terraform", ".git"),
+    capabilities = capabilities,
+    on_attach = function(client, bufnr)
       vim.api.nvim_create_autocmd({ "BufWritePre" }, {
         pattern = { "*.tf", "*.tfvars" },
-        callback = vim.lsp.buf.format(),
+        callback = function() vim.lsp.buf.format() end,
       })
-      on_attach(arg, bufnr)
+      on_attach(client, bufnr)
     end
   }
 end

@@ -2,7 +2,6 @@ local keymaps = require('editor/keymappings')
 local chatgpt = require("chatgpt")
 
 chatgpt.setup({
-  api_key_cmd = 'ai_key_provider',
   openai_params = {
     model = "gpt-4o",
     max_tokens = 4096,

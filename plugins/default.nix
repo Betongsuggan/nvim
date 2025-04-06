@@ -7,45 +7,42 @@
     vim-smoothie
     telescope-nvim
     nvim-scrollbar
-  
+
     # Editor plugins
     nvim-autopairs
     lualine-nvim
     nvim-notify
     vim-illuminate
-  
+
     # File tree
     nvim-tree-lua
     nvim-web-devicons
-  
+
     # Syntax highlighting
     nvim-treesitter.withAllGrammars
     nvim-treesitter-textobjects
-  
+
     # Keybindings
     legendary-nvim
-  
+
     # Indentation
     #indent-blankline-nvim
-  
+
     # AI stuff
-    ChatGPT-nvim
     avante-nvim
-  
+
     # LSP
     nvim-lspconfig
-  
+
     # null-ls
     none-ls-nvim
-  
-    ## Show references in a popup
-    #nice-reference
 
-    ## Show code actions icon
+    # Show code actions icon
     nvim-lightbulb
-    ## Show code actions in popup
+
+    # Show code actions in popup
     actions-preview-nvim
-  
+
     # LSP Testing
     nvim-dap
     nvim-dap-go
@@ -53,10 +50,10 @@
     neotest-go
     neotest-plenary
     vimspector
-  
+
     ## Show LSP Processes
     fidget-nvim
-  
+
     # Completions
     nvim-cmp
     cmp-nvim-lsp
@@ -67,33 +64,34 @@
     cmp-vsnip
     cmp-nvim-lsp-signature-help
     lspkind-nvim
-  
+
     # Snippets
     luasnip
     cmp_luasnip
-  
+
     # Go plugins
     go-nvim
-    #guihua
-  
+
     # Haskell plugins
     haskell-tools-nvim
-  
+
     # Nix plugins
     vim-nix
-  
+
     # Rust plugins
     rust-tools-nvim
-  
+
     # Themes
     gruvbox-nvim
-  
-    # Typescript
-    vim-prettier
-  
+
     # Lua
     neodev-nvim
-  
+
+    # Git integration
+    gitsigns-nvim
+    diffview-nvim
+    telescope-github-nvim
+
     # Utils
     FixCursorHold-nvim
     plenary-nvim
@@ -104,6 +102,9 @@
     tree-sitter
     ripgrep
     curl
+    git
+    gitAndTools.delta # Better diff viewer
+    gitAndTools.gh # GitHub CLI
 
     # Bash
     nodePackages.bash-language-server
@@ -124,14 +125,16 @@
     # Java
     java-language-server
 
-    # Json
-    nodePackages.vscode-json-languageserver
+    # JSON/YAML
+    vscode-langservers-extracted
 
     # Kotlin
     kotlin-language-server
 
     # Lua
     lua-language-server
+    stylua
+    luajitPackages.luacheck
 
     # Nix
     nil
@@ -147,9 +150,7 @@
     terraform-ls
 
     # Typescript
-    nodePackages.typescript
-    nodePackages.prettier
-    nodePackages.typescript-language-server
+    typescript-language-server
+    prettierd
   ];
 }
-

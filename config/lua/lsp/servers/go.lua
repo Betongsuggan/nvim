@@ -1,7 +1,12 @@
+local lspconfig = require('lspconfig')
+
 return function(on_attach, capabilities)
-  vim.lsp.config['gopls'] = {
+  lspconfig.gopls.setup({
     cmd = { "gopls" },
     on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { "go", "gomod", "gowork", "gotmpl" },
+    root_dir = lspconfig.util.root_pattern("go.work", "go.mod", ".git"),
     settings = {
       gopls = {
         completeUnimported = true,
@@ -15,7 +20,5 @@ return function(on_attach, capabilities)
         staticcheck = true,
       },
     },
-  }
-
-  vim.lsp.enable('gopls')
+  })
 end

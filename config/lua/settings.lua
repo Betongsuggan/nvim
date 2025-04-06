@@ -1,8 +1,8 @@
 local set = vim.opt
-local g = vim.g
+local globals = vim.g
 
 -- Set leader key
-g.mapleader = ' '
+globals.mapleader = " "
 
 -- Visuals
 set.cursorline = true
@@ -14,13 +14,13 @@ set.title = true
 set.wildmenu = true
 
 -- Clipboard
-set.clipboard = 'unnamedplus'
+set.clipboard = "unnamedplus"
 
 -- Search behavior
-set.incsearch = true  -- Find next match as we type the search
-set.hlsearch = true   -- Highlight search matches
+set.incsearch = true -- Find next match as we type the search
+set.hlsearch = true -- Highlight search matches
 set.ignorecase = true -- Ignore casing when we seach...
-set.smartcase = true  -- ...unless we search with capitalization
+set.smartcase = true -- ...unless we search with capitalization
 
 -- Editoring
 set.autoindent = true
@@ -31,7 +31,7 @@ set.number = true
 set.shiftwidth = 2
 set.smarttab = true
 set.tabstop = 2
-set.signcolumn = "yes"
+set.signcolumn = "yes:2"
 
 -- Timers
 set.timeoutlen = 1000

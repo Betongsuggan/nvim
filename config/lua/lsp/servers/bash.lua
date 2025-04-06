@@ -1,8 +1,10 @@
-return function(on_attach, capabilities)
-  vim.lsp.config['bashls'] = {
-    on_attach = on_attach,
-    capabilities = capabilities
-  }
+local lspconfig = require('lspconfig')
 
-  vim.lsp.enable('gopls')
+return function(on_attach, capabilities)
+  lspconfig.bashls.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { "sh", "bash" },
+    root_dir = lspconfig.util.root_pattern(".git", ".bashrc", ".bash_profile"),
+  })
 end

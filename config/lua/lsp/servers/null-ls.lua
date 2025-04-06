@@ -6,20 +6,33 @@ return function(on_attach, capabilities)
       -- Nix
       null_ls.builtins.formatting.nixpkgs_fmt,
       null_ls.builtins.diagnostics.statix,
-      null_ls.builtins.code_actions.statix,
 
       -- Go
       null_ls.builtins.formatting.gofmt,
       null_ls.builtins.formatting.goimports,
       null_ls.builtins.formatting.golines,
 
-      -- TypeScript
-      null_ls.builtins.formatting.prettier
+      -- Go
+      null_ls.builtins.formatting.prettier.with({
+        command = "prettierd",
+      }),
+
+      -- Lua
+      null_ls.builtins.formatting.stylua.with({
+        extra_args = {
+          "--indent-type",
+          "Spaces",
+          "--indent-width",
+          "2",
+          "--quote-style",
+          "AutoPreferDouble",
+          "--call-parentheses",
+          "Always",
+        },
+      }),
     },
     on_attach = function(client, bufnr)
       if client.supports_method("textDocument/formatting") then
-        --vim.api.nvim_clear_autocmds({ group = "LspFormatting", buffer = bufnr })
-
         vim.api.nvim_create_autocmd("BufWritePre", {
           group = vim.api.nvim_create_augroup("LspFormatting", { clear = true }),
           buffer = bufnr,
@@ -34,6 +47,6 @@ return function(on_attach, capabilities)
           end,
         })
       end
-    end
+    end,
   })
 end

@@ -95,14 +95,61 @@ vim.lsp.handlers["window/showMessage"] = function(_, result, ctx)
 end
 
 -- Add diagnostic count to statusline (if you're using lualine)
+-- Set up autocommand to show diagnostics in a notification, but with safeguards
 vim.api.nvim_create_autocmd("DiagnosticChanged", {
-  callback = function()
-    -- This will trigger statusline refresh
-    vim.cmd("redrawstatus")
+  callback = function(args)
+    -- Wrap in pcall to prevent errors from propagating
+    local status, err = pcall(function()
+      -- Get the buffer number
+      local bufnr = args.buf
+
+      -- Check if the buffer is valid before proceeding
+      if not bufnr or not vim.api.nvim_buf_is_valid(bufnr) then
+        return
+      end
+
+      -- Get diagnostics for the current buffer
+      local diagnostics = vim.diagnostic.get(bufnr)
+
+      -- Skip if no diagnostics
+      if #diagnostics == 0 then
+        return
+      end
+
+      -- Get the buffer name safely
+      local filename
+      local name_status, name = pcall(vim.api.nvim_buf_get_name, bufnr)
+      if name_status and name and name ~= "" then
+        filename = vim.fn.fnamemodify(name, ":t")
+      else
+        filename = "[No Name]"
+      end
+
+      -- Format the notification message
+      --local message = string.format("Diagnostics for %s", filename)
+
+      -- Use vim.schedule to defer the notification to the next event loop iteration
+      -- This avoids the "not allowed to change text" error
+      --vim.schedule(function()
+      --  -- Only show notification if we're not in the process of exiting
+      --  if vim.v.exiting == nil then
+      --    notify(message, "info", {
+      --      title = "Diagnostics Updated",
+      --      timeout = 2000,
+      --    })
+      --  end
+      --end)
+    end)
+
+    -- If there was an error, we just silently ignore it
+    -- This prevents error messages from appearing during buffer cleanup
+    if not status then
+      -- Optionally log the error for debugging
+      -- vim.api.nvim_echo({{err, "ErrorMsg"}}, false, {})
+    end
+
   end,
 })
-
--- Create command to view notification history
 vim.api.nvim_create_user_command("NotificationHistory", function()
   require("notify").history()
 end, {})

@@ -21,10 +21,10 @@ local on_attach = function(client, bufnr)
   end)
 
   keymaps.lsp_next_diagnostic(function()
-    vim.diagnostic.goto_next({float = {border = "rounded"}})
+    vim.diagnostic.goto_next({ float = { border = "rounded" } })
   end)
   keymaps.lsp_previous_diagnostic(function()
-    vim.diagnostic.goto_prev({float = {border = "rounded"}})
+    vim.diagnostic.goto_prev({ float = { border = "rounded" } })
   end)
 
   keymaps.lsp_hover(function()

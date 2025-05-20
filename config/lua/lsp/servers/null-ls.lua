@@ -18,8 +18,6 @@ return function(on_attach, capabilities)
       }),
 
       -- JavaScript/TypeScript
-
-      -- Go
       null_ls.builtins.formatting.prettier.with({
         command = "prettierd",
       }),

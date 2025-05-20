@@ -64,7 +64,8 @@ local key_mappings = {
   ),
   next_buffer = add_key_mapping("<leader>l", { noremap = true }, "Buffer: Next buffer"),
   previous_buffer = add_key_mapping("<leader>h", { noremap = true }, "Buffer: Previous buffer"),
-  close_buffer = add_key_mapping("<leader>q", { noremap = true }, "Buffer: Close buffer")(":bd <CR>"),
+  close_this_buffer = add_key_mapping("<leader>qt", { noremap = true }, "Buffer: Close buffer")(":bd <CR>"),
+  close_other_buffers = add_key_mapping("<leader>qo", { noremap = true }, "Buffer: Close buffer")(":%bd|e#|bd# <CR>"),
 
   -- Searching
   search_file_name = add_key_mapping("<leader>ff", search_opts, "Searching: Search file name"),

@@ -100,14 +100,14 @@ local key_mappings = {
   lsp_show_workspaces = add_key_mapping("swl", lsp_opts, "LSP: List workspaces"),
 
   -- LSP Testing
-  lsp_file_tests = add_key_mapping("smg", { noremap = true }, "LSP: Run all tests in file"),
-  lsp_nearest_test = add_key_mapping("sme", { noremap = true }, "LSP: Run nearest test"),
-  lsp_debug_nearest_test = add_key_mapping("smd", { noremap = true }, "LSP: Debug nearest test"),
-  lsp_toggle_test_output = add_key_mapping("smo", { noremap = true }, "LSP: Toggle debug menu"),
-  lsp_toggle_test_tree = add_key_mapping("smi", { noremap = true }, "LSP: Toggle debug menu"),
+  lsp_file_tests = add_key_mapping("<leader>ta", { noremap = true }, "LSP: Run all tests in file"),
+  lsp_nearest_test = add_key_mapping("<leader>tn", { noremap = true }, "LSP: Run nearest test"),
+  lsp_debug_nearest_test = add_key_mapping("<leader>td", { noremap = true }, "LSP: Debug nearest test"),
+  lsp_toggle_test_output = add_key_mapping("<leader>to", { noremap = true }, "LSP: Toggle debug menu"),
+  lsp_toggle_test_tree = add_key_mapping("<leader>tm", { noremap = true }, "LSP: Toggle debug menu"),
 
   -- LSP Debugging
-  lsp_toggle_breakpoint = add_key_mapping("smb", { noremap = true }, "LSP: Toggle breakpoint"),
+  lsp_toggle_breakpoint = add_key_mapping("<leader>tb", { noremap = true }, "LSP: Toggle breakpoint"),
 
   -- Git tools
   git_blame_toggle = add_key_mapping("<leader>gb", { noremap = true }, "Git: Toggle blame"),

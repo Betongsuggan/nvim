@@ -2,6 +2,7 @@
 local telescope = require("telescope.builtin")
 local keymaps = require("editor/keymappings")
 local languages = require("lsp/servers")
+require("lsp/testing")
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer

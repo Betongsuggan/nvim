@@ -7,8 +7,6 @@
       action = "<cmd>nohlsearch<CR>";
       options = { desc = "Clear search highlights"; };
     }
-
-    # Better window navigation
     {
       mode = "n";
       key = "<C-h>";
@@ -34,7 +32,6 @@
       options = { desc = "Move to right window"; };
     }
 
-    # Resize windows
     {
       mode = "n";
       key = "<C-Up>";
@@ -60,16 +57,15 @@
       options = { desc = "Increase window width"; };
     }
 
-    # Buffer navigation
     {
       mode = "n";
-      key = "<S-h>";
+      key = "<leader>h";
       action = "<cmd>bprevious<CR>";
       options = { desc = "Previous buffer"; };
     }
     {
       mode = "n";
-      key = "<S-l>";
+      key = "<leader>l";
       action = "<cmd>bnext<CR>";
       options = { desc = "Next buffer"; };
     }
@@ -86,7 +82,6 @@
       options = { desc = "Force delete buffer"; };
     }
 
-    # Better indenting
     {
       mode = "v";
       key = "<";
@@ -100,7 +95,6 @@
       options = { desc = "Indent right"; };
     }
 
-    # Move text up and down
     {
       mode = "v";
       key = "J";
@@ -117,14 +111,8 @@
     # File Explorer (Neo-tree)
     {
       mode = "n";
-      key = "<leader>e";
-      action = "<cmd>Neotree toggle<CR>";
-      options = { desc = "Toggle file explorer"; };
-    }
-    {
-      mode = "n";
       key = "<leader>o";
-      action = "<cmd>Neotree focus<CR>";
+      action = "<cmd>Neotree reveal<CR>";
       options = { desc = "Focus file explorer"; };
     }
 
@@ -178,7 +166,7 @@
       options = { desc = "Find word under cursor"; };
     }
 
-    # LSP (All LSP keymaps centralized here)
+    # LSP
     {
       mode = "n";
       key = "gD";
@@ -278,31 +266,6 @@
         '';
       };
       options = { desc = "Go to references"; };
-    }
-    {
-      mode = "n";
-      key = "K";
-      action = {
-        __raw = ''
-          function()
-            local clients = vim.lsp.get_active_clients({ bufnr = 0 })
-            local supports_hover = false
-            for _, client in pairs(clients) do
-              if client.server_capabilities.hoverProvider then
-                supports_hover = true
-                break
-              end
-            end
-            
-            if supports_hover then
-              vim.lsp.buf.hover()
-            else
-              print("Hover not supported by current LSP server")
-            end
-          end
-        '';
-      };
-      options = { desc = "Hover documentation"; };
     }
     {
       mode = "n";

@@ -5,7 +5,7 @@
       position = "bottom";
       height = 10;
       width = 50;
-      icons = true;
+      #icons = true;
       mode = "workspace_diagnostics";
       severity = null; # nil (ALL) or vim.diagnostic.severity.ERROR | WARN | INFO | HINT
       fold_open = "";
@@ -44,7 +44,7 @@
       auto_close = false;
       auto_preview = true;
       auto_fold = false;
-      auto_jump = [ "lsp_definitions" ];
+      #auto_jump = "lsp_definitions";
       include_declaration = [
         "lsp_references"
         "lsp_implementations"

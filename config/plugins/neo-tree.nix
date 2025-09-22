@@ -5,6 +5,7 @@
     closeIfLastWindow = true;
     popupBorderStyle = "rounded";
     enableGitStatus = true;
+    enableDiagnostics = true;
     enableModifiedMarkers = true;
     enableRefreshOnWrite = true;
 
@@ -23,17 +24,10 @@
       };
 
       icon = {
-        folderClosed = "";
-        folderOpen = "";
-        folderEmpty = "󰜌";
-        folderEmptyOpen = "󰜌";
+        folderEmpty = "";
+        folderEmptyOpen = "";
         default = "*";
         highlight = "NeoTreeFileIcon";
-      };
-
-      modifiedIcon = {
-        symbol = "[+]";
-        highlight = "NeoTreeModified";
       };
 
       name = {
@@ -44,21 +38,21 @@
 
       gitStatus = {
         symbols = {
-          added = ""; # or "✚", but this is redundant info if you use git_status_colors on the name
-          modified = ""; # or "", but this is redundant info if you use git_status_colors on the name
-          deleted = "✖"; # this can only be used in the git_status source
-          renamed = "󰁕"; # this can only be used in the git_status source
-          untracked = "";
+          added = "";
+          modified = "";
+          deleted = "";
+          renamed = "";
+          untracked = "";
           ignored = "";
-          unstaged = "󰄱";
+          unstaged = "";
           staged = "";
-          conflict = "";
+          conflict = "󰦦";
         };
       };
     };
 
     window = {
-      position = "left";
+      position = "float";
       width = 40;
       mappingOptions = {
         noremap = true;
@@ -68,11 +62,15 @@
       mappings = {
         "<space>" = {
           command = "toggle_node";
-          nowait = false;
+          nowait = true;
+        };
+        "o" = {
+          command = "open";
+          nowait = true;
         };
         "<2-LeftMouse>" = "open";
         "<cr>" = "open";
-        "<esc>" = "cancel"; # close preview or floating neo-tree window
+        "<esc>" = "cancel";
         "P" = {
           command = "toggle_preview";
           config = {
@@ -119,24 +117,24 @@
       };
     };
 
-    nesting = {
-      enabled = false;
-      openFoldersUntilSingleChild = false; # Don't auto-expand single child folders
-    };
+    #nesting = {
+    #  enabled = false;
+    #  openFoldersUntilSingleChild = false; # Don't auto-expand single child folders
+    #};
 
-    filesystemComponents = {
-      # This is to use the existing file icon color
-      # If you want to customize the color, you can use the file_icon component
-      hcFiletypeIcon = "highlight";
-      hcGitStatus = true;
-    };
+    #filesystemComponents = {
+    #  # This is to use the existing file icon color
+    #  # If you want to customize the color, you can use the file_icon component
+    #  hcFiletypeIcon = "highlight";
+    #  hcGitStatus = true;
+    #};
 
     filesystem = {
       filteredItems = {
         visible = false; # when true, they will just be displayed differently than normal items
         hideDotfiles = true;
         hideGitignored = true;
-        hideHidden = true; # only works on Windows for hidden files/directories
+        hideHidden = true;
         hideByName = [
           "node_modules"
         ];
@@ -158,65 +156,51 @@
       };
 
       followCurrentFile = {
-        enabled = false; # This will find and focus the file in the active buffer every time
-        leaveDirsOpen = false; # `false` closes auto expanded dirs, such as with `:Neotree reveal`
+        enabled = true;
+        leaveDirsOpen = true;
       };
 
       groupEmptyDirs = false; # when true, empty folders will be grouped together
-      hijackNetrwBehavior = "open_default"; # netrw disabled, opening a directory opens neo-tree in whatever position is specified in window.position
-      useLibuvFileWatcher = true; # This will use the OS level file watchers to detect changes instead of relying on nvim autocmd events.
+      hijackNetrwBehavior = "open_default";
+      useLibuvFileWatcher = true;
 
       window = {
         mappings = {
+          "o" = {
+            command = "open";
+            nowait = true;
+          };
           "<bs>" = "navigate_up";
           "." = "set_root";
           "H" = "toggle_hidden";
           "/" = "fuzzy_finder";
           "D" = "fuzzy_finder_directory";
-          "#" = "fuzzy_sorter"; # fuzzy sorting using the fzy algorithm
+          "#" = "fuzzy_sorter";
           "f" = "filter_on_submit";
           "<c-x>" = "clear_filter";
           "[g" = "prev_git_modified";
           "]g" = "next_git_modified";
-          "o" = {
-            command = "system_open";
-          };
-        };
-
-        fuzzyFinder = {
-          enable = true; # This will override the 'fuzzy_finder' and 'fuzzy_finder_directory' options
-          sortFunction = "fzy"; # fzf, fzy
-          windowOptions = {
-            winblend = 10;
-          };
         };
       };
-
-      commands = { };
     };
 
     buffers = {
       followCurrentFile = {
-        enabled = true; # This will find and focus the file in the active buffer every time
-        leaveDirsOpen = false; # `false` closes auto expanded dirs, such as with `:Neotree reveal`
+        enabled = true;
+        leaveDirsOpen = true;
       };
-      groupEmptyDirs = true; # when true, empty folders will be grouped together
-      showUnloadedIcon = true;
+      groupEmptyDirs = true;
       window = {
         mappings = {
           "bd" = "buffer_delete";
           "<bs>" = "navigate_up";
           "." = "set_root";
-          "o" = {
-            command = "system_open";
-          };
         };
       };
     };
 
     gitStatus = {
       window = {
-        position = "float";
         mappings = {
           "A" = "git_add_all";
           "gu" = "git_unstage_file";
@@ -225,9 +209,6 @@
           "gc" = "git_commit";
           "gp" = "git_push";
           "gg" = "git_commit_and_push";
-          "o" = {
-            command = "system_open";
-          };
         };
       };
     };

@@ -87,31 +87,37 @@
       # Statusline
       lualine = {
         enable = true;
-        iconsEnabled = true;
-        theme = "catppuccin";
-        componentSeparators = {
-          left = "";
-          right = "";
-        };
-        sectionSeparators = {
-          left = "";
-          right = "";
-        };
-        sections = {
-          lualine_a = [ "mode" ];
-          lualine_b = [ "branch" "diff" "diagnostics" ];
-          lualine_c = [ "filename" ];
-          lualine_x = [ "encoding" "fileformat" "filetype" ];
-          lualine_y = [ "progress" ];
-          lualine_z = [ "location" ];
-        };
-        inactiveSections = {
-          lualine_a = [ ];
-          lualine_b = [ ];
-          lualine_c = [ "filename" ];
-          lualine_x = [ "location" ];
-          lualine_y = [ ];
-          lualine_z = [ ];
+        settings = {
+          options = {
+            iconsEnabled = true;
+            theme = "catppuccin";
+
+            componentSeparators = {
+              left = "";
+              right = "";
+            };
+            sectionSeparators = {
+              left = "";
+              right = "";
+            };
+          };
+
+          sections = {
+            lualine_a = [ "mode" ];
+            lualine_b = [ "branch" "diff" "diagnostics" ];
+            lualine_c = [ "filename" ];
+            lualine_x = [ "encoding" "fileformat" "filetype" ];
+            lualine_y = [ "progress" ];
+            lualine_z = [ "location" ];
+          };
+          inactiveSections = {
+            lualine_a = [ ];
+            lualine_b = [ ];
+            lualine_c = [ "filename" ];
+            lualine_x = [ "location" ];
+            lualine_y = [ ];
+            lualine_z = [ ];
+          };
         };
       };
 
@@ -278,146 +284,13 @@
       # Notifications
       notify = {
         enable = true;
-        backgroundColour = "#000000";
-        fps = 30;
-        render = "default";
-        timeout = 500;
-        topDown = true;
-      };
-
-      # Dashboard
-      alpha = {
-        enable = true;
-        layout = [
-          {
-            type = "padding";
-            val = 2;
-          }
-          {
-            type = "text";
-            val = [
-              "██╗   ██╗██╗███╗   ███╗"
-              "██║   ██║██║████╗ ████║"
-              "██║   ██║██║██╔████╔██║"
-              "╚██╗ ██╔╝██║██║╚██╔╝██║"
-              " ╚████╔╝ ██║██║ ╚═╝ ██║"
-              "  ╚═══╝  ╚═╝╚═╝     ╚═╝"
-            ];
-            opts = {
-              position = "center";
-              hl = "Type";
-            };
-          }
-          {
-            type = "padding";
-            val = 2;
-          }
-          {
-            type = "group";
-            val = [
-              {
-                type = "button";
-                val = "  Find file";
-                on_press = {
-                  __raw = "function() require('telescope.builtin').find_files() end";
-                };
-                opts = {
-                  keymap = [ "n" "ff" ":Telescope find_files <CR>" { noremap = true; silent = true; nowait = true; } ];
-                  shortcut = "ff";
-                  position = "center";
-                  cursor = 3;
-                  width = 38;
-                  align_shortcut = "right";
-                  hl_shortcut = "Keyword";
-                };
-              }
-              {
-                type = "button";
-                val = "  New file";
-                on_press = {
-                  __raw = "function() vim.cmd[[ene]] end";
-                };
-                opts = {
-                  keymap = [ "n" "nf" ":ene <BAR> startinsert <CR>" { noremap = true; silent = true; nowait = true; } ];
-                  shortcut = "nf";
-                  position = "center";
-                  cursor = 3;
-                  width = 38;
-                  align_shortcut = "right";
-                  hl_shortcut = "Keyword";
-                };
-              }
-              {
-                type = "button";
-                val = "  Recently used files";
-                on_press = {
-                  __raw = "function() require('telescope.builtin').oldfiles() end";
-                };
-                opts = {
-                  keymap = [ "n" "fr" ":Telescope oldfiles <CR>" { noremap = true; silent = true; nowait = true; } ];
-                  shortcut = "fr";
-                  position = "center";
-                  cursor = 3;
-                  width = 38;
-                  align_shortcut = "right";
-                  hl_shortcut = "Keyword";
-                };
-              }
-              {
-                type = "button";
-                val = "  Find text";
-                on_press = {
-                  __raw = "function() require('telescope.builtin').live_grep() end";
-                };
-                opts = {
-                  keymap = [ "n" "fg" ":Telescope live_grep <CR>" { noremap = true; silent = true; nowait = true; } ];
-                  shortcut = "fg";
-                  position = "center";
-                  cursor = 3;
-                  width = 38;
-                  align_shortcut = "right";
-                  hl_shortcut = "Keyword";
-                };
-              }
-              {
-                type = "button";
-                val = "  Configuration";
-                on_press = {
-                  __raw = "function() vim.cmd[[e ~/.config/nvim/init.lua]] end";
-                };
-                opts = {
-                  keymap = [ "n" "fc" ":e ~/.config/nvim/init.lua <CR>" { noremap = true; silent = true; nowait = true; } ];
-                  shortcut = "fc";
-                  position = "center";
-                  cursor = 3;
-                  width = 38;
-                  align_shortcut = "right";
-                  hl_shortcut = "Keyword";
-                };
-              }
-              {
-                type = "button";
-                val = "  Quit Neovim";
-                on_press = {
-                  __raw = "function() vim.cmd[[qa]] end";
-                };
-                opts = {
-                  keymap = [ "n" "q" ":qa<CR>" { noremap = true; silent = true; nowait = true; } ];
-                  shortcut = "q";
-                  position = "center";
-                  cursor = 3;
-                  width = 38;
-                  align_shortcut = "right";
-                  hl_shortcut = "Keyword";
-                };
-              }
-            ];
-          }
-          {
-            type = "padding";
-            val = 2;
-          }
-        ];
+        settings = {
+          backgroundColour = "#000000";
+          fps = 30;
+          render = "default";
+          timeout = 500;
+          topDown = true;
+        };
       };
     };
 
@@ -430,41 +303,6 @@
         opts.border = opts.border or "rounded"
         return orig_util_open_floating_preview(contents, syntax, opts, ...)
       end
-      
-      -- Configure diagnostic signs with rounded appearance
-      local signs = {
-        { name = "DiagnosticSignError", text = "" },
-        { name = "DiagnosticSignWarn", text = "" },
-        { name = "DiagnosticSignHint", text = "󰌶" },
-        { name = "DiagnosticSignInfo", text = "" },
-      }
-      
-      for _, sign in ipairs(signs) do
-        vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "" })
-      end
-      
-      -- Configure diagnostic display
-      vim.diagnostic.config({
-        virtual_text = {
-          spacing = 4,
-          source = "if_many",
-          prefix = "●",
-        },
-        signs = {
-          active = signs,
-        },
-        update_in_insert = true,
-        underline = true,
-        severity_sort = true,
-        float = {
-          focusable = true,
-          style = "minimal",
-          border = "rounded",
-          source = "always",
-          header = "",
-          prefix = "",
-        },
-      })
     '';
   };
 }

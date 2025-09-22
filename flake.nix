@@ -19,7 +19,7 @@
           nixvimLib = nixvim.legacyPackages.${system};
           nixvim' = nixvimLib.makeNixvimWithModule {
             inherit pkgs;
-            module = ./config;
+            module = import ./config;
           };
         in
         {

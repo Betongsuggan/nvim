@@ -4,7 +4,7 @@
       enable = true;
 
       # Automatically install missing parsers when entering buffer
-      autoInstall = true;
+      #autoInstall = true;
 
       # Install these parsers
       ensureInstalled = [
@@ -37,24 +37,24 @@
       ];
 
       # Enable syntax highlighting
-      highlight = {
-        enable = true;
-        additionalVimRegexHighlighting = false;
-      };
+      #highlight = {
+      #  enable = true;
+      #  additionalVimRegexHighlighting = false;
+      #};
 
       # Enable smart indentation
-      indent = {
-        enable = true;
-      };
+      #indent = {
+      #  enable = true;
+      #};
 
       # Enable incremental selection
       incrementalSelection = {
         enable = true;
         keymaps = {
-          initSelection = "<C-space>";
-          nodeIncremental = "<C-space>";
-          scopeIncremental = "<C-s>";
-          nodeDecremental = "<M-space>";
+          #initSelection = "<C-space>";
+          #nodeIncremental = "<C-space>";
+          #scopeIncremental = "<C-s>";
+          #nodeDecremental = "<M-space>";
         };
       };
 
@@ -158,10 +158,10 @@
         "" = "rainbow-delimiters";
         lua = "rainbow-blocks";
       };
-      priority = {
-        "" = 110;
-        lua = 210;
-      };
+      #priority = {
+      #  "" = 110;
+      #  lua = 210;
+      #};
       highlight = [
         "RainbowDelimiterRed"
         "RainbowDelimiterYellow"

@@ -1,4 +1,4 @@
-{
+{ pkgs, ... }: {
   imports = [
     ./keymaps.nix
     ./lsp.nix
@@ -8,6 +8,9 @@
 
   # Basic Neovim configuration
   config = {
+    extraPackages = with pkgs; [
+      ripgrep
+    ];
     # General settings
     opts = {
       # Line numbers
@@ -89,6 +92,35 @@
       loaded_netrwPlugin = 1;
       loaded_netrwSettings = 1;
       loaded_netrwFileHandlers = 1;
+    };
+
+
+    diagnostic = {
+      settings = {
+        signs = {
+          error = "✘";
+          warn = "▲";
+          hint = "⚑";
+          info = "»";
+        };
+        virtual_text = {
+          spacing = 4;
+          source = "if_many";
+          prefix = "●";
+        };
+
+        update_in_insert = true;
+        underline = true;
+        severity_sort = true;
+        float = {
+          focusable = true;
+          style = "minimal";
+          border = "rounded";
+          source = "always";
+          header = "";
+          prefix = "";
+        };
+      };
     };
 
     # Highlight on yank

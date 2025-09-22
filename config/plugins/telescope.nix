@@ -103,10 +103,10 @@
               "<C-d>" = "preview_scrolling_down";
               "<PageUp>" = "results_scrolling_up";
               "<PageDown>" = "results_scrolling_down";
-              "<Tab>" = "toggle_selection + move_selection_worse";
-              "<S-Tab>" = "toggle_selection + move_selection_better";
-              "<C-q>" = "send_to_qflist + open_qflist";
-              "<M-q>" = "send_selected_to_qflist + open_qflist";
+              #"<Tab>" = "toggle_selection + move_selection_worse";
+              #"<S-Tab>" = "toggle_selection + move_selection_better";
+              #"<C-q>" = "send_to_qflist + open_qflist";
+              #"<M-q>" = "send_selected_to_qflist + open_qflist";
               "<C-l>" = "complete_tag";
               "<C-_>" = "which_key"; # keys from pressing <C-/>
             };
@@ -131,9 +131,9 @@
         };
 
         pickers = {
-          find_files = {
-            find_command = [ "rg" "--files" "--hidden" "--glob" "!**/.git/*" ];
-          };
+          #find_files = {
+          #  find_command = [ "rg" "--files" "--hidden" "--glob" "!**/.git/*" ];
+          #};
           live_grep = {
             additional_args = [ "--hidden" ];
           };

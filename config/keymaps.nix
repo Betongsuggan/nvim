@@ -69,17 +69,9 @@
       mode = "n";
       key = "<leader>bc";
       action = {
-        __raw = "function() require('bufferline').close_with_pick() end";
+        __raw = "function() require('bufferline').pick_buffer() end";
       };
-      options = { desc = "Close buffer with pick"; };
-    }
-    {
-      mode = "n";
-      key = "<leader>bh";
-      action = {
-        __raw = "function() require('bufferline').close_others() end";
-      };
-      options = { desc = "Close all other buffers"; };
+      options = { desc = "Pick buffer to switch to"; };
     }
 
     # Window management

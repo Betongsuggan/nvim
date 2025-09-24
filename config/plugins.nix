@@ -171,5 +171,112 @@
         };
       };
     };
+
+    # Lualine status bar with emoji indicators
+    lualine = {
+      enable = true;
+      settings = {
+        options = {
+          theme = "catppuccin";
+          component_separators = {
+            left = "";
+            right = "";
+          };
+          section_separators = {
+            left = "";
+            right = "";
+          };
+          globalstatus = true;
+          refresh = {
+            statusline = 1000;
+            tabline = 1000;
+            winbar = 1000;
+          };
+        };
+        sections = {
+          lualine_a = [
+            {
+              __unkeyed-1 = "mode";
+              separator = {
+                left = "";
+              };
+              right_padding = 2;
+            }
+          ];
+          lualine_b = [
+            {
+              __unkeyed-1 = "filename";
+              symbols = {
+                modified = "●";
+                readonly = "🔒";
+                unnamed = "📝";
+                newfile = "✨";
+              };
+            }
+          ];
+          lualine_c = [
+            {
+              __unkeyed-1 = "branch";
+              icon = "🌿";
+            }
+            {
+              __unkeyed-1 = "diff";
+              symbols = {
+                added = "✅ ";
+                modified = "⚡ ";
+                removed = "❌ ";
+              };
+            }
+          ];
+          lualine_x = [
+            {
+              __unkeyed-1 = "diagnostics";
+              sources = [ "nvim_diagnostic" "nvim_lsp" ];
+              symbols = {
+                error = "🚨 ";
+                warn = "⚠️ ";
+                info = "💡 ";
+                hint = "💭 ";
+              };
+            }
+            {
+              __unkeyed-1 = "encoding";
+              fmt = {
+                __raw = "string.upper";
+              };
+            }
+            {
+              __unkeyed-1 = "fileformat";
+              symbols = {
+                unix = "🐧";
+                dos = "🪟";
+                mac = "🍎";
+              };
+            }
+            "filetype"
+          ];
+          lualine_y = [
+            "progress"
+          ];
+          lualine_z = [
+            {
+              __unkeyed-1 = "location";
+              separator = {
+                right = "";
+              };
+              left_padding = 2;
+            }
+          ];
+        };
+        inactive_sections = {
+          lualine_a = [ "filename" ];
+          lualine_b = [];
+          lualine_c = [];
+          lualine_x = [];
+          lualine_y = [];
+          lualine_z = [ "location" ];
+        };
+      };
+    };
   };
 }

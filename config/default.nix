@@ -192,7 +192,7 @@
     }
     {
       mode = "n";
-      key = "<leader>q";
+      key = "<leader>qq";
       action = "<cmd>q<CR>";
       options = { desc = "Quit"; };
     }
@@ -217,7 +217,7 @@
       options = { desc = "Next buffer"; };
     }
 
-    # Telescope file finding
+    # Find operations (using <leader>f prefix - Telescope)
     {
       mode = "n";
       key = "<leader>ff";
@@ -228,7 +228,7 @@
       mode = "n";
       key = "<leader>fg";
       action = "<cmd>Telescope live_grep<CR>";
-      options = { desc = "Find in files (grep)"; };
+      options = { desc = "Find by grep"; };
     }
     {
       mode = "n";
@@ -276,21 +276,21 @@
     }
     {
       mode = "n";
-      key = "<leader>rn";
+      key = "<leader>lr";
       action = "vim.lsp.buf.rename";
-      options = { desc = "Rename symbol"; };
+      options = { desc = "LSP rename"; };
     }
     {
       mode = "n";
-      key = "<leader>ca";
+      key = "<leader>la";
       action = "vim.lsp.buf.code_action";
-      options = { desc = "Code actions"; };
+      options = { desc = "LSP code action"; };
     }
     {
       mode = "n";
-      key = "<leader>f";
+      key = "<leader>lf";
       action = "vim.lsp.buf.format";
-      options = { desc = "Format code"; };
+      options = { desc = "LSP format"; };
     }
 
     # Diagnostic keymaps
@@ -308,29 +308,29 @@
     }
     {
       mode = "n";
-      key = "<leader>e";
+      key = "<leader>ld";
       action = "vim.diagnostic.open_float";
-      options = { desc = "Show diagnostic"; };
+      options = { desc = "LSP show diagnostic"; };
     }
 
-    # Go-specific keymaps
+    # Go-specific keymaps (using <leader>g prefix for Go commands)
     {
       mode = "n";
-      key = "<leader>gt";
+      key = "<leader>grt";
       action = "<cmd>!go test ./...<CR>";
-      options = { desc = "Run Go tests"; };
+      options = { desc = "Go run tests"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>grr";
+      action = "<cmd>!go run .<CR>";
+      options = { desc = "Go run main"; };
     }
     {
       mode = "n";
       key = "<leader>gb";
       action = "<cmd>!go build<CR>";
-      options = { desc = "Build Go project"; };
-    }
-    {
-      mode = "n";
-      key = "<leader>gr";
-      action = "<cmd>!go run .<CR>";
-      options = { desc = "Run Go project"; };
+      options = { desc = "Go build"; };
     }
   ];
 }

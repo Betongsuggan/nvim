@@ -71,7 +71,7 @@
       mode = "n";
       key = "gd";
       action = {
-        __raw = "function() vim.lsp.buf.definition() end";
+        __raw = "function() require('telescope.builtin').lsp_definitions() end";
       };
       options = { desc = "Go to definition"; };
     }
@@ -87,7 +87,7 @@
       mode = "n";
       key = "gi";
       action = {
-        __raw = "function() vim.lsp.buf.implementation() end";
+        __raw = "function() require('telescope.builtin').lsp_implementations() end";
       };
       options = { desc = "Go to implementation"; };
     }
@@ -95,7 +95,7 @@
       mode = "n";
       key = "gr";
       action = {
-        __raw = "function() vim.lsp.buf.references() end";
+        __raw = "function() require('telescope.builtin').lsp_references() end";
       };
       options = { desc = "Show references"; };
     }

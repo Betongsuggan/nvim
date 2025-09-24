@@ -53,8 +53,17 @@
     }
 
     -- LSP handlers with rounded borders
-    vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, border_opts)
-    vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, border_opts)
+    vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+      border = "rounded",
+      focusable = true,
+      style = "minimal",
+      source = "always",
+    })
+    vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+      border = "rounded",
+      focusable = false,
+      style = "minimal",
+    })
 
     -- Diagnostic configuration with rounded borders
     vim.diagnostic.config({
@@ -64,6 +73,7 @@
         header = "",
         prefix = "",
         focusable = false,
+        style = "minimal",
       },
       virtual_text = {
         spacing = 4,
@@ -75,5 +85,13 @@
       update_in_insert = false,
       severity_sort = true,
     })
+
+    -- Additional LSP window configuration
+    local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+    function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+      opts = opts or {}
+      opts.border = opts.border or "rounded"
+      return orig_util_open_floating_preview(contents, syntax, opts, ...)
+    end
   '';
 }

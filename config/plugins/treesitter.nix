@@ -3,61 +3,63 @@
     treesitter = {
       enable = true;
 
+      settings = {
+        ensureInstalled = [
+          "go"
+          "gomod"
+          "gowork"
+          "gosum"
+          "lua"
+          "vim"
+          "vimdoc"
+          "nix"
+          "bash"
+          "c"
+          "markdown"
+          "markdown_inline"
+          "python"
+          "javascript"
+          "typescript"
+          "html"
+          "css"
+          "json"
+          "yaml"
+          "toml"
+          "regex"
+          "dockerfile"
+          "gitignore"
+          "gitcommit"
+          "diff"
+          "sql"
+        ];
+
+        # Enable syntax highlighting
+        highlight = {
+          enable = true;
+          additionalVimRegexHighlighting = false;
+        };
+
+        # Enable smart indentation
+        indent = {
+          enable = true;
+        };
+
+        # Enable incremental selection
+        incrementalSelection = {
+          enable = true;
+          keymaps = {
+            initSelection = "<C-space>";
+            nodeIncremental = "<C-space>";
+            scopeIncremental = "<C-s>";
+            nodeDecremental = "<M-space>";
+          };
+        };
+      };
+
       # Automatically install missing parsers when entering buffer
       #autoInstall = true;
 
       # Install these parsers
-      ensureInstalled = [
-        "go"
-        "gomod"
-        "gowork"
-        "gosum"
-        "lua"
-        "vim"
-        "vimdoc"
-        "nix"
-        "bash"
-        "c"
-        "markdown"
-        "markdown_inline"
-        "python"
-        "javascript"
-        "typescript"
-        "html"
-        "css"
-        "json"
-        "yaml"
-        "toml"
-        "regex"
-        "dockerfile"
-        "gitignore"
-        "gitcommit"
-        "diff"
-        "sql"
-      ];
-
-      # Enable syntax highlighting
-      #highlight = {
-      #  enable = true;
-      #  additionalVimRegexHighlighting = false;
-      #};
-
-      # Enable smart indentation
-      #indent = {
-      #  enable = true;
-      #};
-
-      # Enable incremental selection
-      incrementalSelection = {
-        enable = true;
-        keymaps = {
-          #initSelection = "<C-space>";
-          #nodeIncremental = "<C-space>";
-          #scopeIncremental = "<C-s>";
-          #nodeDecremental = "<M-space>";
-        };
-      };
-
       # Enable folding based on treesitter
       folding = true;
     };

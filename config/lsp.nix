@@ -47,17 +47,17 @@
           #   };
           # };
 
-          # nil-ls = {
-          #   enable = true;
-          #   settings = {
-          #     nil = {
-          #       testSetting = 42;
-          #       formatting = {
-          #         command = [ "nixpkgs-fmt" ];
-          #       };
-          #     };
-          #   };
-          # };
+           nil_ls = {
+             enable = true;
+             settings = {
+               nil = {
+                 testSetting = 42;
+                 formatting = {
+                   command = [ "nixpkgs-fmt" ];
+                 };
+               };
+             };
+           };
         };
 
         # Global LSP settings

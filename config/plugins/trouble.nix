@@ -2,7 +2,7 @@
   config.plugins.trouble = {
     enable = true;
     settings = {
-      position = "bottom";
+      position = "float";
       height = 10;
       width = 50;
       #icons = true;

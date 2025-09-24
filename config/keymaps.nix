@@ -66,50 +66,50 @@
       options = { desc = "Find help"; };
     }
 
-    # LSP keymaps
+    # LSP keymaps (all under <leader>l prefix to avoid vim conflicts)
     {
       mode = "n";
-      key = "gd";
+      key = "<leader>ld";
       action = {
         __raw = "function() require('telescope.builtin').lsp_definitions() end";
       };
-      options = { desc = "Go to definition"; };
+      options = { desc = "LSP definitions"; };
     }
     {
       mode = "n";
-      key = "gD";
+      key = "<leader>lD";
       action = {
         __raw = "function() vim.lsp.buf.declaration() end";
       };
-      options = { desc = "Go to declaration"; };
+      options = { desc = "LSP declaration"; };
     }
     {
       mode = "n";
-      key = "gi";
+      key = "<leader>li";
       action = {
         __raw = "function() require('telescope.builtin').lsp_implementations() end";
       };
-      options = { desc = "Go to implementation"; };
-    }
-    {
-      mode = "n";
-      key = "gr";
-      action = {
-        __raw = "function() require('telescope.builtin').lsp_references() end";
-      };
-      options = { desc = "Show references"; };
-    }
-    {
-      mode = "n";
-      key = "K";
-      action = {
-        __raw = "function() vim.lsp.buf.hover() end";
-      };
-      options = { desc = "Show hover documentation"; };
+      options = { desc = "LSP implementations"; };
     }
     {
       mode = "n";
       key = "<leader>lr";
+      action = {
+        __raw = "function() require('telescope.builtin').lsp_references() end";
+      };
+      options = { desc = "LSP references"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>lh";
+      action = {
+        __raw = "function() vim.lsp.buf.hover() end";
+      };
+      options = { desc = "LSP hover info"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>ln";
       action = {
         __raw = "function() vim.lsp.buf.rename() end";
       };
@@ -151,7 +151,7 @@
     }
     {
       mode = "n";
-      key = "<leader>ld";
+      key = "<leader>le";
       action = {
         __raw = "function() vim.diagnostic.open_float() end";
       };

@@ -43,4 +43,37 @@
     mapleader = " ";
     maplocalleader = " ";
   };
+
+  # LSP UI configuration for rounded borders
+  extraConfigLua = ''
+    -- Configure LSP floating windows with rounded borders
+    local border_opts = {
+      border = "rounded",
+      winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
+    }
+
+    -- LSP handlers with rounded borders
+    vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, border_opts)
+    vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, border_opts)
+
+    -- Diagnostic configuration with rounded borders
+    vim.diagnostic.config({
+      float = {
+        border = "rounded",
+        source = "always",
+        header = "",
+        prefix = "",
+        focusable = false,
+      },
+      virtual_text = {
+        spacing = 4,
+        source = "if_many",
+        prefix = "●",
+      },
+      signs = true,
+      underline = true,
+      update_in_insert = false,
+      severity_sort = true,
+    })
+  '';
 }

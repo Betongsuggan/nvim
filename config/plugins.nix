@@ -14,6 +14,7 @@
           selection_caret = " ";
           path_display = ["truncate"];
           sorting_strategy = "ascending";
+          borderchars = [ "─" "│" "─" "│" "╭" "╮" "╯" "╰" ];
           layout_config = {
             horizontal = {
               prompt_position = "top";
@@ -81,6 +82,16 @@
       settings = {
         snippet = {
           expand = "function(args) require('luasnip').lsp_expand(args.body) end";
+        };
+        window = {
+          completion = {
+            border = "rounded";
+            winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None";
+          };
+          documentation = {
+            border = "rounded";
+            winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None";
+          };
         };
         mapping = {
           "<C-b>" = "cmp.mapping.scroll_docs(-4)";

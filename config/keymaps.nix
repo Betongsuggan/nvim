@@ -65,6 +65,22 @@
       action = "<cmd>bprevious<CR>";
       options = { desc = "Previous buffer"; };
     }
+    {
+      mode = "n";
+      key = "<leader>bc";
+      action = {
+        __raw = "function() require('bufferline').close_with_pick() end";
+      };
+      options = { desc = "Close buffer with pick"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>bh";
+      action = {
+        __raw = "function() require('bufferline').close_others() end";
+      };
+      options = { desc = "Close all other buffers"; };
+    }
 
     # Window management
     {

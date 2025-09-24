@@ -169,6 +169,11 @@
             group = "Git";
             icon = "🌿";
           }
+          {
+            __unkeyed-1 = "<leader>w";
+            group = "Windows";
+            icon = "🪟";
+          }
         ];
         win = {
           border = "rounded";

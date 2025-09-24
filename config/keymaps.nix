@@ -9,23 +9,37 @@
     }
     {
       mode = "n";
-      key = "<leader>w";
-      action = "<cmd>w<CR>";
-      options = { desc = "Save file"; };
-    }
-    {
-      mode = "n";
       key = "<leader>qq";
       action = "<cmd>q<CR>";
       options = { desc = "Quit"; };
     }
 
-    # Buffer navigation
+    # Buffer management
+    {
+      mode = "n";
+      key = "<leader>bs";
+      action = "<cmd>w<CR>";
+      options = { desc = "Save buffer"; };
+    }
     {
       mode = "n";
       key = "<leader>bd";
-      action = "<cmd>bd<CR>";
+      action = "<cmd>bdelete<CR>";
       options = { desc = "Delete buffer"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>bD";
+      action = "<cmd>bdelete!<CR>";
+      options = { desc = "Force delete buffer"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>bo";
+      action = {
+        __raw = "function() vim.cmd('%bdelete|edit#|bdelete#') end";
+      };
+      options = { desc = "Close all other buffers"; };
     }
     {
       mode = "n";
@@ -38,6 +52,114 @@
       key = "]b";
       action = "<cmd>bnext<CR>";
       options = { desc = "Next buffer"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>bn";
+      action = "<cmd>bnext<CR>";
+      options = { desc = "Next buffer"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>bp";
+      action = "<cmd>bprevious<CR>";
+      options = { desc = "Previous buffer"; };
+    }
+
+    # Window management
+    {
+      mode = "n";
+      key = "<leader>wv";
+      action = "<cmd>vsplit<CR>";
+      options = { desc = "Split window vertically"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>wh";
+      action = "<cmd>split<CR>";
+      options = { desc = "Split window horizontally"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>wc";
+      action = "<cmd>close<CR>";
+      options = { desc = "Close window"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>wo";
+      action = "<cmd>only<CR>";
+      options = { desc = "Close all other windows"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>ww";
+      action = "<C-w>w";
+      options = { desc = "Switch to next window"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>wr";
+      action = "<C-w>r";
+      options = { desc = "Rotate windows"; };
+    }
+
+    # Window navigation
+    {
+      mode = "n";
+      key = "<C-h>";
+      action = "<C-w>h";
+      options = { desc = "Move to left window"; };
+    }
+    {
+      mode = "n";
+      key = "<C-j>";
+      action = "<C-w>j";
+      options = { desc = "Move to bottom window"; };
+    }
+    {
+      mode = "n";
+      key = "<C-k>";
+      action = "<C-w>k";
+      options = { desc = "Move to top window"; };
+    }
+    {
+      mode = "n";
+      key = "<C-l>";
+      action = "<C-w>l";
+      options = { desc = "Move to right window"; };
+    }
+
+    # Window resizing
+    {
+      mode = "n";
+      key = "<leader>w=";
+      action = "<C-w>=";
+      options = { desc = "Equalize window sizes"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>w+";
+      action = "<cmd>resize +5<CR>";
+      options = { desc = "Increase window height"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>w-";
+      action = "<cmd>resize -5<CR>";
+      options = { desc = "Decrease window height"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>w>";
+      action = "<cmd>vertical resize +5<CR>";
+      options = { desc = "Increase window width"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>w<";
+      action = "<cmd>vertical resize -5<CR>";
+      options = { desc = "Decrease window width"; };
     }
 
     # Find operations (using <leader>f prefix - Telescope)

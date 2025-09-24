@@ -65,7 +65,7 @@
       style = "minimal",
     })
 
-    -- Diagnostic configuration with rounded borders
+    -- Diagnostic configuration with rounded borders and emoji signs
     vim.diagnostic.config({
       float = {
         border = "rounded",
@@ -80,10 +80,35 @@
         source = "if_many",
         prefix = "●",
       },
-      signs = true,
+      signs = {
+        text = {
+          [vim.diagnostic.severity.ERROR] = "🚨",
+          [vim.diagnostic.severity.WARN] = "⚠️",
+          [vim.diagnostic.severity.INFO] = "💡",
+          [vim.diagnostic.severity.HINT] = "💭",
+        },
+      },
       underline = true,
       update_in_insert = false,
       severity_sort = true,
+    })
+
+    -- Define diagnostic signs for the signcolumn
+    vim.fn.sign_define("DiagnosticSignError", {
+      text = "🚨",
+      texthl = "DiagnosticSignError"
+    })
+    vim.fn.sign_define("DiagnosticSignWarn", {
+      text = "⚠️",
+      texthl = "DiagnosticSignWarn"
+    })
+    vim.fn.sign_define("DiagnosticSignInfo", {
+      text = "💡",
+      texthl = "DiagnosticSignInfo"
+    })
+    vim.fn.sign_define("DiagnosticSignHint", {
+      text = "💭",
+      texthl = "DiagnosticSignHint"
     })
 
     -- Additional LSP window configuration

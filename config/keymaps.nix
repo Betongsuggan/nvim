@@ -158,6 +158,48 @@
       options = { desc = "LSP show diagnostic"; };
     }
 
+    # Git hunk navigation and actions
+    {
+      mode = "n";
+      key = "]h";
+      action = {
+        __raw = "function() require('gitsigns').next_hunk() end";
+      };
+      options = { desc = "Next git hunk"; };
+    }
+    {
+      mode = "n";
+      key = "[h";
+      action = {
+        __raw = "function() require('gitsigns').prev_hunk() end";
+      };
+      options = { desc = "Previous git hunk"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>gh";
+      action = {
+        __raw = "function() require('gitsigns').preview_hunk() end";
+      };
+      options = { desc = "Preview git hunk"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>gs";
+      action = {
+        __raw = "function() require('gitsigns').stage_hunk() end";
+      };
+      options = { desc = "Stage git hunk"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>gu";
+      action = {
+        __raw = "function() require('gitsigns').undo_stage_hunk() end";
+      };
+      options = { desc = "Undo stage git hunk"; };
+    }
+
     # Project commands (language-agnostic using <leader>p prefix)
     {
       mode = "n";

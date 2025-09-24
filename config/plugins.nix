@@ -144,9 +144,9 @@
             icon = "🔧";
           }
           {
-            __unkeyed-1 = "<leader>g";
-            group = "Go";
-            icon = "🐹";
+            __unkeyed-1 = "<leader>p";
+            group = "Project";
+            icon = "📦";
           }
           {
             __unkeyed-1 = "<leader>b";

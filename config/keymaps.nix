@@ -136,24 +136,75 @@
       options = { desc = "LSP show diagnostic"; };
     }
 
-    # Go-specific keymaps (using <leader>g prefix for Go commands)
+    # Project commands (language-agnostic using <leader>p prefix)
     {
       mode = "n";
-      key = "<leader>grt";
-      action = "<cmd>!go test ./...<CR>";
-      options = { desc = "Go run tests"; };
+      key = "<leader>pt";
+      action = {
+        __raw = ''
+          function()
+            -- Detect project type and run appropriate test command
+            if vim.fn.filereadable("go.mod") == 1 then
+              vim.cmd("!go test ./...")
+            elseif vim.fn.filereadable("package.json") == 1 then
+              vim.cmd("!npm test")
+            elseif vim.fn.filereadable("Cargo.toml") == 1 then
+              vim.cmd("!cargo test")
+            elseif vim.fn.filereadable("Makefile") == 1 then
+              vim.cmd("!make test")
+            else
+              print("No recognized test framework found")
+            end
+          end
+        '';
+      };
+      options = { desc = "Run tests"; };
     }
     {
       mode = "n";
-      key = "<leader>grr";
-      action = "<cmd>!go run .<CR>";
-      options = { desc = "Go run main"; };
+      key = "<leader>pr";
+      action = {
+        __raw = ''
+          function()
+            -- Detect project type and run appropriate run command
+            if vim.fn.filereadable("go.mod") == 1 then
+              vim.cmd("!go run .")
+            elseif vim.fn.filereadable("package.json") == 1 then
+              vim.cmd("!npm start")
+            elseif vim.fn.filereadable("Cargo.toml") == 1 then
+              vim.cmd("!cargo run")
+            elseif vim.fn.filereadable("Makefile") == 1 then
+              vim.cmd("!make run")
+            else
+              print("No recognized run command found")
+            end
+          end
+        '';
+      };
+      options = { desc = "Run project"; };
     }
     {
       mode = "n";
-      key = "<leader>gb";
-      action = "<cmd>!go build<CR>";
-      options = { desc = "Go build"; };
+      key = "<leader>pb";
+      action = {
+        __raw = ''
+          function()
+            -- Detect project type and run appropriate build command
+            if vim.fn.filereadable("go.mod") == 1 then
+              vim.cmd("!go build")
+            elseif vim.fn.filereadable("package.json") == 1 then
+              vim.cmd("!npm run build")
+            elseif vim.fn.filereadable("Cargo.toml") == 1 then
+              vim.cmd("!cargo build")
+            elseif vim.fn.filereadable("Makefile") == 1 then
+              vim.cmd("!make build")
+            else
+              print("No recognized build command found")
+            end
+          end
+        '';
+      };
+      options = { desc = "Build project"; };
     }
   ];
 }

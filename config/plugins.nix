@@ -126,6 +126,47 @@
       enable = true;
     };
 
+    # File explorer
+    neo-tree = {
+      enable = true;
+      closeIfLastWindow = false;
+      popupBorderStyle = "rounded";
+      enableGitStatus = true;
+      enableDiagnostics = true;
+      window = {
+        position = "float";
+        width = 50;
+        mappings = {
+          "o" = "open";
+          "<CR>" = "open";
+        };
+        mappingOptions = {
+          noremap = true;
+          nowait = true;
+        };
+      };
+    };
+
+    # Indent guides for better code visualization
+    indent-blankline = {
+      enable = true;
+      settings = {
+        indent = {
+          char = "│";
+          tab_char = "│";
+        };
+        whitespace = {
+          remove_blankline_trail = false;
+        };
+        scope = {
+          enabled = true;
+          char = "│";
+          show_start = true;
+          show_end = true;
+        };
+      };
+    };
+
     # Which-Key for keymap discovery
     which-key = {
       enable = true;

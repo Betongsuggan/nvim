@@ -35,7 +35,7 @@
     
     # Performance
     updatetime = 300;
-    timeoutlen = 500;
+    timeoutlen = 300;
   };
   
   # Global variables

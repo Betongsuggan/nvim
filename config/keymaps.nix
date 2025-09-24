@@ -173,6 +173,12 @@
     # Find operations (using <leader>f prefix - Telescope)
     {
       mode = "n";
+      key = "<leader>fe";
+      action = "<cmd>Neotree toggle<CR>";
+      options = { desc = "File explorer"; };
+    }
+    {
+      mode = "n";
       key = "<leader>ff";
       action = "<cmd>Telescope find_files<CR>";
       options = { desc = "Find files"; };

@@ -70,49 +70,65 @@
     {
       mode = "n";
       key = "gd";
-      action = "vim.lsp.buf.definition";
+      action = {
+        __raw = "function() vim.lsp.buf.definition() end";
+      };
       options = { desc = "Go to definition"; };
     }
     {
       mode = "n";
       key = "gD";
-      action = "vim.lsp.buf.declaration";
+      action = {
+        __raw = "function() vim.lsp.buf.declaration() end";
+      };
       options = { desc = "Go to declaration"; };
     }
     {
       mode = "n";
       key = "gi";
-      action = "vim.lsp.buf.implementation";
+      action = {
+        __raw = "function() vim.lsp.buf.implementation() end";
+      };
       options = { desc = "Go to implementation"; };
     }
     {
       mode = "n";
       key = "gr";
-      action = "vim.lsp.buf.references";
+      action = {
+        __raw = "function() vim.lsp.buf.references() end";
+      };
       options = { desc = "Show references"; };
     }
     {
       mode = "n";
       key = "K";
-      action = "vim.lsp.buf.hover";
+      action = {
+        __raw = "function() vim.lsp.buf.hover() end";
+      };
       options = { desc = "Show hover documentation"; };
     }
     {
       mode = "n";
       key = "<leader>lr";
-      action = "vim.lsp.buf.rename";
+      action = {
+        __raw = "function() vim.lsp.buf.rename() end";
+      };
       options = { desc = "LSP rename"; };
     }
     {
       mode = "n";
       key = "<leader>la";
-      action = "vim.lsp.buf.code_action";
+      action = {
+        __raw = "function() vim.lsp.buf.code_action() end";
+      };
       options = { desc = "LSP code action"; };
     }
     {
       mode = "n";
       key = "<leader>lf";
-      action = "vim.lsp.buf.format";
+      action = {
+        __raw = "function() vim.lsp.buf.format() end";
+      };
       options = { desc = "LSP format"; };
     }
 
@@ -120,19 +136,25 @@
     {
       mode = "n";
       key = "[d";
-      action = "vim.diagnostic.goto_prev";
+      action = {
+        __raw = "function() vim.diagnostic.goto_prev() end";
+      };
       options = { desc = "Previous diagnostic"; };
     }
     {
       mode = "n";
       key = "]d";
-      action = "vim.diagnostic.goto_next";
+      action = {
+        __raw = "function() vim.diagnostic.goto_next() end";
+      };
       options = { desc = "Next diagnostic"; };
     }
     {
       mode = "n";
       key = "<leader>ld";
-      action = "vim.diagnostic.open_float";
+      action = {
+        __raw = "function() vim.diagnostic.open_float() end";
+      };
       options = { desc = "LSP show diagnostic"; };
     }
 

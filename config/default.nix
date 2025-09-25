@@ -21,6 +21,8 @@ in {
     nerd-fonts.fira-code
     nerd-fonts.jetbrains-mono
     nerd-fonts.hack
+    # Debugging tools
+    delve # Go debugger
   ];
 
   # Extra plugins not available in nixvim
@@ -35,6 +37,9 @@ in {
     dracula-nvim          # Dracula - dark theme inspired by the famous color palette
     kanagawa-nvim         # Kanagawa - inspired by the famous painting
     rose-pine             # Rosé Pine - soho vibes theme
+    # Testing and debugging plugins  
+    neotest-go            # Go test adapter for neotest
+    neotest-plenary       # Plenary test adapter
   ];
 
   # Configure nvim-scrollbar with theme colors and theme switching

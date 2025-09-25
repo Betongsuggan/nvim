@@ -101,7 +101,7 @@ let
   # Available: "catppuccin", "gruvbox", "tokyonight", "nord", "onedark", 
   #            "nightfox", "dracula", "kanagawa", "rose-pine"
   currentThemeName = "catppuccin";
-  
+
   # Get current theme configuration
   currentTheme = themes.${currentThemeName};
 

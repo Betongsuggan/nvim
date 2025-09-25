@@ -19,14 +19,14 @@ end
 function Registry.get_adapter_for_file(filepath)
   local filetype = vim.filetype.match({ filename = filepath }) or ""
   local extension = filepath:match("%.([^%.]+)$") or ""
-  
+
   -- First, try exact test file matching
   for _, adapter in pairs(_G.test_adapters) do
     if adapter:is_test_file(filepath) then
       return adapter
     end
   end
-  
+
   -- Fallback: try to match by filetype or extension
   for _, adapter in pairs(_G.test_adapters) do
     for _, pattern in ipairs(adapter.file_patterns) do
@@ -35,7 +35,7 @@ function Registry.get_adapter_for_file(filepath)
       end
     end
   end
-  
+
   return nil
 end
 
@@ -47,10 +47,11 @@ function Registry.list_adapters()
       file_patterns = adapter.file_patterns,
       supports_nearest = adapter.supports_nearest,
       supports_file = adapter.supports_file,
-      supports_all = adapter.supports_all
+      supports_all = adapter.supports_all,
     })
   end
   return adapters
 end
 
 return Registry
+

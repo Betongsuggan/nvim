@@ -71,50 +71,44 @@
           stylua = {
             prepend_args = [ "--indent-type" "Spaces" "--indent-width" "2" ];
           };
-          nixfmt = {
-            prepend_args = [ "--width" "80" ];
-          };
+          nixfmt = { prepend_args = [ "--width" "80" ]; };
         };
       };
     };
   };
 
   # Auto commands for formatting and cleanup
-  autoCmd = [
-    {
-      event = [ "BufWritePre" ];
-      pattern = [ "*" ];
-      callback = {
-        __raw = ''
-          function()
-            -- Save cursor position
-            local save = vim.fn.winsaveview()
-            -- Remove trailing whitespace
-            vim.cmd([[%s/\s\+$//e]])
-            -- Restore cursor position
-            vim.fn.winrestview(save)
-          end
-        '';
-      };
-    }
-  ];
+  autoCmd = [{
+    event = [ "BufWritePre" ];
+    pattern = [ "*" ];
+    callback = {
+      __raw = ''
+        function()
+          -- Save cursor position
+          local save = vim.fn.winsaveview()
+          -- Remove trailing whitespace
+          vim.cmd([[%s/\s\+$//e]])
+          -- Restore cursor position
+          vim.fn.winrestview(save)
+        end
+      '';
+    };
+  }];
 
   # Key mappings for manual formatting
-  keymaps = [
-    {
-      mode = "n";
-      key = "<leader>f";
-      action = {
-        __raw = ''
-          function()
-            require("conform").format({ lsp_fallback = true })
-          end
-        '';
-      };
-      options = {
-        desc = "Format current buffer";
-        silent = true;
-      };
-    }
-  ];
+  keymaps = [{
+    mode = "n";
+    key = "<leader>f";
+    action = {
+      __raw = ''
+        function()
+          require("conform").format({ lsp_fallback = true })
+        end
+      '';
+    };
+    options = {
+      desc = "Format current buffer";
+      silent = true;
+    };
+  }];
 }

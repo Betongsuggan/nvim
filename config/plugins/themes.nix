@@ -116,7 +116,7 @@
     -- Theme persistence
     local data_dir = vim.fn.stdpath("data")
     local theme_file = data_dir .. "/theme.txt"
-    
+
     -- Function to save current theme
     local function save_theme(theme_name)
       local file = io.open(theme_file, "w")
@@ -125,7 +125,7 @@
         file:close()
       end
     end
-    
+
     -- Function to load saved theme
     local function load_saved_theme()
       local file = io.open(theme_file, "r")
@@ -138,11 +138,11 @@
       end
       return "${theme.name}" -- fallback to nix config default
     end
-    
+
     -- Load saved theme or use default
     local saved_theme_name = load_saved_theme()
     local current_theme = themes[saved_theme_name]
-    
+
     -- Apply saved theme on startup if different from nix default
     if saved_theme_name ~= "${theme.name}" then
       -- Use autocmd to ensure plugins are loaded before applying theme
@@ -364,3 +364,4 @@
     end
   '';
 }
+

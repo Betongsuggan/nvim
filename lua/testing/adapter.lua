@@ -39,3 +39,4 @@ function TestAdapter:get_test_name_at_cursor(bufnr, cursor_line)
 end
 
 return TestAdapter
+

@@ -4,41 +4,41 @@
     # Line numbers and UI
     number = true;
     relativenumber = true;
-    signcolumn = "yes";  # Keep single column width
+    signcolumn = "yes"; # Keep single column width
     cursorline = true;
     colorcolumn = "120";
-    
+
     # Indentation and formatting
     tabstop = 2;
     shiftwidth = 2;
     expandtab = true;
     autoindent = true;
     smartindent = true;
-    
+
     # Search
     ignorecase = true;
     smartcase = true;
     hlsearch = true;
     incsearch = true;
-    
+
     # Editor behavior
     wrap = false;
     scrolloff = 8;
     sidescrolloff = 8;
     mouse = "a";
     clipboard = "unnamedplus";
-    
+
     # File handling
     backup = false;
     writebackup = false;
     swapfile = false;
     undofile = true;
-    
+
     # Performance
-    updatetime = 1000;  # Reduced frequency for better performance
+    updatetime = 1000; # Reduced frequency for better performance
     timeoutlen = 300;
   };
-  
+
   # Global variables
   globals = {
     mapleader = " ";
@@ -225,7 +225,7 @@
         end,
       })
     end
-    
+
     create_scrollbar_indicator()
 
     -- Show trailing whitespace and problematic whitespace
@@ -247,7 +247,7 @@
     vim.opt.foldlevelstart = 99
     vim.opt.foldenable = true
     vim.opt.foldcolumn = '0'  -- Hide fold column
-    
+
     -- Custom fold text function with │ theme
     function _G.custom_fold_text()
       local line = vim.fn.getline(vim.v.foldstart)
@@ -267,7 +267,7 @@
     vim.api.nvim_set_hl(0, 'CmpDoc', { bg = '#181825', fg = '#cdd6f4' })
     vim.api.nvim_set_hl(0, 'CmpDocBorder', { fg = '#6c7086' })
     vim.api.nvim_set_hl(0, 'CmpGhostText', { fg = '#6c7086', italic = true })
-    
+
     -- Completion kind highlights
     vim.api.nvim_set_hl(0, 'CmpItemKindFunction', { fg = '#89b4fa' })
     vim.api.nvim_set_hl(0, 'CmpItemKindMethod', { fg = '#89b4fa' })
@@ -276,7 +276,7 @@
     vim.api.nvim_set_hl(0, 'CmpItemKindKeyword', { fg = '#cba6f7' })
     vim.api.nvim_set_hl(0, 'CmpItemKindSnippet', { fg = '#a6e3a1' })
     vim.api.nvim_set_hl(0, 'CmpItemKindText', { fg = '#cdd6f4' })
-    
+
     -- Custom cursorline highlighting (background only, no underline)
     vim.api.nvim_set_hl(0, 'CursorLine', { bg = '#313244', underline = false })
     vim.api.nvim_set_hl(0, 'CursorLineNr', { fg = '#fab387', bold = true })
@@ -333,7 +333,7 @@
         preview_title = "Preview",
       })
     end
-    
+
     _G.telescope_diagnostics_with_preview = telescope_diagnostics_with_preview
   '';
 }

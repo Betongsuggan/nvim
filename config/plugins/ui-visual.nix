@@ -1,11 +1,9 @@
-{ ... }: let
-  theme = import ../theme.nix;
+{ ... }:
+let theme = import ../theme.nix;
 in {
   plugins = {
     # Icons (required by telescope and other plugins)
-    web-devicons = {
-      enable = true;
-    };
+    web-devicons = { enable = true; };
 
     # Buffer tabline for open buffer visualization  
     bufferline = {
@@ -144,26 +142,20 @@ in {
           };
         };
         sections = {
-          lualine_a = [
-            {
-              __unkeyed-1 = "mode";
-              separator = {
-                left = "";
-              };
-              right_padding = 2;
-            }
-          ];
-          lualine_b = [
-            {
-              __unkeyed-1 = "filename";
-              symbols = {
-                modified = "●";
-                readonly = "🔒";
-                unnamed = "📝";
-                newfile = "✨";
-              };
-            }
-          ];
+          lualine_a = [{
+            __unkeyed-1 = "mode";
+            separator = { left = ""; };
+            right_padding = 2;
+          }];
+          lualine_b = [{
+            __unkeyed-1 = "filename";
+            symbols = {
+              modified = "●";
+              readonly = "🔒";
+              unnamed = "📝";
+              newfile = "✨";
+            };
+          }];
           lualine_c = [
             {
               __unkeyed-1 = "branch";
@@ -215,9 +207,7 @@ in {
             }
             {
               __unkeyed-1 = "encoding";
-              fmt = {
-                __raw = "string.upper";
-              };
+              fmt = { __raw = "string.upper"; };
             }
             {
               __unkeyed-1 = "fileformat";
@@ -229,18 +219,12 @@ in {
             }
             "filetype"
           ];
-          lualine_y = [
-            "progress"
-          ];
-          lualine_z = [
-            {
-              __unkeyed-1 = "location";
-              separator = {
-                right = "";
-              };
-              left_padding = 2;
-            }
-          ];
+          lualine_y = [ "progress" ];
+          lualine_z = [{
+            __unkeyed-1 = "location";
+            separator = { right = ""; };
+            left_padding = 2;
+          }];
         };
         inactive_sections = {
           lualine_a = [ "filename" ];
@@ -258,32 +242,18 @@ in {
       enable = true;
       settings = {
         signs = {
-          add = {
-            text = "+";
-          };
-          change = {
-            text = "~";
-          };
-          delete = {
-            text = "_";
-          };
-          topdelete = {
-            text = "‾";
-          };
-          changedelete = {
-            text = "~";
-          };
-          untracked = {
-            text = "?";
-          };
+          add = { text = "+"; };
+          change = { text = "~"; };
+          delete = { text = "_"; };
+          topdelete = { text = "‾"; };
+          changedelete = { text = "~"; };
+          untracked = { text = "?"; };
         };
         signcolumn = true;
         numhl = false;
         linehl = false;
         word_diff = false;
-        watch_gitdir = {
-          follow_files = true;
-        };
+        watch_gitdir = { follow_files = true; };
         attach_to_untracked = false;
         current_line_blame = false;
         sign_priority = 6;
@@ -314,15 +284,16 @@ in {
               title = "Preview";
               title_pos = "center";
               position = [ 0 2 ];
-              size = { width = 0.4; height = 0.4; };
+              size = {
+                width = 0.4;
+                height = 0.4;
+              };
               zindex = 200;
             };
           };
           buffer_diagnostics = {
             mode = "diagnostics";
-            filter = {
-              buf = 0;
-            };
+            filter = { buf = 0; };
             preview = {
               type = "float";
               relative = "editor";
@@ -330,7 +301,10 @@ in {
               title = "Preview";
               title_pos = "center";
               position = [ 0 2 ];
-              size = { width = 0.4; height = 0.4; };
+              size = {
+                width = 0.4;
+                height = 0.4;
+              };
               zindex = 200;
             };
           };
@@ -375,12 +349,15 @@ in {
             Variable = "󰀫 ";
           };
         };
-        win = { 
+        win = {
           border = "rounded";
           type = "float";
           relative = "editor";
           position = "50%";
-          size = { width = 0.8; height = 0.8; };
+          size = {
+            width = 0.8;
+            height = 0.8;
+          };
           zindex = 50;
         };
         preview = {
@@ -390,7 +367,10 @@ in {
           title = "Preview";
           title_pos = "center";
           position = [ 0 2 ];
-          size = { width = 0.4; height = 0.4; };
+          size = {
+            width = 0.4;
+            height = 0.4;
+          };
           zindex = 100;
         };
         throttle = {
@@ -398,7 +378,10 @@ in {
           update = 10;
           render = 10;
           follow = 100;
-          preview = { ms = 100; debounce = true; };
+          preview = {
+            ms = 100;
+            debounce = true;
+          };
         };
         keys = {
           "?" = "help";
@@ -416,7 +399,10 @@ in {
           "{" = "prev";
           "[[" = "prev";
           dd = "delete";
-          d = { action = "delete"; mode = "v"; };
+          d = {
+            action = "delete";
+            mode = "v";
+          };
           i = "inspect";
           p = "preview";
           P = "toggle_preview";
@@ -548,10 +534,10 @@ in {
         search = false,  -- Disable search handler to avoid hlslens dependency
       },
     })
-    
+
     -- Integrate with gitsigns
     require('scrollbar.handlers.gitsigns').setup()
-    
+
     -- Set up custom highlight groups based on theme
     vim.cmd([[
       highlight ScrollbarHandle guifg=${theme.colors.border}
@@ -563,7 +549,7 @@ in {
       highlight ScrollbarGitChangeHandle guifg=${theme.colors.git_change}
       highlight ScrollbarGitDeleteHandle guifg=${theme.colors.git_delete}
     ]])
-    
+
     -- Configure web-devicons with fallback icons for better compatibility
     local ok, devicons = pcall(require, "nvim-web-devicons")
     if ok then
@@ -597,3 +583,4 @@ in {
     end
   '';
 }
+

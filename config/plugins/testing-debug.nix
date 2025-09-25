@@ -8,9 +8,7 @@
     };
 
     # Go debug adapter
-    dap-go = {
-      enable = true;
-    };
+    dap-go = { enable = true; };
 
     # Debug Adapter Protocol (DAP)
     dap = {
@@ -40,14 +38,10 @@
     };
 
     # DAP UI
-    dap-ui = {
-      enable = true;
-    };
+    dap-ui = { enable = true; };
 
     # DAP Virtual Text
-    dap-virtual-text = {
-      enable = true;
-    };
+    dap-virtual-text = { enable = true; };
   };
 
   # Basic test keymaps
@@ -166,7 +160,7 @@
         silent = true;
       };
     }
-    
+
     # Debug keymaps
     {
       mode = "n";
@@ -226,3 +220,4 @@
     end
   '';
 }
+

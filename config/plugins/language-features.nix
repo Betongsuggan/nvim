@@ -4,23 +4,10 @@
     treesitter = {
       enable = true;
       settings = {
-        highlight = {
-          enable = true;
-        };
-        indent = {
-          enable = true;
-        };
-        ensure_installed = [
-          "go"
-          "gomod"
-          "gosum"
-          "lua"
-          "nix"
-          "bash"
-          "json"
-          "yaml"
-          "markdown"
-        ];
+        highlight = { enable = true; };
+        indent = { enable = true; };
+        ensure_installed =
+          [ "go" "gomod" "gosum" "lua" "nix" "bash" "json" "yaml" "markdown" ];
       };
     };
 
@@ -41,11 +28,13 @@
               completionBudget = "100ms"; # Limit completion time
               matcher = "Fuzzy";
               # Auto-import settings
-              completeUnimported = true; # Include unimported packages in completions
+              completeUnimported =
+                true; # Include unimported packages in completions
               deepCompletion = true; # Enable deep completions
               usePlaceholders = true; # Use placeholders in completions
               # Enhanced completion context
-              completionDocumentation = true; # Include documentation in completions
+              completionDocumentation =
+                true; # Include documentation in completions
               hoverKind = "FullDocumentation"; # Full documentation on hover
               linkTarget = "pkg.go.dev"; # Link to documentation
               # Interface implementation settings
@@ -87,18 +76,16 @@
           enable = true;
           settings = {
             nixd = {
-              nixpkgs = {
-                expr = "import <nixpkgs> { }";
-              };
-              formatting = {
-                command = [ "nixfmt" ];
-              };
+              nixpkgs = { expr = "import <nixpkgs> { }"; };
+              formatting = { command = [ "nixfmt" ]; };
               options = {
                 nixos = {
-                  expr = "(builtins.getFlake \"/etc/nixos\").nixosConfigurations.HOSTNAME.options";
+                  expr = ''
+                    (builtins.getFlake "/etc/nixos").nixosConfigurations.HOSTNAME.options'';
                 };
                 home_manager = {
-                  expr = "(builtins.getFlake \"/etc/nixos\").homeConfigurations.USERNAME.options";
+                  expr = ''
+                    (builtins.getFlake "/etc/nixos").homeConfigurations.USERNAME.options'';
                 };
               };
             };
@@ -112,7 +99,8 @@
       enable = true;
       settings = {
         snippet = {
-          expand = "function(args) require('luasnip').lsp_expand(args.body) end";
+          expand =
+            "function(args) require('luasnip').lsp_expand(args.body) end";
         };
 
         window = {
@@ -137,20 +125,37 @@
           "<Up>" = "cmp.mapping.select_prev_item()";
           "<C-d>" = "cmp.mapping.scroll_docs(4)";
           "<C-u>" = "cmp.mapping.scroll_docs(-4)";
-          "<C-y>" = "cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = true })";
+          "<C-y>" =
+            "cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = true })";
           "<C-e>" = "cmp.mapping.abort()";
           "<C-Space>" = "cmp.mapping.complete()";
-          "<CR>" = "cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = false })";
-          "<Tab>" = "cmp.mapping(function(fallback) if cmp.visible() then cmp.select_next_item() elseif require('luasnip').expand_or_jumpable() then require('luasnip').expand_or_jump() else fallback() end end, { 'i', 's' })";
-          "<S-Tab>" = "cmp.mapping(function(fallback) if cmp.visible() then cmp.select_prev_item() elseif require('luasnip').jumpable(-1) then require('luasnip').jump(-1) else fallback() end end, { 'i', 's' })";
+          "<CR>" =
+            "cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = false })";
+          "<Tab>" =
+            "cmp.mapping(function(fallback) if cmp.visible() then cmp.select_next_item() elseif require('luasnip').expand_or_jumpable() then require('luasnip').expand_or_jump() else fallback() end end, { 'i', 's' })";
+          "<S-Tab>" =
+            "cmp.mapping(function(fallback) if cmp.visible() then cmp.select_prev_item() elseif require('luasnip').jumpable(-1) then require('luasnip').jump(-1) else fallback() end end, { 'i', 's' })";
         };
 
         # Simple source priority
         sources = [
-          { name = "nvim_lsp"; priority = 1000; }
-          { name = "luasnip"; priority = 750; }
-          { name = "buffer"; priority = 500; max_item_count = 5; }
-          { name = "path"; priority = 250; }
+          {
+            name = "nvim_lsp";
+            priority = 1000;
+          }
+          {
+            name = "luasnip";
+            priority = 750;
+          }
+          {
+            name = "buffer";
+            priority = 500;
+            max_item_count = 5;
+          }
+          {
+            name = "path";
+            priority = 250;
+          }
         ];
 
         # Custom sorting for modules, fields, methods priority
@@ -183,15 +188,9 @@
               '';
             }
             # Default comparators for everything else
-            {
-              __raw = "require('cmp.config.compare').score";
-            }
-            {
-              __raw = "require('cmp.config.compare').offset";
-            }
-            {
-              __raw = "require('cmp.config.compare').order";
-            }
+            { __raw = "require('cmp.config.compare').score"; }
+            { __raw = "require('cmp.config.compare').offset"; }
+            { __raw = "require('cmp.config.compare').order"; }
           ];
         };
 
@@ -238,9 +237,7 @@
     };
 
     # Snippet engine (required for cmp)
-    luasnip = {
-      enable = true;
-    };
+    luasnip = { enable = true; };
 
     # LSP UI improvements
     lspkind = {

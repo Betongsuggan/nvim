@@ -36,9 +36,7 @@
     {
       mode = "n";
       key = "<leader>bo";
-      action = {
-        __raw = "function() vim.cmd('%bdelete|edit#|bdelete#') end";
-      };
+      action = { __raw = "function() vim.cmd('%bdelete|edit#|bdelete#') end"; };
       options = { desc = "Close all other buffers"; };
     }
     {
@@ -245,9 +243,7 @@
     {
       mode = "n";
       key = "<leader>lD";
-      action = {
-        __raw = "function() vim.lsp.buf.declaration() end";
-      };
+      action = { __raw = "function() vim.lsp.buf.declaration() end"; };
       options = { desc = "Go to declaration"; };
     }
     {
@@ -289,9 +285,7 @@
     {
       mode = "n";
       key = "<leader>lh";
-      action = {
-        __raw = "function() vim.lsp.buf.hover() end";
-      };
+      action = { __raw = "function() vim.lsp.buf.hover() end"; };
       options = { desc = "Hover info"; };
     }
     # Code Actions (using <leader>c prefix for Code operations)
@@ -367,17 +361,13 @@
     {
       mode = "n";
       key = "<leader>ca";
-      action = {
-        __raw = "function() vim.lsp.buf.code_action() end";
-      };
+      action = { __raw = "function() vim.lsp.buf.code_action() end"; };
       options = { desc = "Code actions"; };
     }
     {
       mode = "n";
       key = "<leader>cf";
-      action = {
-        __raw = "function() vim.lsp.buf.format() end";
-      };
+      action = { __raw = "function() vim.lsp.buf.format() end"; };
       options = { desc = "Format code"; };
     }
     {
@@ -407,7 +397,8 @@
       mode = "n";
       key = "[d";
       action = {
-        __raw = "function() vim.diagnostic.goto_prev({ border = 'rounded' }) end";
+        __raw =
+          "function() vim.diagnostic.goto_prev({ border = 'rounded' }) end";
       };
       options = { desc = "Previous diagnostic"; };
     }
@@ -415,7 +406,8 @@
       mode = "n";
       key = "]d";
       action = {
-        __raw = "function() vim.diagnostic.goto_next({ border = 'rounded' }) end";
+        __raw =
+          "function() vim.diagnostic.goto_next({ border = 'rounded' }) end";
       };
       options = { desc = "Next diagnostic"; };
     }
@@ -423,7 +415,8 @@
       mode = "n";
       key = "[e";
       action = {
-        __raw = "function() vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR, border = 'rounded' }) end";
+        __raw =
+          "function() vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR, border = 'rounded' }) end";
       };
       options = { desc = "Previous error"; };
     }
@@ -431,7 +424,8 @@
       mode = "n";
       key = "]e";
       action = {
-        __raw = "function() vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR, border = 'rounded' }) end";
+        __raw =
+          "function() vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR, border = 'rounded' }) end";
       };
       options = { desc = "Next error"; };
     }
@@ -439,7 +433,8 @@
       mode = "n";
       key = "[w";
       action = {
-        __raw = "function() vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.WARN, border = 'rounded' }) end";
+        __raw =
+          "function() vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.WARN, border = 'rounded' }) end";
       };
       options = { desc = "Previous warning"; };
     }
@@ -447,7 +442,8 @@
       mode = "n";
       key = "]w";
       action = {
-        __raw = "function() vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.WARN, border = 'rounded' }) end";
+        __raw =
+          "function() vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.WARN, border = 'rounded' }) end";
       };
       options = { desc = "Next warning"; };
     }
@@ -507,33 +503,25 @@
     {
       mode = "n";
       key = "]h";
-      action = {
-        __raw = "function() require('gitsigns').next_hunk() end";
-      };
+      action = { __raw = "function() require('gitsigns').next_hunk() end"; };
       options = { desc = "Next git hunk"; };
     }
     {
       mode = "n";
       key = "[h";
-      action = {
-        __raw = "function() require('gitsigns').prev_hunk() end";
-      };
+      action = { __raw = "function() require('gitsigns').prev_hunk() end"; };
       options = { desc = "Previous git hunk"; };
     }
     {
       mode = "n";
       key = "<leader>gh";
-      action = {
-        __raw = "function() require('gitsigns').preview_hunk() end";
-      };
+      action = { __raw = "function() require('gitsigns').preview_hunk() end"; };
       options = { desc = "Preview git hunk"; };
     }
     {
       mode = "n";
       key = "<leader>gs";
-      action = {
-        __raw = "function() require('gitsigns').stage_hunk() end";
-      };
+      action = { __raw = "function() require('gitsigns').stage_hunk() end"; };
       options = { desc = "Stage git hunk"; };
     }
     {
@@ -620,10 +608,9 @@
     {
       mode = "n";
       key = "<leader>Th";
-      action = {
-        __raw = "function() _G.theme_picker() end";
-      };
+      action = { __raw = "function() _G.theme_picker() end"; };
       options = { desc = "Theme picker"; };
     }
   ];
 }
+

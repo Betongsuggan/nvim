@@ -3,11 +3,7 @@
     # File finder and navigation
     telescope = {
       enable = true;
-      extensions = {
-        fzf-native = {
-          enable = true;
-        };
-      };
+      extensions = { fzf-native = { enable = true; }; };
       settings = {
         defaults = {
           prompt_prefix = " ";
@@ -24,11 +20,9 @@
               preview_width = 0.55;
               results_width = 0.8;
             };
-            vertical = {
-              mirror = false;
-            };
+            vertical = { mirror = false; };
             width = 0.87;
-            height = 0.80;
+            height = 0.8;
             preview_cutoff = 120;
           };
         };
@@ -36,9 +30,7 @@
           diagnostics = {
             theme = "dropdown";
             initial_mode = "normal";
-            layout_config = {
-              preview_cutoff = 9999;
-            };
+            layout_config = { preview_cutoff = 9999; };
           };
           lsp_implementations = {
             theme = "dropdown";
@@ -121,15 +113,8 @@
           hideDotfiles = true;
           hideGitignored = true;
           hideHidden = true;
-          hideByName = [
-            ".DS_Store"
-            "thumbs.db"
-            "node_modules"
-            "__pycache__"
-          ];
-          neverShow = [
-            ".git"
-          ];
+          hideByName = [ ".DS_Store" "thumbs.db" "node_modules" "__pycache__" ];
+          neverShow = [ ".git" ];
         };
       };
     };
@@ -143,7 +128,7 @@
           max_width = [ 40 0.2 ];
           width = null;
           min_width = 10;
-          win_opts = {};
+          win_opts = { };
           default_direction = "prefer_right";
           placement = "window";
           preserve_equality = false;
@@ -189,10 +174,10 @@
         disable_max_size = 2000000;
         filter_kind = [
           "Class"
-          "Constructor" 
+          "Constructor"
           "Enum"
           "Function"
-          "Interface" 
+          "Interface"
           "Module"
           "Method"
           "Struct"
@@ -202,11 +187,11 @@
         highlight_on_hover = false;
         highlight_on_jump = 300;
         autojump = false;
-        icons = {};
+        icons = { };
         ignore = {
           unlisted_buffers = false;
           diff_windows = true;
-          filetypes = [];
+          filetypes = [ ];
           buftypes = "special";
           wintypes = "special";
         };
@@ -264,12 +249,8 @@
             '';
           };
         };
-        treesitter = {
-          update_delay = 300;
-        };
-        markdown = {
-          update_delay = 300;
-        };
+        treesitter = { update_delay = 300; };
+        markdown = { update_delay = 300; };
       };
     };
   };

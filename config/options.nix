@@ -4,7 +4,7 @@
     # Line numbers and UI
     number = true;
     relativenumber = true;
-    signcolumn = "yes";
+    signcolumn = "yes";  # Keep single column width
     cursorline = true;
     colorcolumn = "120";
     

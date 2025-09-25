@@ -22,6 +22,7 @@ in {
   # Extra plugins not available in nixvim
   extraPlugins = with pkgs.vimPlugins; [
     nvim-scrollbar
+    gruvbox-nvim  # Gruvbox colorscheme for dynamic switching
   ];
 
   # Configure nvim-scrollbar with theme colors and theme switching
@@ -187,11 +188,17 @@ in {
         return
       end
 
-      -- Switch colorscheme
+      -- Switch colorscheme with error handling
+      local success = false
       if theme_name == "catppuccin" then
-        vim.cmd("colorscheme catppuccin")
+        success = pcall(vim.cmd, "colorscheme catppuccin")
       elseif theme_name == "gruvbox" then
-        vim.cmd("colorscheme gruvbox")
+        success = pcall(vim.cmd, "colorscheme gruvbox")
+      end
+
+      if not success then
+        print("Error: Colorscheme '" .. theme_name .. "' is not available. Make sure the plugin is installed.")
+        return
       end
 
       -- Update current theme
@@ -203,11 +210,31 @@ in {
       print("Switched to " .. theme_name .. " theme")
     end
 
+    -- Function to check if a colorscheme is available
+    local function is_colorscheme_available(name)
+      return pcall(vim.cmd, "colorscheme " .. name)
+    end
+
     -- Theme picker function
     function _G.theme_picker()
       local theme_names = {}
       for name, _ in pairs(themes) do
-        table.insert(theme_names, name)
+        -- Check if colorscheme is actually available
+        local available = false
+        if name == "catppuccin" then
+          available = pcall(function() vim.cmd("colorscheme catppuccin") end)
+        elseif name == "gruvbox" then
+          available = pcall(function() vim.cmd("colorscheme gruvbox") end)
+        end
+        
+        if available then
+          table.insert(theme_names, name)
+        end
+      end
+
+      if #theme_names == 0 then
+        print("No themes available. Make sure colorscheme plugins are installed.")
+        return
       end
 
       vim.ui.select(theme_names, {

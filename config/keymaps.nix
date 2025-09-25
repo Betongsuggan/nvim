@@ -630,11 +630,36 @@
             print("  <leader>th - Interactive theme picker")
             print("  <leader>tc - Switch to Catppuccin")
             print("  <leader>tg - Switch to Gruvbox")
+            print("  <leader>tl - List available themes")
             print("  :lua switch_theme('name') - Direct theme switch")
           end
         '';
       };
       options = { desc = "Theme info"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>tl";
+      action = {
+        __raw = ''
+          function()
+            local themes = { "catppuccin", "gruvbox" }
+            print("Available themes:")
+            for _, theme in ipairs(themes) do
+              local available = false
+              if theme == "catppuccin" then
+                available = pcall(function() vim.cmd("colorscheme catppuccin") end)
+              elseif theme == "gruvbox" then
+                available = pcall(function() vim.cmd("colorscheme gruvbox") end)
+              end
+              
+              local status = available and "✓" or "✗"
+              print("  " .. status .. " " .. theme:gsub("^%l", string.upper))
+            end
+          end
+        '';
+      };
+      options = { desc = "List available themes"; };
     }
   ];
 }

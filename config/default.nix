@@ -38,7 +38,7 @@ in {
     kanagawa-nvim         # Kanagawa - inspired by the famous painting
     rose-pine             # Rosé Pine - soho vibes theme
     # Testing and debugging plugins  
-    neotest-golang        # Go test adapter for neotest (more recent than neotest-go)
+    neotest-go            # Go test adapter for neotest
     neotest-plenary       # Plenary test adapter
   ];
 

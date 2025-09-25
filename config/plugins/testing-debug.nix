@@ -218,7 +218,7 @@
     {
       mode = "n";
       key = "<leader>cti";
-      action = ":lua print('Neotest adapters: ' .. vim.inspect(require('neotest').config.adapters)); print('Go binary: ' .. (vim.fn.executable('go') == 1 and 'found' or 'not found'))<CR>";
+      action = ":lua local ok, neotest = pcall(require, 'neotest'); if ok then print('Adapters: ' .. #(neotest.config.adapters or {})); for i, adapter in ipairs(neotest.config.adapters or {}) do print('  ' .. i .. ': ' .. (adapter.name or 'unknown')); end else print('Neotest not loaded'); end; print('Go: ' .. (vim.fn.executable('go') == 1 and 'found' or 'missing')); print('Delve: ' .. (vim.fn.executable('dlv') == 1 and 'found' or 'missing'))<CR>";
       options = {
         desc = "Show test info (debug)";
         silent = false;
@@ -260,6 +260,15 @@
         silent = true;
       };
     }
+    {
+      mode = "n";
+      key = "<leader>ctr";
+      action = ":lua require('neotest').run.run_last()<CR>";
+      options = {
+        desc = "Re-run last test";
+        silent = true;
+      };
+    }
 
     # Debug UI and advanced features (less frequent)
     {
@@ -295,30 +304,46 @@
   # Extra configuration for language-specific test adapters
   extraConfigLua = ''
     -- Configure neotest adapters for different languages
-    local neotest_golang_ok, neotest_golang = pcall(require, "neotest-golang")
+    local neotest_go_ok, neotest_go = pcall(require, "neotest-go")
     local neotest_plenary_ok, neotest_plenary = pcall(require, "neotest-plenary")
     
     local adapters = {}
     
     -- Add Go adapter if available
-    if neotest_golang_ok then
-      table.insert(adapters, neotest_golang)
+    if neotest_go_ok then
+      -- Configure neotest-go with basic settings
+      local go_adapter = neotest_go({
+        experimental = {
+          test_table = false, -- Disable table tests to avoid issues
+        },
+        args = { "-count=1", "-timeout=60s", "-race" }
+      })
+      table.insert(adapters, go_adapter)
+      print("✓ neotest-go loaded successfully")
     else
-      print("Warning: neotest-golang not available")
+      print("✗ Warning: neotest-go not available")
     end
     
     -- Add plenary adapter if available
     if neotest_plenary_ok then
       table.insert(adapters, neotest_plenary)
+      print("✓ neotest-plenary loaded successfully")
     else
-      print("Warning: neotest-plenary not available")
+      print("✗ Warning: neotest-plenary not available")
     end
     
-    -- Log adapter count for debugging
-    print("Neotest configured with " .. #adapters .. " adapters")
+    -- Check if we have any adapters
+    if #adapters == 0 then
+      print("✗ No neotest adapters loaded! Tests will not work.")
+      return
+    end
     
-    require("neotest").setup({
-      adapters = adapters,
+    print("✓ Neotest configured with " .. #adapters .. " adapters")
+    
+    -- Safer neotest setup with error handling
+    local neotest_ok, neotest_err = pcall(function()
+      require("neotest").setup({
+        adapters = adapters,
       
       -- Test discovery patterns
       discovery = {
@@ -389,6 +414,15 @@
         expand_errors = true,
       },
     })
+    end)
+    
+    -- Check if neotest setup succeeded
+    if not neotest_ok then
+      print("✗ Error setting up neotest: " .. (neotest_err or "unknown error"))
+      return
+    else
+      print("✓ Neotest setup completed successfully")
+    end
     
     -- Configure DAP UI to auto-open/close
     local dap, dapui = require("dap"), require("dapui")

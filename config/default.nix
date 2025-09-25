@@ -14,6 +14,16 @@ in {
   # Colorscheme from theme
   colorschemes.${theme.name} = theme.colorscheme;
 
+  # Include modular Lua files
+  extraFiles = {
+    "lua/testing/adapter.lua" = builtins.readFile ../lua/testing/adapter.lua;
+    "lua/testing/registry.lua" = builtins.readFile ../lua/testing/registry.lua;
+    "lua/testing/runner.lua" = builtins.readFile ../lua/testing/runner.lua;
+    "lua/testing/ui.lua" = builtins.readFile ../lua/testing/ui.lua;
+    "lua/testing/telescope.lua" = builtins.readFile ../lua/testing/telescope.lua;
+    "lua/testing/adapters/go.lua" = builtins.readFile ../lua/testing/adapters/go.lua;
+  };
+
   # Additional packages needed by plugins
   extraPackages = with pkgs; [
     ripgrep # Required by telescope live_grep

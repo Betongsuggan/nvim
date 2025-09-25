@@ -147,8 +147,52 @@ in {
       }
     }
 
-    -- Current theme (matches the nix config default)
-    local current_theme = themes.${theme.name}
+    -- Theme persistence
+    local data_dir = vim.fn.stdpath("data")
+    local theme_file = data_dir .. "/theme.txt"
+    
+    -- Function to save current theme
+    local function save_theme(theme_name)
+      local file = io.open(theme_file, "w")
+      if file then
+        file:write(theme_name)
+        file:close()
+      end
+    end
+    
+    -- Function to load saved theme
+    local function load_saved_theme()
+      local file = io.open(theme_file, "r")
+      if file then
+        local saved_theme = file:read("*all"):gsub("%s+", "") -- trim whitespace
+        file:close()
+        if saved_theme and saved_theme ~= "" and themes[saved_theme] then
+          return saved_theme
+        end
+      end
+      return "${theme.name}" -- fallback to nix config default
+    end
+    
+    -- Load saved theme or use default
+    local saved_theme_name = load_saved_theme()
+    local current_theme = themes[saved_theme_name]
+    
+    -- Apply saved theme on startup if different from nix default
+    if saved_theme_name ~= "${theme.name}" then
+      -- Use autocmd to ensure plugins are loaded before applying theme
+      vim.api.nvim_create_autocmd("VimEnter", {
+        pattern = "*",
+        once = true,
+        callback = function()
+          vim.defer_fn(function()
+            local success = pcall(vim.cmd, "colorscheme " .. saved_theme_name)
+            if success then
+              pcall(apply_theme_colors, current_theme)
+            end
+          end, 50)
+        end
+      })
+    end
 
     -- Function to apply theme colors to various plugins
     local function apply_theme_colors(theme_data)
@@ -271,13 +315,16 @@ in {
       -- Update current theme
       current_theme = themes[theme_name]
       
+      -- Save theme for persistence
+      save_theme(theme_name)
+      
       -- Apply theme colors with error handling
       local apply_success = pcall(apply_theme_colors, current_theme)
       
       if apply_success then
-        print("✓ Switched to " .. theme_name:gsub("^%l", string.upper) .. " theme")
+        print("✓ Switched to " .. theme_name:gsub("^%l", string.upper) .. " theme (saved)")
       else
-        print("✓ Switched to " .. theme_name:gsub("^%l", string.upper) .. " theme (some plugin colors may not have updated)")
+        print("✓ Switched to " .. theme_name:gsub("^%l", string.upper) .. " theme (saved, some plugin colors may not have updated)")
       end
       
       return true
@@ -333,6 +380,21 @@ in {
           _G.switch_theme(choice)
         end
       end)
+    end
+
+    -- Function to get current saved theme
+    function _G.get_saved_theme()
+      local saved = load_saved_theme()
+      print("Current saved theme: " .. saved:gsub("^%l", string.upper))
+      print("Theme file location: " .. theme_file)
+      return saved
+    end
+
+    -- Function to reset to default theme
+    function _G.reset_theme_to_default()
+      local default_theme = "${theme.name}"
+      _G.switch_theme(default_theme)
+      print("Reset to default theme: " .. default_theme:gsub("^%l", string.upper))
     end
 
     -- Configure nvim-scrollbar with color-coded line indicators

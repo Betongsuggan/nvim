@@ -28,7 +28,12 @@ You can also use Lua commands directly:
 :lua switch_theme('tokyonight')
 :lua switch_theme('dracula')
 :lua theme_picker()
+:lua get_saved_theme()          -- Show current saved theme
+:lua reset_theme_to_default()   -- Reset to nix config default
 ```
+
+### **Theme Persistence**
+Your theme choice is automatically saved and will be restored when you restart Neovim. The theme is stored in your Neovim data directory (`~/.local/share/nvim/theme.txt` on Linux).
 
 ### Static Theme Configuration
 

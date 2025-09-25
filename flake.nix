@@ -1,5 +1,5 @@
 {
-  description = "Minimal nixvim configuration for Go development";
+  description = "Betongsuggans Neovim setup";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";

@@ -19,8 +19,8 @@ All testing and debugging commands use the `<leader>c` (code) prefix for logical
 These are the commands you'll use most often, mapped to single keys after `<leader>c`:
 
 #### Testing
-- **`<leader>ct`** - Run nearest test (most common)
-- **`<leader>cf`** - Run tests in current file
+- **`<leader>ct`** - Run test under cursor or nearest test (most common)
+- **`<leader>cf`** - Run all tests in current file
 
 #### Debugging  
 - **`<leader>cb`** - Toggle breakpoint
@@ -35,6 +35,7 @@ Advanced features and UI management use longer key sequences:
 
 #### Test Management (`<leader>ct*`)
 - **`<leader>cta`** - Run **a**ll tests in project
+- **`<leader>cti`** - Show test adapter **i**nfo (debug/troubleshooting)
 - **`<leader>cts`** - Toggle test **s**ummary window
 - **`<leader>cto`** - Toggle test **o**utput panel
 - **`<leader>ctw`** - **W**atch tests in current file (continuous)
@@ -102,6 +103,30 @@ The framework is extensible. To add support for other languages:
 - **Breakpoints** - List of all breakpoints
 - **REPL** - Interactive debug console
 
+## Troubleshooting
+
+### Tests Not Running?
+
+1. **Check test adapter info**: Use `<leader>cti` to see if adapters loaded correctly
+2. **Verify Go installation**: The info command shows if Go binary is found
+3. **Check test file structure**: 
+   - Go tests should be in `*_test.go` files
+   - Test functions should start with `func Test...`
+4. **Use test summary**: `<leader>cts` shows discovered tests
+5. **Check neotest output**: `<leader>cto` shows detailed error messages
+
+### Common Issues
+
+- **"No tests found"**: Make sure you're in a Go project with proper test files
+- **Tests don't run**: Check that the Go toolchain is available in your PATH
+- **Debug not working**: Ensure `delve` debugger is installed and accessible
+
+### Debug Commands
+
+- `<leader>cti` - Shows loaded adapters and Go binary status
+- `:lua print(vim.inspect(require('neotest').config))` - Full neotest configuration
+- `:checkhealth neotest` - Built-in health check (if available)
+
 ## Tips
 
 - Use `<leader>ct` liberally while developing - it's the fastest way to test your current work
@@ -109,3 +134,4 @@ The framework is extensible. To add support for other languages:
 - The debug UI auto-opens when debugging starts and closes when done
 - Test watching (`<leader>ctw`) is great for TDD workflows
 - Use the test summary (`<leader>cts`) to get an overview of your entire test suite
+- If tests aren't detected, try opening the test file and running `<leader>cti` to debug

@@ -142,7 +142,7 @@
       key = "<leader>ct";
       action = ":lua require('neotest').run.run()<CR>";
       options = {
-        desc = "Run nearest test";
+        desc = "Run test under cursor or nearest test";
         silent = true;
       };
     }
@@ -151,7 +151,7 @@
       key = "<leader>cf";
       action = ":lua require('neotest').run.run(vim.fn.expand('%'))<CR>";
       options = {
-        desc = "Run tests in current file";
+        desc = "Run all tests in current file";
         silent = true;
       };
     }
@@ -211,8 +211,17 @@
       key = "<leader>cta";
       action = ":lua require('neotest').run.run(vim.fn.getcwd())<CR>";
       options = {
-        desc = "Run all tests";
+        desc = "Run all tests in project";
         silent = true;
+      };
+    }
+    {
+      mode = "n";
+      key = "<leader>cti";
+      action = ":lua print('Neotest adapters: ' .. vim.inspect(require('neotest').config.adapters)); print('Go binary: ' .. (vim.fn.executable('go') == 1 and 'found' or 'not found'))<CR>";
+      options = {
+        desc = "Show test info (debug)";
+        silent = false;
       };
     }
     {
@@ -286,19 +295,30 @@
   # Extra configuration for language-specific test adapters
   extraConfigLua = ''
     -- Configure neotest adapters for different languages
+    local neotest_golang_ok, neotest_golang = pcall(require, "neotest-golang")
+    local neotest_plenary_ok, neotest_plenary = pcall(require, "neotest-plenary")
+    
+    local adapters = {}
+    
+    -- Add Go adapter if available
+    if neotest_golang_ok then
+      table.insert(adapters, neotest_golang)
+    else
+      print("Warning: neotest-golang not available")
+    end
+    
+    -- Add plenary adapter if available
+    if neotest_plenary_ok then
+      table.insert(adapters, neotest_plenary)
+    else
+      print("Warning: neotest-plenary not available")
+    end
+    
+    -- Log adapter count for debugging
+    print("Neotest configured with " .. #adapters .. " adapters")
+    
     require("neotest").setup({
-      adapters = {
-        -- Go testing
-        require("neotest-go")({
-          experimental = {
-            test_table = true,
-          },
-          args = { "-count=1", "-timeout=60s" }
-        }),
-        
-        -- Generic test detection
-        require("neotest-plenary"),
-      },
+      adapters = adapters,
       
       -- Test discovery patterns
       discovery = {

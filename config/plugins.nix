@@ -351,10 +351,42 @@
         mappings = {
           "o" = "open";
           "<CR>" = "open";
+          "l" = "open";
+          "h" = "close_node";
+          "z" = "close_all_nodes";
+          "Z" = "expand_all_nodes";
+          "<C-x>" = "open_split";
+          "<C-v>" = "open_vsplit";
+          "P" = "toggle_preview";
+          "S" = "open_split";
+          "s" = "open_vsplit";
         };
         mappingOptions = {
           noremap = true;
           nowait = true;
+        };
+      };
+      filesystem = {
+        followCurrentFile = {
+          enabled = true;
+          leaveDirsOpen = true;
+        };
+        hijackNetrwBehavior = "open_current";
+        useLibuvFileWatcher = true;
+        filteredItems = {
+          visible = false;
+          hideDotfiles = true;
+          hideGitignored = true;
+          hideHidden = true;
+          hideByName = [
+            ".DS_Store"
+            "thumbs.db"
+            "node_modules"
+            "__pycache__"
+          ];
+          neverShow = [
+            ".git"
+          ];
         };
       };
     };

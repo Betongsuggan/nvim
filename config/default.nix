@@ -33,7 +33,7 @@
       folds = 1000,
       max_lines = false,
       hide_if_all_visible = false,
-      throttle_ms = 100,
+      throttle_ms = 200,
       handle = {
         text = " ",
         blend = 30,

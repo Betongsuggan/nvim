@@ -600,15 +600,41 @@
       mode = "n";
       key = "<leader>th";
       action = {
+        __raw = "function() _G.theme_picker() end";
+      };
+      options = { desc = "Theme picker"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>tc";
+      action = {
+        __raw = "function() _G.switch_theme('catppuccin') end";
+      };
+      options = { desc = "Switch to Catppuccin theme"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>tg";
+      action = {
+        __raw = "function() _G.switch_theme('gruvbox') end";
+      };
+      options = { desc = "Switch to Gruvbox theme"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>ti";
+      action = {
         __raw = ''
           function()
-            print("Current theme configuration is managed in config/theme.nix")
-            print("Available themes: catppuccin, gruvbox")
-            print("Edit 'currentThemeName' in theme.nix and rebuild to switch themes")
+            print("Theme Management:")
+            print("  <leader>th - Interactive theme picker")
+            print("  <leader>tc - Switch to Catppuccin")
+            print("  <leader>tg - Switch to Gruvbox")
+            print("  :lua switch_theme('name') - Direct theme switch")
           end
         '';
       };
-      options = { desc = "Theme help"; };
+      options = { desc = "Theme info"; };
     }
   ];
 }

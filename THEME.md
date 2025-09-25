@@ -9,10 +9,28 @@ This Neovim configuration supports multiple themes with centralized color manage
 
 ## Switching Themes
 
-To switch themes, edit `config/theme.nix` and change the `currentThemeName` variable:
+### Dynamic Theme Switching (Recommended)
+
+You can now switch themes instantly from within Neovim using these keybindings:
+
+- **`<leader>th`** - Interactive theme picker (shows a menu to select theme)
+- **`<leader>tc`** - Switch to Catppuccin theme instantly  
+- **`<leader>tg`** - Switch to Gruvbox theme instantly
+- **`<leader>ti`** - Show theme help and available commands
+
+You can also use Lua commands directly:
+```lua
+:lua switch_theme('catppuccin')
+:lua switch_theme('gruvbox')  
+:lua theme_picker()
+```
+
+### Static Theme Configuration
+
+To permanently change the default theme, edit `config/theme.nix` and change the `currentThemeName` variable:
 
 ```nix
-# Current theme selection - change this to switch themes
+# Current theme selection - change this to switch themes  
 currentThemeName = "catppuccin"; # Options: "catppuccin", "gruvbox"
 ```
 
@@ -24,13 +42,15 @@ nix build
 
 ## Theme System
 
-All colors throughout the configuration reference the centralized theme system:
+All colors throughout the configuration reference the centralized theme system and update automatically when switching themes:
 
-- **Lualine**: Uses theme name and colors automatically
-- **Scrollbar**: All diagnostic and git colors reference theme
-- **Buffer line**: Diagnostic indicators use theme colors  
-- **Gitsigns**: Git diff colors from theme
+- **Lualine**: Uses theme name and updates instantly on switch
+- **Scrollbar**: All diagnostic and git colors reference theme  
+- **Buffer line**: Diagnostic indicators use theme colors and refresh
+- **Gitsigns**: Git diff colors from theme with live updates
 - **Trouble/Diagnostics**: Error/warn/info/hint colors from theme
+- **Neo-tree**: File explorer colors update automatically
+- **Telescope**: Border and UI colors match theme
 
 ## Adding New Themes
 

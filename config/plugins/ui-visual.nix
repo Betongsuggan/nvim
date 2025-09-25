@@ -104,6 +104,11 @@ in {
             group = "Windows";
             icon = "🪟";
           }
+          {
+            __unkeyed-1 = "<leader>t";
+            group = "Theme";
+            icon = "🎨";
+          }
         ];
         win = {
           border = "rounded";

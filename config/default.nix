@@ -17,6 +17,10 @@ in {
   # Additional packages needed by plugins
   extraPackages = with pkgs; [
     ripgrep # Required by telescope live_grep
+    # Nerd Fonts for proper icon display
+    nerd-fonts.fira-code
+    nerd-fonts.jetbrains-mono
+    nerd-fonts.hack
   ];
 
   # Extra plugins not available in nixvim
@@ -526,5 +530,85 @@ in {
       highlight ScrollbarGitChangeHandle guifg=${theme.colors.git_change}
       highlight ScrollbarGitDeleteHandle guifg=${theme.colors.git_delete}
     ]])
+    
+    -- Configure web-devicons with fallback icons for better compatibility
+    local ok, devicons = pcall(require, "nvim-web-devicons")
+    if ok then
+      devicons.setup({
+        override = {
+          default_icon = { icon = "📄", name = "Default" },
+        },
+        default = true,
+        strict = true,
+        override_by_filename = {
+          [".gitignore"] = { icon = "🚫", name = "Gitignore" },
+          ["README.md"] = { icon = "📖", name = "Readme" },
+          ["Makefile"] = { icon = "🔨", name = "Makefile" },
+          ["Dockerfile"] = { icon = "🐳", name = "Docker" },
+        },
+        override_by_extension = {
+          ["nix"] = { icon = "❄️", name = "Nix" },
+          ["go"] = { icon = "🐹", name = "Go" },
+          ["js"] = { icon = "📜", name = "JavaScript" },
+          ["ts"] = { icon = "📘", name = "TypeScript" },
+          ["lua"] = { icon = "🌙", name = "Lua" },
+          ["py"] = { icon = "🐍", name = "Python" },
+          ["rs"] = { icon = "🦀", name = "Rust" },
+          ["md"] = { icon = "📝", name = "Markdown" },
+          ["json"] = { icon = "📋", name = "JSON" },
+          ["yaml"] = { icon = "📋", name = "YAML" },
+          ["yml"] = { icon = "📋", name = "YAML" },
+          ["toml"] = { icon = "📋", name = "TOML" },
+        },
+      })
+    end
+    
+    -- Configure Neo-tree with better icon handling
+    vim.api.nvim_create_autocmd("VimEnter", {
+      pattern = "*",
+      once = true,
+      callback = function()
+        -- Delay to ensure neo-tree is loaded
+        vim.defer_fn(function()
+          local neotree_ok, neotree = pcall(require, "neo-tree")
+          if neotree_ok then
+            -- Update neo-tree configuration after it's loaded
+            require("neo-tree").setup({
+              default_component_configs = {
+                icon = {
+                  folder_closed = "📁",
+                  folder_open = "📂",
+                  folder_empty = "📂",
+                  default = "*",
+                  highlight = "NeoTreeFileIcon"
+                },
+                modified = {
+                  symbol = "●",
+                  highlight = "NeoTreeModified",
+                },
+                name = {
+                  trailing_slash = false,
+                  use_git_status_colors = true,
+                  highlight = "NeoTreeFileName",
+                },
+                git_status = {
+                  symbols = {
+                    added = "✚",
+                    modified = "○", 
+                    deleted = "✖",
+                    renamed = "➜",
+                    untracked = "★",
+                    ignored = "◌",
+                    unstaged = "✗",
+                    staged = "✓",
+                    conflict = "",
+                  }
+                },
+              },
+            })
+          end
+        end, 100)
+      end
+    })
   '';
 }

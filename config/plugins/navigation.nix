@@ -51,6 +51,7 @@
       popupBorderStyle = "rounded";
       enableGitStatus = true;
       enableDiagnostics = true;
+      
       window = {
         position = "float";
         width = 50;

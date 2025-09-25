@@ -50,6 +50,22 @@ in {
           enforce_regular_tabs = true;
           always_show_bufferline = true;
           sort_by = "insert_after_current";
+          custom_filter = {
+            __raw = ''
+              function(buf_number, buf_numbers)
+                -- Hide buffers with "claude" in their name
+                local buf_name = vim.fn.bufname(buf_number)
+                if buf_name:match("claude") then
+                  return false
+                end
+                -- Hide terminal buffers
+                if vim.api.nvim_buf_get_option(buf_number, 'buftype') == 'terminal' then
+                  return false
+                end
+                return true
+              end
+            '';
+          };
         };
       };
     };
@@ -126,6 +142,38 @@ in {
             __unkeyed-1 = "<leader>/";
             group = "Comments";
             icon = "💬";
+          }
+          {
+            __unkeyed-1 = "<C-a>";
+            desc = "Toggle Claude";
+            icon = "🤖";
+          }
+          {
+            __unkeyed-1 = "<C-b>";
+            desc = "Add current buffer to Claude";
+            icon = "➕";
+          }
+          {
+            __unkeyed-1 = "<C-s>";
+            desc = "Send selection to Claude";
+            icon = "📤";
+            mode = "v";
+          }
+          {
+            __unkeyed-1 = "<C-y>";
+            desc = "Accept diff";
+            icon = "✅";
+          }
+          {
+            __unkeyed-1 = "<C-n>";
+            desc = "Deny diff";
+            icon = "❌";
+          }
+          {
+            __unkeyed-1 = "<C-a>";
+            desc = "Toggle Claude from terminal";
+            icon = "🤖";
+            mode = "t";
           }
         ];
         win = {

@@ -17,21 +17,15 @@
     # Terminal keymaps
     {
       mode = "n";
-      key = "<leader>tm";
+      key = "<C-t>";
       action = "<cmd>ToggleTerm<cr>";
       options = { desc = "Toggle floating terminal"; };
     }
     {
       mode = "t";
-      key = "<leader>tm";
+      key = "<C-t>";
       action = "<cmd>ToggleTerm<cr>";
       options = { desc = "Toggle floating terminal"; };
-    }
-    {
-      mode = "t";
-      key = "<C-q>";
-      action = "<cmd>ToggleTerm<cr>";
-      options = { desc = "Close terminal"; };
     }
 
     # Buffer management
@@ -630,6 +624,44 @@
       key = "<leader>Th";
       action = { __raw = "function() _G.theme_picker() end"; };
       options = { desc = "Theme picker"; };
+    }
+
+    # Claude Code keymaps
+    {
+      mode = "n";
+      key = "<C-a>";
+      action = "<cmd>ClaudeCode<cr>";
+      options = { desc = "Toggle Claude"; };
+    }
+    {
+      mode = "n";
+      key = "<C-b>";
+      action = "<cmd>ClaudeCodeAdd %<cr>";
+      options = { desc = "Add current buffer"; };
+    }
+    {
+      mode = "v";
+      key = "<C-s>";
+      action = "<cmd>ClaudeCodeSend<cr>";
+      options = { desc = "Send to Claude"; };
+    }
+    {
+      mode = "n";
+      key = "<C-y>";
+      action = "<cmd>ClaudeCodeDiffAccept<cr>";
+      options = { desc = "Accept diff"; };
+    }
+    {
+      mode = "n";
+      key = "<C-n>";
+      action = "<cmd>ClaudeCodeDiffDeny<cr>";
+      options = { desc = "Deny diff"; };
+    }
+    {
+      mode = "t";
+      key = "<C-a>";
+      action = "<cmd>ClaudeCode<cr>";
+      options = { desc = "Toggle Claude from terminal"; };
     }
   ];
 }

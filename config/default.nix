@@ -75,7 +75,39 @@ in {
     # Testing and debugging plugins  
     neotest-go # Go test adapter for neotest
     neotest-plenary # Plenary test adapter
+
+    # Claude Code integration
+    (pkgs.vimUtils.buildVimPlugin {
+      name = "claudecode-nvim";
+      src = pkgs.fetchFromGitHub {
+        owner = "coder";
+        repo = "claudecode.nvim";
+        rev = "main";
+        sha256 = "sha256-sOBY2y/buInf+SxLwz6uYlUouDULwebY/nmDlbFbGa8=";
+      };
+    })
   ];
+
+  # Claude Code plugin configuration
+  extraConfigLua = ''
+    -- Setup claudecode.nvim
+    require('claudecode').setup({
+      terminal_cmd = nil, -- Auto-detect Claude CLI
+      auto_start = true,
+      log_level = "info",
+
+      terminal = {
+        provider = "native", -- Use native terminal for better session persistence
+        auto_close = false,  -- Don't auto-close terminal to keep session alive
+      },
+
+      diff_opts = {
+        auto_close_on_accept = true,
+        vertical_split = true,
+        on_new_file_reject = "keep_empty" -- Keep buffers instead of closing
+      }
+    })
+  '';
 
   # Configure nvim-scrollbar with theme colors and theme switching
   # Configuration moved to individual plugin files for better organization

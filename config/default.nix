@@ -96,20 +96,22 @@ in {
       
       -- Update scrollbar colors
       if package.loaded['scrollbar'] then
-        require('scrollbar').setup({
-          handle = { color = colors.border },
-          marks = {
-            Cursor = { color = colors.fg },
-            Search = { color = colors.search },
-            Error = { color = colors.error },
-            Warn = { color = colors.warn },
-            Info = { color = colors.info },
-            Hint = { color = colors.hint },
-            GitAdd = { color = colors.git_add },
-            GitChange = { color = colors.git_change },
-            GitDelete = { color = colors.git_delete }
-          }
-        })
+        pcall(function()
+          require('scrollbar').setup({
+            handle = { color = colors.border },
+            marks = {
+              Cursor = { color = colors.fg },
+              Search = { color = colors.search },
+              Error = { color = colors.error },
+              Warn = { color = colors.warn },
+              Info = { color = colors.info },
+              Hint = { color = colors.hint },
+              GitAdd = { color = colors.git_add },
+              GitChange = { color = colors.git_change },
+              GitDelete = { color = colors.git_delete }
+            }
+          })
+        end)
       end
 
       -- Update highlight groups
@@ -135,57 +137,67 @@ in {
         colors.border, colors.border
       ))
 
-      -- Update bufferline diagnostics colors if available
+      -- Update bufferline colors if available
       if package.loaded['bufferline'] then
-        local bufferline = require('bufferline')
-        local config = bufferline.get_config()
-        if config and config.options and config.options.diagnostics_indicator then
-          -- Force bufferline to refresh
-          vim.cmd('BufferLineRefresh')
+        local ok, bufferline = pcall(require, 'bufferline')
+        if ok then
+          -- Try to refresh bufferline safely
+          pcall(function()
+            if vim.fn.exists(':BufferLineRefresh') > 0 then
+              vim.cmd('BufferLineRefresh')
+            end
+          end)
         end
       end
 
       -- Refresh lualine if available  
       if package.loaded['lualine'] then
-        -- Update lualine theme dynamically
-        require('lualine').setup({
-          options = { theme = theme_data.name }
-        })
+        pcall(function()
+          require('lualine').setup({
+            options = { theme = theme_data.name }
+          })
+        end)
       end
 
       -- Update gitsigns colors if available
       if package.loaded['gitsigns'] then
-        vim.cmd(string.format([[
-          highlight GitSignsAdd guifg=%s
-          highlight GitSignsChange guifg=%s
-          highlight GitSignsDelete guifg=%s
-        ]], colors.git_add, colors.git_change, colors.git_delete))
+        pcall(function()
+          vim.cmd(string.format([[
+            highlight GitSignsAdd guifg=%s
+            highlight GitSignsChange guifg=%s
+            highlight GitSignsDelete guifg=%s
+          ]], colors.git_add, colors.git_change, colors.git_delete))
+        end)
       end
 
       -- Update trouble diagnostic colors if available
       if package.loaded['trouble'] then
-        vim.cmd(string.format([[
-          highlight TroubleError guifg=%s
-          highlight TroubleWarning guifg=%s
-          highlight TroubleInformation guifg=%s
-          highlight TroubleHint guifg=%s
-        ]], colors.error, colors.warn, colors.info, colors.hint))
+        pcall(function()
+          vim.cmd(string.format([[
+            highlight TroubleError guifg=%s
+            highlight TroubleWarning guifg=%s
+            highlight TroubleInformation guifg=%s
+            highlight TroubleHint guifg=%s
+          ]], colors.error, colors.warn, colors.info, colors.hint))
+        end)
       end
 
       -- Refresh plugins that need it
       vim.cmd('redraw!')
       
       -- Refresh neo-tree if open
-      if vim.fn.exists(':Neotree') > 0 then
-        vim.cmd('Neotree refresh')
-      end
+      pcall(function()
+        if vim.fn.exists(':Neotree') > 0 then
+          vim.cmd('Neotree refresh')
+        end
+      end)
     end
 
     -- Function to switch theme dynamically
     function _G.switch_theme(theme_name)
       if not themes[theme_name] then
         print("Theme '" .. theme_name .. "' not found. Available: catppuccin, gruvbox")
-        return
+        return false
       end
 
       -- Switch colorscheme with error handling
@@ -198,16 +210,22 @@ in {
 
       if not success then
         print("Error: Colorscheme '" .. theme_name .. "' is not available. Make sure the plugin is installed.")
-        return
+        return false
       end
 
       -- Update current theme
       current_theme = themes[theme_name]
       
-      -- Apply theme colors
-      apply_theme_colors(current_theme)
-
-      print("Switched to " .. theme_name .. " theme")
+      -- Apply theme colors with error handling
+      local apply_success = pcall(apply_theme_colors, current_theme)
+      
+      if apply_success then
+        print("✓ Switched to " .. theme_name:gsub("^%l", string.upper) .. " theme")
+      else
+        print("✓ Switched to " .. theme_name:gsub("^%l", string.upper) .. " theme (some plugin colors may not have updated)")
+      end
+      
+      return true
     end
 
     -- Function to check if a colorscheme is available

@@ -1,4 +1,6 @@
-{ pkgs, ... }: {
+{ pkgs, ... }: let
+  theme = import ./theme.nix;
+in {
   imports = [
     ./options.nix
     ./plugins.nix
@@ -9,14 +11,8 @@
   viAlias = true;
   vimAlias = true;
   
-  # Colorscheme
-  colorschemes.catppuccin = {
-    enable = true;
-    settings = {
-      flavour = "mocha";
-      transparent_background = false;
-    };
-  };
+  # Colorscheme from theme
+  colorschemes.${theme.name} = theme.colorscheme;
 
   # Additional packages needed by plugins
   extraPackages = with pkgs; [
@@ -28,7 +24,7 @@
     nvim-scrollbar
   ];
 
-  # Configure nvim-scrollbar
+  # Configure nvim-scrollbar with theme colors
   extraConfigLua = ''
     -- Configure nvim-scrollbar with color-coded line indicators
     require('scrollbar').setup({
@@ -42,8 +38,7 @@
       handle = {
         text = " ",
         blend = 30,
-        color = nil,
-        color_nr = nil,
+        color = "${theme.colors.border}",
         highlight = "CursorColumn",
         hide_if_all_visible = true,
       },
@@ -51,91 +46,61 @@
         Cursor = {
           text = "•",
           priority = 0,
-          gui = nil,
-          color = nil,
-          cterm = nil,
-          color_nr = nil,
+          color = "${theme.colors.fg}",
           highlight = "Normal",
         },
         Search = {
           text = { "-", "=" },
           priority = 1,
-          gui = nil,
-          color = nil,
-          cterm = nil,
-          color_nr = nil,
+          color = "${theme.colors.search}",
           highlight = "Search",
         },
         Error = {
           text = { "─" },
           priority = 2,
-          gui = nil,
-          color = nil,
-          cterm = nil,
-          color_nr = nil,
+          color = "${theme.colors.error}",
           highlight = "DiagnosticVirtualTextError",
         },
         Warn = {
           text = { "─" },
           priority = 3,
-          gui = nil,
-          color = nil,
-          cterm = nil,
-          color_nr = nil,
+          color = "${theme.colors.warn}",
           highlight = "DiagnosticVirtualTextWarn",
         },
         Info = {
           text = { "─" },
           priority = 4,
-          gui = nil,
-          color = nil,
-          cterm = nil,
-          color_nr = nil,
+          color = "${theme.colors.info}",
           highlight = "DiagnosticVirtualTextInfo",
         },
         Hint = {
           text = { "─" },
           priority = 5,
-          gui = nil,
-          color = nil,
-          cterm = nil,
-          color_nr = nil,
+          color = "${theme.colors.hint}",
           highlight = "DiagnosticVirtualTextHint",
         },
         Misc = {
           text = { "-" },
           priority = 6,
-          gui = nil,
-          color = nil,
-          cterm = nil,
-          color_nr = nil,
+          color = "${theme.colors.fg_alt}",
           highlight = "Normal",
         },
         GitAdd = {
           text = "│",
           priority = 7,
-          gui = nil,
-          color = nil,
-          cterm = nil,
-          color_nr = nil,
+          color = "${theme.colors.git_add}",
           highlight = "GitSignsAdd",
         },
         GitChange = {
           text = "│",
           priority = 8,
-          gui = nil,
-          color = nil,
-          cterm = nil,
-          color_nr = nil,
+          color = "${theme.colors.git_change}",
           highlight = "GitSignsChange",
         },
         GitDelete = {
           text = "│",
           priority = 9,
-          gui = nil,
-          color = nil,
-          cterm = nil,
-          color_nr = nil,
+          color = "${theme.colors.git_delete}",
           highlight = "GitSignsDelete",
         },
       },
@@ -177,5 +142,18 @@
     
     -- Integrate with gitsigns
     require('scrollbar.handlers.gitsigns').setup()
+    
+    -- Set up custom highlight groups based on theme
+    vim.cmd([[
+      highlight ScrollbarHandle guifg=${theme.colors.border}
+      highlight ScrollbarSearchHandle guifg=${theme.colors.search}
+      highlight ScrollbarErrorHandle guifg=${theme.colors.error}
+      highlight ScrollbarWarnHandle guifg=${theme.colors.warn}
+      highlight ScrollbarInfoHandle guifg=${theme.colors.info}
+      highlight ScrollbarHintHandle guifg=${theme.colors.hint}
+      highlight ScrollbarGitAddHandle guifg=${theme.colors.git_add}
+      highlight ScrollbarGitChangeHandle guifg=${theme.colors.git_change}
+      highlight ScrollbarGitDeleteHandle guifg=${theme.colors.git_delete}
+    ]])
   '';
 }

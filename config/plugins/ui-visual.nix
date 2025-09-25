@@ -1,4 +1,6 @@
-{ ... }: {
+{ ... }: let
+  theme = import ../theme.nix;
+in {
   plugins = {
     # Icons (required by telescope and other plugins)
     web-devicons = {
@@ -115,7 +117,7 @@
       enable = true;
       settings = {
         options = {
-          theme = "catppuccin";
+          theme = theme.name;
           component_separators = {
             left = "";
             right = "";

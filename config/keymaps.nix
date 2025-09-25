@@ -594,5 +594,21 @@
       };
       options = { desc = "Build project"; };
     }
+
+    # Theme switching
+    {
+      mode = "n";
+      key = "<leader>th";
+      action = {
+        __raw = ''
+          function()
+            print("Current theme configuration is managed in config/theme.nix")
+            print("Available themes: catppuccin, gruvbox")
+            print("Edit 'currentThemeName' in theme.nix and rebuild to switch themes")
+          end
+        '';
+      };
+      options = { desc = "Theme help"; };
+    }
   ];
 }

@@ -52,19 +52,15 @@
 
   # Basic test keymaps
   keymaps = [
-    # Test running - smart detection between Go and other files
+    # Universal test running - works with any supported language via adapters
     {
       mode = "n";
       key = "<leader>tt";
       action = {
         __raw = ''
           function() 
-            local file = vim.fn.expand('%:p')
-            if file:match('%.go$') then
-              run_go_test_nearest()
-            else
-              require('neotest').run.run()
-            end
+            -- Use universal test runner
+            run_test_nearest()
           end
         '';
       };
@@ -79,12 +75,8 @@
       action = {
         __raw = ''
           function() 
-            local file = vim.fn.expand('%:p')
-            if file:match('%.go$') then
-              run_go_test_file()
-            else
-              require('neotest').run.run(vim.fn.expand('%'))
-            end
+            -- Use universal test runner
+            run_test_file()
           end
         '';
       };
@@ -99,12 +91,8 @@
       action = {
         __raw = ''
           function() 
-            local file = vim.fn.expand('%:p')
-            if file:match('%.go$') then
-              run_go_test_all()
-            else
-              require('neotest').run.run({suite = true})
-            end
+            -- Use universal test runner
+            run_test_all()
           end
         '';
       };
@@ -172,11 +160,12 @@
     }
   ];
 
-  # Enhanced Go testing Lua configuration
+  # Modular test runner configuration supporting multiple languages
   extraConfigLua = ''
-    -- Enhanced Go testing with beautiful UI and telescope integration
-    -- Test results storage
-    _G.go_test_results = {}
+    -- Modular Test Runner System
+    -- Supports multiple languages through adapter pattern
+    _G.test_results = {} -- Global test results storage
+    _G.test_adapters = {} -- Registry of language adapters
     
     -- Define custom signs for test status with wider characters
     vim.fn.sign_define("test_pass", {
@@ -219,18 +208,117 @@
       callback = setup_test_highlights,
       desc = "Reapply test sign highlights after colorscheme change"
     })
+
+    -- ========================================
+    -- MODULAR TEST ADAPTER SYSTEM
+    -- ========================================
     
-    -- Function to clear all test signs in current buffer
-    local function clear_test_signs()
-      local bufnr = vim.api.nvim_get_current_buf()
-      vim.fn.sign_unplace("test_signs", { buffer = bufnr })
+    -- Base Test Adapter Interface
+    -- Each language adapter should implement these methods:
+    local TestAdapter = {}
+    TestAdapter.__index = TestAdapter
+    
+    function TestAdapter:new(config)
+      local adapter = {
+        name = config.name or "unknown",
+        file_patterns = config.file_patterns or {},
+        test_command = config.test_command or "",
+        supports_nearest = config.supports_nearest or false,
+        supports_file = config.supports_file or false,
+        supports_all = config.supports_all or false,
+      }
+      setmetatable(adapter, TestAdapter)
+      return adapter
     end
     
-    -- Function to find test function line numbers in current buffer  
-    local function find_test_functions()
+    -- Interface methods that must be implemented by language adapters
+    function TestAdapter:is_test_file(filepath)
+      error("is_test_file must be implemented by language adapter")
+    end
+    
+    function TestAdapter:find_test_functions(bufnr)
+      error("find_test_functions must be implemented by language adapter")
+    end
+    
+    function TestAdapter:build_test_command(test_type, context)
+      error("build_test_command must be implemented by language adapter")
+    end
+    
+    function TestAdapter:parse_test_output(output)
+      error("parse_test_output must be implemented by language adapter")
+    end
+    
+    function TestAdapter:get_test_name_at_cursor(bufnr, cursor_line)
+      error("get_test_name_at_cursor must be implemented by language adapter")
+    end
+    
+    -- Test Adapter Registry
+    local TestAdapterRegistry = {}
+    
+    function TestAdapterRegistry.register(adapter)
+      if not adapter.name then
+        error("Adapter must have a name")
+      end
+      _G.test_adapters[adapter.name] = adapter
+      print("✓ Registered test adapter: " .. adapter.name)
+    end
+    
+    function TestAdapterRegistry.get_adapter_for_file(filepath)
+      local filetype = vim.filetype.match({ filename = filepath }) or ""
+      local extension = filepath:match("%.([^%.]+)$") or ""
+      
+      for _, adapter in pairs(_G.test_adapters) do
+        if adapter:is_test_file(filepath) then
+          return adapter
+        end
+      end
+      
+      -- Fallback: try to match by filetype or extension
+      for _, adapter in pairs(_G.test_adapters) do
+        for _, pattern in ipairs(adapter.file_patterns) do
+          if filetype:match(pattern) or extension:match(pattern) then
+            return adapter
+          end
+        end
+      end
+      
+      return nil
+    end
+    
+    function TestAdapterRegistry.list_adapters()
+      local adapters = {}
+      for name, adapter in pairs(_G.test_adapters) do
+        table.insert(adapters, {
+          name = name,
+          file_patterns = adapter.file_patterns,
+          supports_nearest = adapter.supports_nearest,
+          supports_file = adapter.supports_file,
+          supports_all = adapter.supports_all
+        })
+      end
+      return adapters
+    end
+    
+    -- ========================================
+    -- GO TEST ADAPTER IMPLEMENTATION
+    -- ========================================
+    
+    local GoTestAdapter = TestAdapter:new({
+      name = "go",
+      file_patterns = {"go", "%.go$"},
+      test_command = "go test",
+      supports_nearest = true,
+      supports_file = true,
+      supports_all = true,
+    })
+    
+    function GoTestAdapter:is_test_file(filepath)
+      return filepath:match("_test%.go$") ~= nil
+    end
+    
+    function GoTestAdapter:find_test_functions(bufnr)
       local test_functions = {}
-      local bufnr = vim.api.nvim_get_current_buf()
-      local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+      local lines = vim.api.nvim_buf_get_lines(bufnr or 0, 0, -1, false)
       
       for line_num, line in ipairs(lines) do
         local test_name = line:match('func%s+%(.*%)%s+(Test%w+)') or line:match('func%s+(Test%w+)')
@@ -240,6 +328,209 @@
       end
       
       return test_functions
+    end
+    
+    function GoTestAdapter:get_test_name_at_cursor(bufnr, cursor_line)
+      local lines = vim.api.nvim_buf_get_lines(bufnr or 0, 0, -1, false)
+      local test_name = nil
+      local test_function_line = nil
+      
+      -- Look backwards from cursor to find the test function
+      for i = cursor_line, 1, -1 do
+        local line = lines[i]
+        if line then
+          local match = line:match('func%s+%(.*%)%s+(Test%w+)') or line:match('func%s+(Test%w+)')
+          if match then
+            test_name = match
+            test_function_line = i
+            break
+          end
+        end
+      end
+      
+      if not test_name then
+        return nil
+      end
+      
+      -- Check if this is a table-driven test
+      local is_table_driven = false
+      local max_lines_to_check = math.min(50, #lines - test_function_line)
+      
+      for i = test_function_line, test_function_line + max_lines_to_check do
+        local line = lines[i]
+        if line and (
+          line:match('for%s+[%w_,%-]*%s*:=%s*range%s+.*struct') or
+          line:match('for%s+[%w_,%-]*%s*:=%s*range%s+tests') or
+          line:match('for%s+[%w_,%-]*%s*:=%s*range%s+.*cases') or
+          line:match('for%s+[%w_,%-]*%s*:=%s*range%s+%[%]struct') or
+          line:match('tests%s*:=%s*%[%]struct') or
+          line:match('cases%s*:=%s*%[%]struct')
+        ) then
+          is_table_driven = true
+          break
+        end
+      end
+      
+      return {
+        name = test_name,
+        line = test_function_line,
+        is_table_driven = is_table_driven
+      }
+    end
+    
+    function GoTestAdapter:build_test_command(test_type, context)
+      local package_path = self:get_relative_package_path()
+      
+      if test_type == "nearest" and context.test_info then
+        local test_pattern = context.test_info.name
+        if context.test_info.is_table_driven then
+          test_pattern = string.format("^%s$", context.test_info.name)
+        end
+        return string.format('cd "%s" && go test -v %s -run "%s"', 
+          vim.fn.getcwd(), package_path, test_pattern)
+      elseif test_type == "file" then
+        return string.format('cd "%s" && go test -v %s', vim.fn.getcwd(), package_path)
+      elseif test_type == "all" then
+        return 'go test -v ./...'
+      end
+      
+      return nil
+    end
+    
+    function GoTestAdapter:get_relative_package_path()
+      local current_file = vim.fn.expand('%:p')
+      local current_dir = vim.fn.fnamemodify(current_file, ':h')
+      
+      -- Try to get go.mod directory
+      local handle = io.popen(string.format('cd "%s" && go env GOMOD 2>/dev/null', current_dir))
+      if handle then
+        local gomod_path = handle:read('*l')
+        handle:close()
+        
+        if gomod_path and gomod_path ~= "" and gomod_path ~= "<nil>" then
+          local gomod_dir = vim.fn.fnamemodify(gomod_path, ':h')
+          local rel_path = current_dir:gsub("^" .. vim.pesc(gomod_dir) .. "/?", "")
+          return rel_path == "" and "." or "./" .. rel_path
+        end
+      end
+      
+      return "."
+    end
+    
+    function GoTestAdapter:parse_test_output(output)
+      local results = {}
+      local current_test = nil
+      local lines = vim.split(output, '\n')
+      local global_output = {} -- Capture all output for failed tests
+      
+      for _, line in ipairs(lines) do
+        -- Always capture the line for potential use
+        table.insert(global_output, line)
+        
+        -- Match test start: === RUN   TestName or === RUN   TestName/subtest
+        local test_name = line:match('=== RUN%s+(%S+)')
+        if test_name then
+          -- For subtests (TestName/subtest), we want to track the parent test
+          local parent_test = test_name:match('^([^/]+)')
+          if parent_test then
+            test_name = parent_test -- Use parent test name for table-driven tests
+          end
+          
+          if not results[test_name] then
+            results[test_name] = {
+              name = test_name,
+              status = 'running',
+              output = {},
+              subtests = {},
+              duration = nil,
+              raw_output = {}
+            }
+          end
+          current_test = results[test_name]
+        end
+        
+        -- Match test result: --- PASS: TestName (0.00s) or --- FAIL: TestName (0.00s)
+        local status, name, duration = line:match('--- (%w+): (%S+) %(([^)]+)%)')
+        if status and name then
+          local parent_test = name:match('^([^/]+)')
+          if parent_test and results[parent_test] then
+            -- This is a subtest result
+            if not results[parent_test].subtests then
+              results[parent_test].subtests = {}
+            end
+            table.insert(results[parent_test].subtests, {
+              name = name,
+              status = status:lower(),
+              duration = duration
+            })
+            
+            -- Update parent test status - if any subtest fails, parent fails
+            if status:lower() == 'fail' then
+              results[parent_test].status = 'fail'
+            elseif results[parent_test].status ~= 'fail' and status:lower() == 'pass' then
+              results[parent_test].status = 'pass'
+            end
+            results[parent_test].duration = duration -- Use last duration as overall
+          else
+            -- This is a main test result
+            if results[name] then
+              results[name].status = status:lower()
+              results[name].duration = duration
+            end
+          end
+        end
+        
+        -- Capture all output lines for the current test (much more inclusive)
+        if current_test then
+          table.insert(current_test.output, line)
+          table.insert(current_test.raw_output, line)
+        end
+        
+        -- Special handling for test failures and logs
+        if line:match('FAIL:') or line:match('panic:') or line:match('Error:') or 
+           line:match('t%.Log') or line:match('t%.Error') or line:match('t%.Fatal') then
+          if current_test then
+            -- Mark this as important output
+            table.insert(current_test.output, "🚨 " .. line)
+          end
+        end
+      end
+      
+      -- Post-process to add full context for failed tests
+      for test_name, result in pairs(results) do
+        if result.status == 'fail' and #result.output == 0 then
+          -- If no specific output captured, provide the global context
+          result.output = global_output
+        end
+      end
+      
+      return results
+    end
+    
+    -- Register the Go adapter
+    TestAdapterRegistry.register(GoTestAdapter)
+
+    -- Function to clear all test signs in current buffer
+    local function clear_test_signs()
+      local bufnr = vim.api.nvim_get_current_buf()
+      vim.fn.sign_unplace("test_signs", { buffer = bufnr })
+    end
+    
+    -- ========================================
+    -- UNIVERSAL TEST RUNNER UI
+    -- ========================================
+    
+    -- Universal function to find test functions using the appropriate adapter
+    local function find_test_functions()
+      local filepath = vim.fn.expand('%:p')
+      local adapter = TestAdapterRegistry.get_adapter_for_file(filepath)
+      
+      if not adapter then
+        return {}
+      end
+      
+      local bufnr = vim.api.nvim_get_current_buf()
+      return adapter:find_test_functions(bufnr)
     end
     
     -- Function to mark test function with signs across multiple lines
@@ -325,7 +616,99 @@
       return buf, win
     end
     
-    -- Function to parse Go test output
+    -- Universal test runner function
+    local function run_test_with_ui(test_type, context)
+      local filepath = vim.fn.expand('%:p')
+      local adapter = TestAdapterRegistry.get_adapter_for_file(filepath)
+      
+      if not adapter then
+        local filetype = vim.filetype.match({ filename = filepath }) or "unknown"
+        print(string.format("❌ No test adapter found for %s files", filetype))
+        print("Available adapters: " .. table.concat(vim.tbl_keys(_G.test_adapters), ", "))
+        return
+      end
+      
+      -- Build the test command using the adapter
+      local cmd = adapter:build_test_command(test_type, context or {})
+      if not cmd then
+        print("❌ Failed to build test command")
+        return
+      end
+      
+      -- Mark all found tests as running
+      local test_functions = find_test_functions()
+      clear_test_signs()
+      for test_name, line_num in pairs(test_functions) do
+        mark_test_function(test_name, "running", line_num)
+      end
+      
+      -- Show loading notification
+      local loading_msg = string.format("🧪 Running %s tests using %s adapter...", test_type, adapter.name)
+      print(loading_msg)
+      
+      -- Run command and capture output
+      local handle = io.popen(cmd .. ' 2>&1')
+      if not handle then
+        print("❌ Failed to run test command")
+        return
+      end
+      
+      local output = handle:read('*a')
+      handle:close()
+      
+      -- Parse results using the adapter
+      local parsed_results = adapter:parse_test_output(output)
+      _G.test_results = parsed_results
+      
+      -- Update gutter signs based on results
+      update_test_signs(parsed_results)
+      
+      -- Show brief status message
+      local passed_count = 0
+      local failed_count = 0
+      local subtest_passed = 0
+      local subtest_failed = 0
+      
+      for test_name, result in pairs(parsed_results) do
+        if result.status == 'pass' then
+          passed_count = passed_count + 1
+        elseif result.status == 'fail' then
+          failed_count = failed_count + 1
+        end
+        
+        -- Count subtests if they exist
+        if result.subtests then
+          for _, subtest in ipairs(result.subtests) do
+            if subtest.status == 'pass' then
+              subtest_passed = subtest_passed + 1
+            else
+              subtest_failed = subtest_failed + 1
+            end
+          end
+        end
+      end
+      
+      -- Brief status notification
+      local status_msg = ""
+      if failed_count > 0 then
+        status_msg = string.format("❌ %d failed, %d passed", failed_count, passed_count)
+        if subtest_failed > 0 then
+          status_msg = status_msg .. string.format(" (%d subtests failed)", subtest_failed)
+        end
+      else
+        status_msg = string.format("✅ All %d tests passed", passed_count)
+        if subtest_passed > 0 then
+          status_msg = status_msg .. string.format(" (%d subtests)", subtest_passed)
+        end
+      end
+      
+      print(string.format("%s - Press <leader>to for details", status_msg))
+      
+      -- Store raw output for debugging
+      _G.test_raw_output = output
+    end
+
+    -- Legacy Go-specific parse function (will be removed)
     local function parse_test_output(output)
       local results = {}
       local current_test = nil
@@ -505,9 +888,13 @@
       _G.go_test_raw_output = output
     end
     
-    -- Function to show test results in telescope
+    -- ========================================
+    -- UNIVERSAL GLOBAL TEST FUNCTIONS
+    -- ========================================
+    
+    -- Universal function to show test results in telescope
     function _G.show_test_results_telescope()
-      if not _G.go_test_results or vim.tbl_isempty(_G.go_test_results) then
+      if not _G.test_results or vim.tbl_isempty(_G.test_results) then
         print("No test results available. Run tests first.")
         return
       end
@@ -519,7 +906,7 @@
       local action_state = require "telescope.actions.state"
       
       local results = {}
-      for test_name, result in pairs(_G.go_test_results) do
+      for test_name, result in pairs(_G.test_results) do
         local status_icon = result.status == 'pass' and '✅' or result.status == 'fail' and '❌' or '⏳'
         local duration_text = result.duration and (string.format(' (%s)', result.duration)) or ""
         local display_text = string.format('%s %s%s', status_icon, test_name, duration_text)
@@ -605,20 +992,85 @@
       }):find()
     end
     
-    -- Function to show raw test output
+    -- Universal function to show raw test output
     function _G.show_raw_test_output()
-      if not _G.go_test_raw_output then
+      if not _G.test_raw_output then
         print("No raw test output available. Run tests first.")
         return
       end
       
-      create_popup(_G.go_test_raw_output, "🔍 Raw Test Output", 0.9, 0.8)
+      create_popup(_G.test_raw_output, "🔍 Raw Test Output", 0.9, 0.8)
     end
     
-    -- Function to clear all test signs (exposed globally)
-    function _G.clear_go_test_signs()
+    -- Universal function to clear all test signs (exposed globally) 
+    function _G.clear_test_signs()
       clear_test_signs()
       print("🧹 Test signs cleared")
+    end
+    
+    -- Universal test runner functions
+    function _G.run_test_file()
+      local filepath = vim.fn.expand('%:p')
+      local adapter = TestAdapterRegistry.get_adapter_for_file(filepath)
+      
+      if not adapter then
+        local filetype = vim.filetype.match({ filename = filepath }) or "unknown"
+        print(string.format("❌ No test adapter found for %s files", filetype))
+        return
+      end
+      
+      if not adapter.supports_file then
+        print(string.format("❌ %s adapter does not support file-level tests", adapter.name))
+        return
+      end
+      
+      run_test_with_ui("file", { filepath = filepath })
+    end
+    
+    function _G.run_test_nearest()
+      local filepath = vim.fn.expand('%:p')
+      local adapter = TestAdapterRegistry.get_adapter_for_file(filepath)
+      
+      if not adapter then
+        local filetype = vim.filetype.match({ filename = filepath }) or "unknown"
+        print(string.format("❌ No test adapter found for %s files", filetype))
+        return
+      end
+      
+      if not adapter.supports_nearest then
+        print(string.format("❌ %s adapter does not support nearest test", adapter.name))
+        return
+      end
+      
+      local bufnr = vim.api.nvim_get_current_buf()
+      local cursor_line = vim.api.nvim_win_get_cursor(0)[1]
+      local test_info = adapter:get_test_name_at_cursor(bufnr, cursor_line)
+      
+      if not test_info then
+        print("❌ No test function found at cursor position")
+        return
+      end
+      
+      print(string.format("🎯 Found test: %s", test_info.name))
+      run_test_with_ui("nearest", { filepath = filepath, test_info = test_info })
+    end
+    
+    function _G.run_test_all()
+      local filepath = vim.fn.expand('%:p')
+      local adapter = TestAdapterRegistry.get_adapter_for_file(filepath)
+      
+      if not adapter then
+        local filetype = vim.filetype.match({ filename = filepath }) or "unknown"
+        print(string.format("❌ No test adapter found for %s files", filetype))
+        return
+      end
+      
+      if not adapter.supports_all then
+        print(string.format("❌ %s adapter does not support running all tests", adapter.name))
+        return
+      end
+      
+      run_test_with_ui("all", { filepath = filepath })
     end
 
     -- Custom syntax highlighting for Go test output

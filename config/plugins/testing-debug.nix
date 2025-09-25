@@ -55,7 +55,7 @@
       key = "<leader>ct";
       action = ":lua require('neotest').run.run()<CR>";
       options = {
-        desc = "Run test under cursor or nearest test";
+        desc = "Run nearest test under cursor";
         silent = true;
       };
     }
@@ -122,7 +122,7 @@
     {
       mode = "n";
       key = "<leader>cta";
-      action = ":lua require('neotest').run.run(vim.fn.getcwd())<CR>";
+      action = ":lua require('neotest').run.run({suite = true})<CR>";
       options = {
         desc = "Run all tests in project";
         silent = true;
@@ -219,9 +219,33 @@
     -- Configure neotest adapters (required in Lua)
     require("neotest").setup({
       adapters = {
-        require("neotest-go"),
+        require("neotest-go")({
+          -- Only run test files, not all Go files
+          experimental = {
+            test_table = true,
+          },
+          args = { "-count=1", "-timeout=60s" },
+          -- Ensure we only discover actual test files
+          is_test_file = function(file_path)
+            return string.match(file_path, "_test%.go$") ~= nil
+          end,
+        }),
         require("neotest-plenary"),
-      }
+      },
+      -- Configure discovery to be more restrictive
+      discovery = {
+        enabled = true,
+        concurrent = 1,
+      },
+      -- Better test result display
+      output = {
+        enabled = true,
+        open_on_run = true,
+      },
+      quickfix = {
+        enabled = false, -- Disable to avoid conflicts
+        open = false,
+      },
     })
     
     -- Configure DAP for Go debugging  

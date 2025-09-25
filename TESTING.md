@@ -19,7 +19,7 @@ All testing and debugging commands use the `<leader>c` (code) prefix for logical
 These are the commands you'll use most often, mapped to single keys after `<leader>c`:
 
 #### Testing
-- **`<leader>ct`** - Run test under cursor or nearest test (most common)
+- **`<leader>ct`** - Run nearest test under cursor (most common)
 - **`<leader>cf`** - Run all tests in current file
 
 #### Debugging  
@@ -34,7 +34,7 @@ These are the commands you'll use most often, mapped to single keys after `<lead
 Advanced features and UI management use longer key sequences:
 
 #### Test Management (`<leader>ct*`)
-- **`<leader>cta`** - Run **a**ll tests in project
+- **`<leader>cta`** - Run **a**ll tests in project (test suite)
 - **`<leader>cti`** - Show test adapter **i**nfo (debug/troubleshooting)
 - **`<leader>cts`** - Toggle test **s**ummary window
 - **`<leader>cto`** - Toggle test **o**utput panel
@@ -49,10 +49,11 @@ Advanced features and UI management use longer key sequences:
 ## Workflow Examples
 
 ### Basic Testing Workflow
-1. Write your test
-2. `<leader>ct` - Run the test under cursor
-3. `<leader>cf` - Run all tests in file  
-4. `<leader>cts` - Open test summary to see results
+1. Write your test function in a `*_test.go` file
+2. `<leader>ct` - Run the specific test under cursor
+3. `<leader>cf` - Run all tests in current file  
+4. `<leader>cta` - Run all tests in project (only test files)
+5. `<leader>cts` - Open test summary to see results
 
 ### Debug Workflow
 1. `<leader>cb` - Set breakpoint on line
@@ -110,14 +111,16 @@ The framework is extensible. To add support for other languages:
 1. **Check test adapter info**: Use `<leader>cti` to see if adapters loaded correctly
 2. **Verify Go installation**: The info command shows if Go binary is found
 3. **Check test file structure**: 
-   - Go tests should be in `*_test.go` files
-   - Test functions should start with `func Test...`
+   - Go tests must be in `*_test.go` files (exact pattern match)
+   - Test functions must start with `func Test...`
+   - Example: `func TestMyFunction(t *testing.T) {...}`
 4. **Use test summary**: `<leader>cts` shows discovered tests
 5. **Check neotest output**: `<leader>cto` shows detailed error messages
 
 ### Common Issues
 
-- **"No tests found"**: Make sure you're in a Go project with proper test files
+- **"No tests found"**: Ensure you're in a `*_test.go` file with proper test functions
+- **All files failing**: Fixed - now only runs actual test files, not all Go files  
 - **Tests don't run**: Check that the Go toolchain is available in your PATH
 - **Debug not working**: Ensure `delve` debugger is installed and accessible
 

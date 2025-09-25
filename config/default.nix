@@ -10,6 +10,20 @@ in {
   # Colorscheme from theme
   colorschemes.${theme.name} = theme.colorscheme;
 
+  # Terminal plugin
+  plugins.toggleterm = {
+    enable = true;
+    settings = {
+      direction = "float";
+      float_opts = {
+        border = "curved";
+        width = 120;
+        height = 30;
+      };
+      shell = "bash";
+    };
+  };
+
   # Include modular Lua files
   extraFiles = {
     "lua/testing/adapter.lua" = {

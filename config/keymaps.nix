@@ -14,6 +14,26 @@
       options = { desc = "Quit"; };
     }
 
+    # Terminal keymaps
+    {
+      mode = "n";
+      key = "<leader>tm";
+      action = "<cmd>ToggleTerm<cr>";
+      options = { desc = "Toggle floating terminal"; };
+    }
+    {
+      mode = "t";
+      key = "<leader>tm";
+      action = "<cmd>ToggleTerm<cr>";
+      options = { desc = "Toggle floating terminal"; };
+    }
+    {
+      mode = "t";
+      key = "<C-q>";
+      action = "<cmd>ToggleTerm<cr>";
+      options = { desc = "Close terminal"; };
+    }
+
     # Buffer management
     {
       mode = "n";

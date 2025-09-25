@@ -65,7 +65,7 @@
               end
               return orig_handler(err, result, ctx, config)
             end
-            
+
           '';
         };
         nixd = {
@@ -193,12 +193,12 @@
                   buffer = "[Buf]",
                   path = "[Path]"
                 }
-                
+
                 vim_item = lspkind.cmp_format({
                   mode = 'symbol_text',
                   maxwidth = 50,
                 })(entry, vim_item)
-                
+
                 vim_item.menu = source_names[entry.source.name] or ""
                 return vim_item
               end

@@ -185,8 +185,8 @@
         on_attach = {
           __raw = ''
             function(bufnr)
-              vim.keymap.set("n", "{", "<cmd>AerialPrev<CR>", { buffer = bufnr })
-              vim.keymap.set("n", "}", "<cmd>AerialNext<CR>", { buffer = bufnr })
+              -- Note: Removed { and } keymaps to preserve default paragraph navigation
+              -- Use [[ and ]] for aerial navigation instead
             end
           '';
         };

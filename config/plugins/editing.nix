@@ -53,25 +53,5 @@
         };
       };
     };
-
-    # Indent guides for better code visualization
-    #indent-blankline = {
-    #  enable = true;
-    #  settings = {
-    #    indent = {
-    #      char = "│";
-    #      tab_char = "│";
-    #    };
-    #    whitespace = {
-    #      remove_blankline_trail = false;
-    #    };
-    #    scope = {
-    #      enabled = true;
-    #      char = "│";
-    #      show_start = true;
-    #      show_end = true;
-    #    };
-    #  };
-    #};
   };
 }

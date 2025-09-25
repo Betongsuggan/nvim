@@ -29,10 +29,11 @@ in {
     (testingDebug.extraConfigLua or "")
   ];
   
-  # Add neotest adapters as extra plugins
+  # Add neotest adapters and UI plugins as extra plugins
   extraPlugins = with pkgs.vimPlugins; [
     neotest-go
     neotest-plenary
+    nvim-scrollbar  # Scrollbar with diagnostics and git integration
   ];
 
   # Ensure Go tools are available

@@ -38,18 +38,19 @@
       settings = {
         padding = true;
         sticky = true;
+        # Comment operations using <leader>/ prefix to avoid conflicts with code actions
         toggler = {
-          line = "<leader>c/";
-          block = "<leader>c?";
+          line = "<leader>//";
+          block = "<leader>/?";
         };
         opleader = {
-          line = "<leader>c/";
-          block = "<leader>c?";
+          line = "<leader>/";
+          block = "<leader>?";
         };
         extra = {
-          above = "<leader>cO";
-          below = "<leader>cb";
-          eol = "<leader>cA";
+          above = "<leader>/O";
+          below = "<leader>/b";
+          eol = "<leader>/A";
         };
       };
     };

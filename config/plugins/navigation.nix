@@ -40,6 +40,38 @@
               preview_cutoff = 9999;
             };
           };
+          lsp_implementations = {
+            theme = "dropdown";
+            initial_mode = "normal";
+            layout_config = {
+              preview_cutoff = 50;
+              preview_width = 0.5;
+            };
+            show_line = false;
+            trim_text = true;
+            include_declaration = false;
+          };
+          lsp_definitions = {
+            theme = "dropdown";
+            initial_mode = "normal";
+            layout_config = {
+              preview_cutoff = 50;
+              preview_width = 0.5;
+            };
+            show_line = false;
+            trim_text = true;
+          };
+          lsp_references = {
+            theme = "dropdown";
+            initial_mode = "normal";
+            layout_config = {
+              preview_cutoff = 50;
+              preview_width = 0.5;
+            };
+            show_line = false;
+            trim_text = true;
+            include_declaration = false;
+          };
         };
       };
     };

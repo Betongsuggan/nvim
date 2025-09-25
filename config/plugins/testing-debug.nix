@@ -1,11 +1,18 @@
 { ... }: {
   plugins = {
-    # Test runner - language agnostic testing framework
+    # Test runner - disable auto-setup, we'll do it manually
     neotest = {
+      enable = true;
+      # No auto adapters - we'll configure manually in extraConfigLua
+      # to avoid compatibility issues
+    };
+
+    # Go debug adapter
+    dap-go = {
       enable = true;
     };
 
-    # Debug Adapter Protocol (DAP) for debugging
+    # Debug Adapter Protocol (DAP)
     dap = {
       enable = true;
       signs = {
@@ -30,49 +37,124 @@
           texthl = "DapStopped";
         };
       };
-      
     };
 
-    # DAP UI - visual debugging interface
+    # DAP UI
     dap-ui = {
       enable = true;
     };
 
-    # DAP Virtual Text - show variable values inline
+    # DAP Virtual Text
     dap-virtual-text = {
       enable = true;
     };
-
   };
 
-  # Keymaps for testing and debugging under <leader>c (code) prefix
+  # Basic test keymaps
   keymaps = [
-    # FREQUENT: Single key commands for most common actions
-    
-    # Test running (most frequent)
+    # Test running - smart detection between Go and other files
     {
       mode = "n";
-      key = "<leader>ct";
-      action = ":lua require('neotest').run.run()<CR>";
+      key = "<leader>tt";
+      action = {
+        __raw = ''
+          function() 
+            local file = vim.fn.expand('%:p')
+            if file:match('%.go$') then
+              run_go_test_nearest()
+            else
+              require('neotest').run.run()
+            end
+          end
+        '';
+      };
       options = {
-        desc = "Run nearest test under cursor";
+        desc = "Run nearest test";
         silent = true;
       };
     }
     {
       mode = "n";
-      key = "<leader>cf";
-      action = ":lua require('neotest').run.run(vim.fn.expand('%'))<CR>";
+      key = "<leader>tf";
+      action = {
+        __raw = ''
+          function() 
+            local file = vim.fn.expand('%:p')
+            if file:match('%.go$') then
+              run_go_test_file()
+            else
+              require('neotest').run.run(vim.fn.expand('%'))
+            end
+          end
+        '';
+      };
       options = {
-        desc = "Run all tests in current file";
+        desc = "Run tests in current file";
+        silent = true;
+      };
+    }
+    {
+      mode = "n";
+      key = "<leader>ta";
+      action = {
+        __raw = ''
+          function() 
+            local file = vim.fn.expand('%:p')
+            if file:match('%.go$') then
+              run_go_test_all()
+            else
+              require('neotest').run.run({suite = true})
+            end
+          end
+        '';
+      };
+      options = {
+        desc = "Run all tests";
+        silent = true;
+      };
+    }
+    {
+      mode = "n";
+      key = "<leader>ti";
+      action = ":lua check_neotest()<CR>";
+      options = {
+        desc = "Test info";
+        silent = false;
+      };
+    }
+    # New beautiful test UI keymaps
+    {
+      mode = "n";
+      key = "<leader>to";
+      action = ":lua show_test_results_telescope()<CR>";
+      options = {
+        desc = "Open test results in telescope";
+        silent = true;
+      };
+    }
+    {
+      mode = "n";
+      key = "<leader>tr";
+      action = ":lua show_raw_test_output()<CR>";
+      options = {
+        desc = "Show raw test output";
+        silent = true;
+      };
+    }
+    {
+      mode = "n";
+      key = "<leader>tc";
+      action = ":lua clear_go_test_signs()<CR>";
+      options = {
+        desc = "Clear test signs from gutter";
         silent = true;
       };
     }
     
-    # Debug controls (frequent during debug session)
+    # Debug keymaps
     {
       mode = "n";
-      key = "<leader>cb";
+      key = "<leader>db";
       action = ":lua require('dap').toggle_breakpoint()<CR>";
       options = {
         desc = "Toggle breakpoint";
@@ -81,196 +163,12 @@
     }
     {
       mode = "n";
-      key = "<leader>cc";
+      key = "<leader>dc";
       action = ":lua require('dap').continue()<CR>";
       options = {
         desc = "Continue debugging";
         silent = true;
       };
     }
-    {
-      mode = "n";
-      key = "<leader>cs";
-      action = ":lua require('dap').step_over()<CR>";
-      options = {
-        desc = "Step over";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>ci";
-      action = ":lua require('dap').step_into()<CR>";
-      options = {
-        desc = "Step into";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>co";
-      action = ":lua require('dap').step_out()<CR>";
-      options = {
-        desc = "Step out";
-        silent = true;
-      };
-    }
-
-    # LESS FREQUENT: Multi-key commands for setup/UI/advanced features
-
-    # Test management (less frequent)
-    {
-      mode = "n";
-      key = "<leader>cta";
-      action = ":lua require('neotest').run.run({suite = true})<CR>";
-      options = {
-        desc = "Run all tests in project";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>cti";
-      action = ":lua local ok, neotest = pcall(require, 'neotest'); if ok then print('Adapters: ' .. #(neotest.config.adapters or {})); for i, adapter in ipairs(neotest.config.adapters or {}) do print('  ' .. i .. ': ' .. (adapter.name or 'unknown')); end else print('Neotest not loaded'); end; print('Go: ' .. (vim.fn.executable('go') == 1 and 'found' or 'missing')); print('Delve: ' .. (vim.fn.executable('dlv') == 1 and 'found' or 'missing'))<CR>";
-      options = {
-        desc = "Show test info (debug)";
-        silent = false;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>cts";
-      action = ":lua require('neotest').summary.toggle()<CR>";
-      options = {
-        desc = "Toggle test summary";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>cto";
-      action = ":lua require('neotest').output_panel.toggle()<CR>";
-      options = {
-        desc = "Toggle test output panel";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>ctw";
-      action = ":lua require('neotest').watch.toggle(vim.fn.expand('%'))<CR>";
-      options = {
-        desc = "Watch tests in current file";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>ctd";
-      action = ":lua require('neotest').run.run({strategy = 'dap'})<CR>";
-      options = {
-        desc = "Debug nearest test";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>ctr";
-      action = ":lua require('neotest').run.run_last()<CR>";
-      options = {
-        desc = "Re-run last test";
-        silent = true;
-      };
-    }
-
-    # Debug UI and advanced features (less frequent)
-    {
-      mode = "n";
-      key = "<leader>cdb";
-      action = ":lua require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>";
-      options = {
-        desc = "Set conditional breakpoint";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>cdr";
-      action = ":lua require('dap').repl.toggle()<CR>";
-      options = {
-        desc = "Toggle debug REPL";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>cdu";
-      action = ":lua require('dapui').toggle()<CR>";
-      options = {
-        desc = "Toggle debug UI";
-        silent = true;
-      };
-    }
-
   ];
-
-  # Essential configuration that must be in Lua
-  extraConfigLua = ''
-    -- Configure neotest adapters (required in Lua)
-    require("neotest").setup({
-      adapters = {
-        require("neotest-go")({
-          -- Only run test files, not all Go files
-          experimental = {
-            test_table = true,
-          },
-          args = { "-count=1", "-timeout=60s" },
-          -- Ensure we only discover actual test files
-          is_test_file = function(file_path)
-            return string.match(file_path, "_test%.go$") ~= nil
-          end,
-        }),
-        require("neotest-plenary"),
-      },
-      -- Configure discovery to be more restrictive
-      discovery = {
-        enabled = true,
-        concurrent = 1,
-      },
-      -- Better test result display
-      output = {
-        enabled = true,
-        open_on_run = true,
-      },
-      quickfix = {
-        enabled = false, -- Disable to avoid conflicts
-        open = false,
-      },
-    })
-    
-    -- Configure DAP for Go debugging  
-    local dap = require("dap")
-    
-    dap.adapters.go = {
-      type = "executable",
-      command = "dlv",
-      args = { "dap", "-l", "127.0.0.1:38697" },
-    }
-    
-    dap.configurations.go = {
-      {
-        type = "go",
-        name = "Debug",
-        request = "launch",
-        program = "''${file}",
-      },
-      {
-        type = "go",  
-        name = "Debug test",
-        request = "launch",
-        mode = "test",
-        program = "''${file}",
-      },
-    }
-  '';
 }

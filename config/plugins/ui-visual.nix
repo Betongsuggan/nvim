@@ -106,6 +106,11 @@ in {
           }
           {
             __unkeyed-1 = "<leader>t";
+            group = "Testing";
+            icon = "🧪";
+          }
+          {
+            __unkeyed-1 = "<leader>T";
             group = "Theme";
             icon = "🎨";
           }

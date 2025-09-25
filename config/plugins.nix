@@ -1,4 +1,4 @@
-{ ... }: let
+{ pkgs, ... }: let
   # Import plugin categories
   languageFeatures = import ./plugins/language-features.nix { };
   uiVisual = import ./plugins/ui-visual.nix { };
@@ -27,5 +27,17 @@ in {
     (editing.extraConfigLua or "")
     (navigation.extraConfigLua or "")
     (testingDebug.extraConfigLua or "")
+  ];
+  
+  # Add neotest adapters as extra plugins
+  extraPlugins = with pkgs.vimPlugins; [
+    neotest-go
+    neotest-plenary
+  ];
+
+  # Ensure Go tools are available
+  extraPackages = with pkgs; [
+    go
+    delve
   ];
 }

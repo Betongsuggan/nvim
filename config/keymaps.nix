@@ -233,10 +233,10 @@
       options = { desc = "Workspace symbols"; };
     }
 
-    # Code actions (LSP, formatting, etc. under <leader>c prefix)
+    # LSP Navigation (using <leader>l prefix for Language features)
     {
       mode = "n";
-      key = "<leader>cd";
+      key = "<leader>ld";
       action = {
         __raw = "function() require('telescope.builtin').lsp_definitions() end";
       };
@@ -244,7 +244,7 @@
     }
     {
       mode = "n";
-      key = "<leader>cD";
+      key = "<leader>lD";
       action = {
         __raw = "function() vim.lsp.buf.declaration() end";
       };
@@ -252,15 +252,35 @@
     }
     {
       mode = "n";
-      key = "<leader>ci";
+      key = "<leader>li";
       action = {
-        __raw = "function() require('telescope.builtin').lsp_implementations() end";
+        __raw = ''
+          function() 
+            require('telescope.builtin').lsp_implementations({
+              show_line = false,
+              trim_text = true,
+              include_declaration = false,
+              include_current_line = false,
+              layout_strategy = "horizontal",
+              layout_config = {
+                preview_width = 0.5,
+                horizontal = {
+                  prompt_position = "top",
+                },
+              },
+              sorting_strategy = "ascending",
+              results_title = "Implementations",
+              prompt_title = "Search Implementations",
+              preview_title = "Preview",
+            })
+          end
+        '';
       };
       options = { desc = "Go to implementations"; };
     }
     {
       mode = "n";
-      key = "<leader>cr";
+      key = "<leader>lr";
       action = {
         __raw = "function() require('telescope.builtin').lsp_references() end";
       };
@@ -268,15 +288,16 @@
     }
     {
       mode = "n";
-      key = "<leader>ch";
+      key = "<leader>lh";
       action = {
         __raw = "function() vim.lsp.buf.hover() end";
       };
       options = { desc = "Hover info"; };
     }
+    # Code Actions (using <leader>c prefix for Code operations)
     {
       mode = "n";
-      key = "<leader>cn";
+      key = "<leader>cr";
       action = {
         __raw = ''
           function()
@@ -381,7 +402,7 @@
       options = { desc = "Organize imports"; };
     }
 
-    # Diagnostic keymaps
+    # Diagnostics (using <leader>d prefix for Diagnostics)
     {
       mode = "n";
       key = "[d";
@@ -432,7 +453,7 @@
     }
     {
       mode = "n";
-      key = "<leader>ce";
+      key = "<leader>de";
       action = {
         __raw = ''
           function() 
@@ -451,7 +472,7 @@
     }
     {
       mode = "n";
-      key = "<leader>ct";
+      key = "<leader>da";
       action = {
         __raw = "function() _G.telescope_diagnostics_with_preview() end";
       };
@@ -459,25 +480,25 @@
     }
     {
       mode = "n";
-      key = "<leader>cT";
+      key = "<leader>df";
       action = "<cmd>Telescope diagnostics bufnr=0<CR>";
-      options = { desc = "Buffer diagnostics"; };
+      options = { desc = "File diagnostics"; };
     }
     {
       mode = "n";
-      key = "<leader>cx";
+      key = "<leader>dx";
       action = "<cmd>Trouble diagnostics toggle<CR>";
       options = { desc = "Trouble diagnostics"; };
     }
     {
       mode = "n";
-      key = "<leader>cq";
+      key = "<leader>dq";
       action = "<cmd>Trouble qflist toggle<CR>";
       options = { desc = "Quickfix list"; };
     }
     {
       mode = "n";
-      key = "<leader>cl";
+      key = "<leader>dl";
       action = "<cmd>Trouble loclist toggle<CR>";
       options = { desc = "Location list"; };
     }
@@ -598,7 +619,7 @@
     # Theme switching
     {
       mode = "n";
-      key = "<leader>th";
+      key = "<leader>Th";
       action = {
         __raw = "function() _G.theme_picker() end";
       };

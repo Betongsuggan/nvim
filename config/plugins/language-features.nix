@@ -48,6 +48,21 @@
               completionDocumentation = true; # Include documentation in completions
               hoverKind = "FullDocumentation"; # Full documentation on hover
               linkTarget = "pkg.go.dev"; # Link to documentation
+              # Interface implementation settings
+              codelenses = {
+                gc_details = false;
+                generate = true;
+                regenerate_cgo = true;
+                run_govulncheck = false;
+                test = true;
+                tidy = true;
+                upgrade_dependency = true;
+                vendor = true;
+              };
+              semanticTokens = true;
+              # Enable better symbol resolution
+              symbolMatcher = "FastFuzzy";
+              symbolStyle = "Dynamic";
             };
           };
           onAttach.function = ''

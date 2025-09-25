@@ -468,12 +468,7 @@ in {
           color = "${theme.colors.fg}",
           highlight = "Normal",
         },
-        Search = {
-          text = { "-", "=" },
-          priority = 1,
-          color = "${theme.colors.search}",
-          highlight = "Search",
-        },
+        -- Search marks disabled since we don't use hlslens search handler
         Error = {
           text = { "─" },
           priority = 2,
@@ -550,7 +545,7 @@ in {
         diagnostic = true,
         gitsigns = true,
         handle = true,
-        search = true,
+        search = false,  -- Disable search handler to avoid hlslens dependency
       },
     })
     
@@ -560,7 +555,6 @@ in {
     -- Set up custom highlight groups based on theme
     vim.cmd([[
       highlight ScrollbarHandle guifg=${theme.colors.border}
-      highlight ScrollbarSearchHandle guifg=${theme.colors.search}
       highlight ScrollbarErrorHandle guifg=${theme.colors.error}
       highlight ScrollbarWarnHandle guifg=${theme.colors.warn}
       highlight ScrollbarInfoHandle guifg=${theme.colors.info}

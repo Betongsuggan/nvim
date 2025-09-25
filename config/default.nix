@@ -18,6 +18,11 @@
     };
   };
 
+  # Additional packages needed by plugins
+  extraPackages = with pkgs; [
+    ripgrep # Required by telescope live_grep
+  ];
+
   # Extra plugins not available in nixvim
   extraPlugins = with pkgs.vimPlugins; [
     nvim-scrollbar

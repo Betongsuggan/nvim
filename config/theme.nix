@@ -98,7 +98,9 @@ let
   };
 
   # Current theme selection - change this to switch themes
-  currentThemeName = "catppuccin"; # Options: "catppuccin", "gruvbox"
+  # Available: "catppuccin", "gruvbox", "tokyonight", "nord", "onedark", 
+  #            "nightfox", "dracula", "kanagawa", "rose-pine"
+  currentThemeName = "catppuccin";
   
   # Get current theme configuration
   currentTheme = themes.${currentThemeName};

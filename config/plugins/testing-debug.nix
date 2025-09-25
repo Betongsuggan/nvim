@@ -3,93 +3,6 @@
     # Test runner - language agnostic testing framework
     neotest = {
       enable = true;
-      settings = {
-        # Test discovery and execution settings
-        discovery = {
-          enabled = true;
-          concurrent = 1;
-        };
-        # Test output settings
-        output = {
-          enabled = true;
-          open_on_run = true;
-        };
-        # Test quickfix integration
-        quickfix = {
-          enabled = true;
-          open = false;
-        };
-        # Test status configuration
-        status = {
-          enabled = true;
-          signs = true;
-          virtual_text = true;
-        };
-        # Floating window for test output
-        output_panel = {
-          enabled = true;
-          open = "botright split | resize 15";
-        };
-        # Test running behavior
-        run = {
-          enabled = true;
-        };
-        # Test summary window
-        summary = {
-          enabled = true;
-          animated = true;
-          follow = true;
-          expand_errors = true;
-          mappings = {
-            expand = [ "<CR>" "<2-LeftMouse>" ];
-            expand_all = "e";
-            output = "o";
-            short = "O";
-            attach = "a";
-            jumpto = "i";
-            stop = "u";
-            run = "r";
-            debug = "d";
-            mark = "m";
-            run_marked = "R";
-            debug_marked = "D";
-            clear_marked = "M";
-            target = "t";
-            clear_target = "T";
-            next_failed = "J";
-            prev_failed = "K";
-            watch = "w";
-          };
-        };
-        # Diagnostic integration
-        diagnostic = {
-          enabled = true;
-          severity = 1;
-        };
-        # Floating test results
-        floating = {
-          border = "rounded";
-          max_height = 0.9;
-          max_width = 0.9;
-          options = {};
-        };
-        # Test icons and signs
-        icons = {
-          child_indent = "│";
-          child_prefix = "├";
-          collapsed = "─";
-          expanded = "╮";
-          failed = "✖";
-          final_child_indent = " ";
-          final_child_prefix = "╰";
-          non_collapsible = "─";
-          passed = "✓";
-          running = "●";
-          running_animated = [ "/" "|" "\\" "-" "/" "|" "\\" "-" ];
-          skipped = "○";
-          unknown = "?";
-        };
-      };
     };
 
     # Debug Adapter Protocol (DAP) for debugging
@@ -301,142 +214,19 @@
 
   ];
 
-  # Extra configuration for language-specific test adapters
+  # Essential configuration that must be in Lua
   extraConfigLua = ''
-    -- Configure neotest adapters for different languages
-    local neotest_go_ok, neotest_go = pcall(require, "neotest-go")
-    local neotest_plenary_ok, neotest_plenary = pcall(require, "neotest-plenary")
-    
-    local adapters = {}
-    
-    -- Add Go adapter if available
-    if neotest_go_ok then
-      -- Configure neotest-go with basic settings
-      local go_adapter = neotest_go({
-        experimental = {
-          test_table = false, -- Disable table tests to avoid issues
-        },
-        args = { "-count=1", "-timeout=60s", "-race" }
-      })
-      table.insert(adapters, go_adapter)
-      print("✓ neotest-go loaded successfully")
-    else
-      print("✗ Warning: neotest-go not available")
-    end
-    
-    -- Add plenary adapter if available
-    if neotest_plenary_ok then
-      table.insert(adapters, neotest_plenary)
-      print("✓ neotest-plenary loaded successfully")
-    else
-      print("✗ Warning: neotest-plenary not available")
-    end
-    
-    -- Check if we have any adapters
-    if #adapters == 0 then
-      print("✗ No neotest adapters loaded! Tests will not work.")
-      return
-    end
-    
-    print("✓ Neotest configured with " .. #adapters .. " adapters")
-    
-    -- Safer neotest setup with error handling
-    local neotest_ok, neotest_err = pcall(function()
-      require("neotest").setup({
-        adapters = adapters,
-      
-      -- Test discovery patterns
-      discovery = {
-        enabled = true,
-        concurrent = 1,
-      },
-      
-      -- Diagnostic integration  
-      diagnostic = {
-        enabled = true,
-        severity = vim.diagnostic.severity.ERROR,
-      },
-      
-      -- Floating windows
-      floating = {
-        border = "rounded",
-        max_height = 0.9,
-        max_width = 0.9,
-        options = {}
-      },
-      
-      -- Icons
-      icons = {
-        child_indent = "│",
-        child_prefix = "├",
-        collapsed = "─", 
-        expanded = "╮",
-        failed = "✖",
-        final_child_indent = " ",
-        final_child_prefix = "╰",
-        non_collapsible = "─",
-        passed = "✓",
-        running = "●",
-        running_animated = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" },
-        skipped = "○",
-        unknown = "?",
-      },
-      
-      -- Output panel
-      output_panel = {
-        enabled = true,
-        open = "botright split | resize 15",
-      },
-      
-      -- Quickfix integration
-      quickfix = {
-        enabled = true,
-        open = false,
-      },
-      
-      -- Test running
-      run = {
-        enabled = true,
-      },
-      
-      -- Status integration
-      status = {
-        enabled = true,
-        signs = true,
-        virtual_text = true,
-      },
-      
-      -- Test summary
-      summary = {
-        enabled = true,
-        animated = true,
-        follow = true,
-        expand_errors = true,
-      },
+    -- Configure neotest adapters (required in Lua)
+    require("neotest").setup({
+      adapters = {
+        require("neotest-go"),
+        require("neotest-plenary"),
+      }
     })
-    end)
     
-    -- Check if neotest setup succeeded
-    if not neotest_ok then
-      print("✗ Error setting up neotest: " .. (neotest_err or "unknown error"))
-      return
-    else
-      print("✓ Neotest setup completed successfully")
-    end
+    -- Configure DAP for Go debugging  
+    local dap = require("dap")
     
-    -- Configure DAP UI to auto-open/close
-    local dap, dapui = require("dap"), require("dapui")
-    dap.listeners.after.event_initialized["dapui_config"] = function()
-      dapui.open()
-    end
-    dap.listeners.before.event_terminated["dapui_config"] = function()
-      dapui.close()
-    end
-    dap.listeners.before.event_exited["dapui_config"] = function()
-      dapui.close()
-    end
-    
-    -- Configure Go debugging (since Go is in the dev environment)
     dap.adapters.go = {
       type = "executable",
       command = "dlv",
@@ -456,13 +246,6 @@
         request = "launch",
         mode = "test",
         program = "''${file}",
-      },
-      {
-        type = "go",
-        name = "Debug test (go.mod)",
-        request = "launch", 
-        mode = "test",
-        program = ".''${relativeFileDirname}",
       },
     }
   '';

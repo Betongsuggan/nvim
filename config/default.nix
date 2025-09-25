@@ -235,14 +235,35 @@ in {
 
     -- Theme picker function
     function _G.theme_picker()
+      -- Save current colorscheme before checking availability
+      local current_colorscheme = vim.g.colors_name or "default"
+      
       local theme_names = {}
       for name, _ in pairs(themes) do
-        -- Check if colorscheme is actually available
+        -- Check if colorscheme is actually available without changing the current one
         local available = false
         if name == "catppuccin" then
-          available = pcall(function() vim.cmd("colorscheme catppuccin") end)
+          available = pcall(function() 
+            -- Test if the colorscheme exists without applying it
+            local colorschemes = vim.fn.getcompletion("", "color")
+            for _, cs in ipairs(colorschemes) do
+              if cs == "catppuccin" then
+                return true
+              end
+            end
+            return false
+          end)
         elseif name == "gruvbox" then
-          available = pcall(function() vim.cmd("colorscheme gruvbox") end)
+          available = pcall(function()
+            -- Test if the colorscheme exists without applying it
+            local colorschemes = vim.fn.getcompletion("", "color")
+            for _, cs in ipairs(colorschemes) do
+              if cs == "gruvbox" then
+                return true
+              end
+            end
+            return false
+          end)
         end
         
         if available then
@@ -250,15 +271,22 @@ in {
         end
       end
 
+      -- Restore the original colorscheme
+      pcall(vim.cmd, "colorscheme " .. current_colorscheme)
+
       if #theme_names == 0 then
         print("No themes available. Make sure colorscheme plugins are installed.")
         return
       end
 
       vim.ui.select(theme_names, {
-        prompt = "Select theme:",
+        prompt = "Select theme (Current: " .. (current_theme.name:gsub("^%l", string.upper)) .. "):",
         format_item = function(item)
-          return item:gsub("^%l", string.upper) -- Capitalize first letter
+          local display = item:gsub("^%l", string.upper)
+          if item == current_theme.name then
+            display = display .. " ✓"
+          end
+          return display
         end
       }, function(choice)
         if choice then

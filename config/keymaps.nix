@@ -643,18 +643,25 @@
       action = {
         __raw = ''
           function()
+            -- Save current colorscheme before checking
+            local current_colorscheme = vim.g.colors_name or "default"
+            
             local themes = { "catppuccin", "gruvbox" }
             print("Available themes:")
             for _, theme in ipairs(themes) do
               local available = false
-              if theme == "catppuccin" then
-                available = pcall(function() vim.cmd("colorscheme catppuccin") end)
-              elseif theme == "gruvbox" then
-                available = pcall(function() vim.cmd("colorscheme gruvbox") end)
+              -- Check without changing the current colorscheme
+              local colorschemes = vim.fn.getcompletion("", "color")
+              for _, cs in ipairs(colorschemes) do
+                if cs == theme then
+                  available = true
+                  break
+                end
               end
               
               local status = available and "✓" or "✗"
-              print("  " .. status .. " " .. theme:gsub("^%l", string.upper))
+              local current_marker = (theme == current_colorscheme) and " (current)" or ""
+              print("  " .. status .. " " .. theme:gsub("^%l", string.upper) .. current_marker)
             end
           end
         '';

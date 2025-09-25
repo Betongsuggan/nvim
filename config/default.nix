@@ -45,6 +45,9 @@ in {
     nerd-fonts.hack
     # Debugging tools
     delve # Go debugger
+    # Formatters
+    stylua # Lua formatter
+    nixfmt-classic # Nix formatter
   ];
 
   # Extra plugins not available in nixvim

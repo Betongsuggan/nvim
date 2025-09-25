@@ -42,13 +42,13 @@
     {
       mode = "n";
       key = "[b";
-      action = "<cmd>bprevious<CR>";
+      action = "<cmd>BufferLineCyclePrev<CR>";
       options = { desc = "Previous buffer"; };
     }
     {
       mode = "n";
       key = "]b";
-      action = "<cmd>bnext<CR>";
+      action = "<cmd>BufferLineCycleNext<CR>";
       options = { desc = "Next buffer"; };
     }
     {

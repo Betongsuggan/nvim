@@ -1,11 +1,15 @@
 { pkgs, ... }:
 let
+  # Import theme configuration
+  theme = import ./theme.nix;
+  
   # Import plugin categories
   languageFeatures = import ./plugins/language-features.nix { };
   uiVisual = import ./plugins/ui-visual.nix { };
   editing = import ./plugins/editing.nix { };
   navigation = import ./plugins/navigation.nix { };
   testingDebug = import ./plugins/testing-debug.nix { };
+  themes = import ./plugins/themes.nix { inherit theme; };
 in {
   # Merge all plugin configurations
   plugins = languageFeatures.plugins // uiVisual.plugins // editing.plugins
@@ -23,6 +27,7 @@ in {
     (editing.extraConfigLua or "")
     (navigation.extraConfigLua or "")
     (testingDebug.extraConfigLua or "")
+    (themes.extraConfigLua or "")
   ];
 
   # Add neotest adapters and UI plugins as extra plugins

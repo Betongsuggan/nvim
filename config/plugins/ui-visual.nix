@@ -112,21 +112,6 @@ in {
             group = "Theme";
             icon = "🎨";
           }
-          {
-            __unkeyed-1 = "<leader>l";
-            group = "LSP";
-            icon = "💡";
-          }
-          {
-            __unkeyed-1 = "<leader>d";
-            group = "Diagnostics";
-            icon = "🩺";
-          }
-          {
-            __unkeyed-1 = "<leader>/";
-            group = "Comments";
-            icon = "💬";
-          }
         ];
         win = {
           border = "rounded";
@@ -598,4 +583,3 @@ in {
     end
   '';
 }
-

@@ -17,7 +17,7 @@
       nixvimLib = nixvim.lib.${system};
       pkgs = import nixpkgs {inherit system;};
       nixvim' = nixvim.legacyPackages.${system};
-      
+
       nvim = nixvim'.makeNixvimWithModule {
         inherit pkgs;
         module = ./config;
@@ -27,7 +27,7 @@
         default = nvim;
         nvim = nvim;
       };
-      
+
       devShells.default = pkgs.mkShell {
         buildInputs = [
           nvim

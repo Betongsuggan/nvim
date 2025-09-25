@@ -308,6 +308,14 @@
       end,
     })
 
+    -- Auto-format on save for Nix files
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      pattern = { "*.nix" },
+      callback = function()
+        vim.lsp.buf.format()
+      end,
+    })
+
     -- Enhanced telescope diagnostics function
     local function telescope_diagnostics_with_preview()
       require('telescope.builtin').diagnostics({

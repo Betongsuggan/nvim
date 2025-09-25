@@ -98,7 +98,7 @@
   # Key mappings for manual formatting
   keymaps = [{
     mode = "n";
-    key = "<leader>f";
+    key = "<leader>cf";
     action = {
       __raw = ''
         function()

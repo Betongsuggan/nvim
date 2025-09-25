@@ -373,6 +373,11 @@
         };
         hijackNetrwBehavior = "open_current";
         useLibuvFileWatcher = true;
+        bindToCwd = false;
+        cwdTarget = {
+          sidebar = "tab";
+          current = "window";
+        };
         filteredItems = {
           visible = false;
           hideDotfiles = true;

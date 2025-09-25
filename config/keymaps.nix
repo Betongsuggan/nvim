@@ -174,7 +174,20 @@
     {
       mode = "n";
       key = "<leader>fe";
-      action = "<cmd>Neotree toggle<CR>";
+      action = {
+        __raw = ''
+          function()
+            local current_file = vim.fn.expand('%:p')
+            if current_file and current_file ~= "" then
+              -- If there's a current file, reveal it in neo-tree
+              vim.cmd("Neotree toggle reveal")
+            else
+              -- If no current file, just toggle normally
+              vim.cmd("Neotree toggle")
+            end
+          end
+        '';
+      };
       options = { desc = "File explorer"; };
     }
     {

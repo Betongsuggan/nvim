@@ -132,12 +132,14 @@
 
   };
 
-  # Keymaps for testing and debugging
+  # Keymaps for testing and debugging under <leader>c (code) prefix
   keymaps = [
-    # Test running
+    # FREQUENT: Single key commands for most common actions
+    
+    # Test running (most frequent)
     {
       mode = "n";
-      key = "<leader>tt";
+      key = "<leader>ct";
       action = ":lua require('neotest').run.run()<CR>";
       options = {
         desc = "Run nearest test";
@@ -146,54 +148,18 @@
     }
     {
       mode = "n";
-      key = "<leader>tf";
+      key = "<leader>cf";
       action = ":lua require('neotest').run.run(vim.fn.expand('%'))<CR>";
       options = {
         desc = "Run tests in current file";
         silent = true;
       };
     }
+    
+    # Debug controls (frequent during debug session)
     {
       mode = "n";
-      key = "<leader>ta";
-      action = ":lua require('neotest').run.run(vim.fn.getcwd())<CR>";
-      options = {
-        desc = "Run all tests";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>ts";
-      action = ":lua require('neotest').summary.toggle()<CR>";
-      options = {
-        desc = "Toggle test summary";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>to";
-      action = ":lua require('neotest').output_panel.toggle()<CR>";
-      options = {
-        desc = "Toggle test output panel";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>tw";
-      action = ":lua require('neotest').watch.toggle(vim.fn.expand('%'))<CR>";
-      options = {
-        desc = "Watch tests in current file";
-        silent = true;
-      };
-    }
-
-    # Debug keymaps
-    {
-      mode = "n";
-      key = "<leader>db";
+      key = "<leader>cb";
       action = ":lua require('dap').toggle_breakpoint()<CR>";
       options = {
         desc = "Toggle breakpoint";
@@ -202,16 +168,7 @@
     }
     {
       mode = "n";
-      key = "<leader>dB";
-      action = ":lua require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>";
-      options = {
-        desc = "Set conditional breakpoint";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>dc";
+      key = "<leader>cc";
       action = ":lua require('dap').continue()<CR>";
       options = {
         desc = "Continue debugging";
@@ -220,7 +177,7 @@
     }
     {
       mode = "n";
-      key = "<leader>ds";
+      key = "<leader>cs";
       action = ":lua require('dap').step_over()<CR>";
       options = {
         desc = "Step over";
@@ -229,7 +186,7 @@
     }
     {
       mode = "n";
-      key = "<leader>di";
+      key = "<leader>ci";
       action = ":lua require('dap').step_into()<CR>";
       options = {
         desc = "Step into";
@@ -238,16 +195,76 @@
     }
     {
       mode = "n";
-      key = "<leader>do";
+      key = "<leader>co";
       action = ":lua require('dap').step_out()<CR>";
       options = {
         desc = "Step out";
         silent = true;
       };
     }
+
+    # LESS FREQUENT: Multi-key commands for setup/UI/advanced features
+
+    # Test management (less frequent)
     {
       mode = "n";
-      key = "<leader>dr";
+      key = "<leader>cta";
+      action = ":lua require('neotest').run.run(vim.fn.getcwd())<CR>";
+      options = {
+        desc = "Run all tests";
+        silent = true;
+      };
+    }
+    {
+      mode = "n";
+      key = "<leader>cts";
+      action = ":lua require('neotest').summary.toggle()<CR>";
+      options = {
+        desc = "Toggle test summary";
+        silent = true;
+      };
+    }
+    {
+      mode = "n";
+      key = "<leader>cto";
+      action = ":lua require('neotest').output_panel.toggle()<CR>";
+      options = {
+        desc = "Toggle test output panel";
+        silent = true;
+      };
+    }
+    {
+      mode = "n";
+      key = "<leader>ctw";
+      action = ":lua require('neotest').watch.toggle(vim.fn.expand('%'))<CR>";
+      options = {
+        desc = "Watch tests in current file";
+        silent = true;
+      };
+    }
+    {
+      mode = "n";
+      key = "<leader>ctd";
+      action = ":lua require('neotest').run.run({strategy = 'dap'})<CR>";
+      options = {
+        desc = "Debug nearest test";
+        silent = true;
+      };
+    }
+
+    # Debug UI and advanced features (less frequent)
+    {
+      mode = "n";
+      key = "<leader>cdb";
+      action = ":lua require('dap').set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>";
+      options = {
+        desc = "Set conditional breakpoint";
+        silent = true;
+      };
+    }
+    {
+      mode = "n";
+      key = "<leader>cdr";
       action = ":lua require('dap').repl.toggle()<CR>";
       options = {
         desc = "Toggle debug REPL";
@@ -256,19 +273,10 @@
     }
     {
       mode = "n";
-      key = "<leader>du";
+      key = "<leader>cdu";
       action = ":lua require('dapui').toggle()<CR>";
       options = {
         desc = "Toggle debug UI";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>dt";
-      action = ":lua require('neotest').run.run({strategy = 'dap'})<CR>";
-      options = {
-        desc = "Debug nearest test";
         silent = true;
       };
     }

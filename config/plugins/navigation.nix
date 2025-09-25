@@ -52,6 +52,7 @@
       enableGitStatus = true;
       enableDiagnostics = true;
       
+      
       window = {
         position = "float";
         width = 50;
@@ -242,4 +243,46 @@
       };
     };
   };
+
+  # Configure Neo-tree icons without overriding main configuration
+  extraConfigLua = ''
+    -- Configure Neo-tree icons after it's loaded
+    vim.api.nvim_create_autocmd("User", {
+      pattern = "NeoTreeLoaded",
+      once = true,
+      callback = function()
+        -- Update neo-tree icons
+        local neotree = require("neo-tree")
+        local current_config = neotree.get_state()
+        
+        -- Apply custom icons through renderer configuration
+        pcall(function()
+          require("neo-tree.ui.renderer").config.default_component_configs = vim.tbl_deep_extend("force", 
+            require("neo-tree.ui.renderer").config.default_component_configs or {}, 
+            {
+              icon = {
+                folder_closed = "📁",
+                folder_open = "📂", 
+                folder_empty = "📂",
+                default = "*",
+              },
+              git_status = {
+                symbols = {
+                  added = "✚",
+                  modified = "○",
+                  deleted = "✖",
+                  renamed = "➜", 
+                  untracked = "★",
+                  ignored = "◌",
+                  unstaged = "✗",
+                  staged = "✓",
+                  conflict = "",
+                }
+              },
+            }
+          )
+        end)
+      end
+    })
+  '';
 }

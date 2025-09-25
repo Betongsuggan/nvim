@@ -563,52 +563,5 @@ in {
       })
     end
     
-    -- Configure Neo-tree with better icon handling
-    vim.api.nvim_create_autocmd("VimEnter", {
-      pattern = "*",
-      once = true,
-      callback = function()
-        -- Delay to ensure neo-tree is loaded
-        vim.defer_fn(function()
-          local neotree_ok, neotree = pcall(require, "neo-tree")
-          if neotree_ok then
-            -- Update neo-tree configuration after it's loaded
-            require("neo-tree").setup({
-              default_component_configs = {
-                icon = {
-                  folder_closed = "📁",
-                  folder_open = "📂",
-                  folder_empty = "📂",
-                  default = "*",
-                  highlight = "NeoTreeFileIcon"
-                },
-                modified = {
-                  symbol = "●",
-                  highlight = "NeoTreeModified",
-                },
-                name = {
-                  trailing_slash = false,
-                  use_git_status_colors = true,
-                  highlight = "NeoTreeFileName",
-                },
-                git_status = {
-                  symbols = {
-                    added = "✚",
-                    modified = "○", 
-                    deleted = "✖",
-                    renamed = "➜",
-                    untracked = "★",
-                    ignored = "◌",
-                    unstaged = "✗",
-                    staged = "✓",
-                    conflict = "",
-                  }
-                },
-              },
-            })
-          end
-        end, 100)
-      end
-    })
   '';
 }

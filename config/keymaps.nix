@@ -244,6 +244,31 @@
       action = "<cmd>Telescope lsp_workspace_symbols<CR>";
       options = { desc = "Workspace symbols"; };
     }
+    {
+      mode = "n";
+      key = "<leader>fS";
+      action = {
+        __raw = ''
+          function()
+            require('telescope.builtin').lsp_workspace_symbols({
+              prompt_title = "Search Symbols",
+              results_title = "Symbol Results", 
+              preview_title = "Preview",
+              layout_strategy = "horizontal",
+              layout_config = {
+                horizontal = {
+                  prompt_position = "top",
+                  preview_width = 0.5,
+                },
+              },
+              sorting_strategy = "ascending",
+              query = vim.fn.expand('<cword>'),
+            })
+          end
+        '';
+      };
+      options = { desc = "Search symbols"; };
+    }
 
     # LSP Navigation (using <leader>l prefix for Language features)
     {

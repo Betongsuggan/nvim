@@ -103,8 +103,13 @@ in {
 
       diff_opts = {
         auto_close_on_accept = true,
-        vertical_split = true,
-        on_new_file_reject = "keep_empty" -- Keep buffers instead of closing
+        vertical_split = false, -- Use horizontal split to give more width
+        close_other_windows = true, -- Close other windows to focus on diff
+        focus_diff_window = true, -- Focus the diff window when opened
+        diff_window_size = 0.8, -- Use 80% of screen for diff view
+        on_new_file_reject = "close_window", -- Clean up rejected changes
+        preview_context = 5, -- Show 5 lines of context around changes
+        wrap_lines = false -- Don't wrap long lines in diff view
       }
     })
   '';

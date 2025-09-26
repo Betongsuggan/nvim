@@ -21,9 +21,11 @@
             gopls = {
               analyses = {
                 unusedparams = true;
+                unusedvariable = true;
+                unusedwrite = true;
                 unreachable = false; # Disable expensive analysis
               };
-              staticcheck = false; # Disable for faster completion
+              staticcheck = true; # Enable staticcheck for better diagnostics
               gofumpt = true;
               completionBudget = "100ms"; # Limit completion time
               matcher = "Fuzzy";

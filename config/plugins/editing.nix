@@ -62,6 +62,7 @@
         formatters_by_ft = {
           lua = [ "stylua" ];
           nix = [ "nixfmt" ];
+          go = [ "golines" "gofumpt" ];
         };
         format_on_save = {
           lsp_fallback = true;
@@ -72,6 +73,9 @@
             prepend_args = [ "--indent-type" "Spaces" "--indent-width" "2" ];
           };
           nixfmt = { prepend_args = [ "--width" "80" ]; };
+          golines = {
+            prepend_args = [ "--max-len=120" "--base-formatter=gofumpt" ];
+          };
         };
       };
     };

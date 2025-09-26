@@ -30,6 +30,7 @@
             pkgs.go
             pkgs.gopls
             pkgs.delve
+            pkgs.golines
             # TypeScript/JavaScript development tools
             pkgs.nodejs_20
             pkgs.typescript

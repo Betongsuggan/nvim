@@ -3,7 +3,7 @@ let theme = import ./theme.nix;
 in {
   imports = [ ./options.nix ./plugins.nix ./keymaps.nix ];
 
-  # Basic nixvim configuration
+  # Core nixvim configuration
   viAlias = true;
   vimAlias = true;
 
@@ -17,8 +17,12 @@ in {
       direction = "float";
       float_opts = {
         border = "curved";
-        width = 120;
-        height = 30;
+        width = {
+          __raw = "math.floor(vim.o.columns * 0.8)";
+        };
+        height = {
+          __raw = "math.floor(vim.o.lines * 0.8)";
+        };
       };
       shell = "bash";
     };
@@ -42,6 +46,9 @@ in {
     "lua/testing/adapters/go.lua" = {
       text = builtins.readFile ../lua/testing/adapters/go.lua;
     };
+    "lua/testing/adapters/typescript.lua" = {
+      text = builtins.readFile ../lua/testing/adapters/typescript.lua;
+    };
   };
 
   # Additional packages needed by plugins
@@ -53,9 +60,12 @@ in {
     nerd-fonts.hack
     # Debugging tools
     delve # Go debugger
+    nodejs_20 # Node.js runtime for TypeScript/JavaScript debugging
     # Formatters
     stylua # Lua formatter
     nixfmt-classic # Nix formatter
+    prettierd # TypeScript/JavaScript formatter
+    eslint_d # TypeScript/JavaScript linter
   ];
 
   # Extra plugins not available in nixvim
@@ -75,6 +85,7 @@ in {
     # Testing and debugging plugins  
     neotest-go # Go test adapter for neotest
     neotest-plenary # Plenary test adapter
+    neotest-jest # Jest test adapter for TypeScript/JavaScript
 
     # Claude Code integration
     (pkgs.vimUtils.buildVimPlugin {

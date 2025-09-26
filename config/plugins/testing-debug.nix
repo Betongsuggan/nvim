@@ -10,6 +10,7 @@
     # Go debug adapter
     dap-go = { enable = true; };
 
+
     # Debug Adapter Protocol (DAP)
     dap = {
       enable = true;

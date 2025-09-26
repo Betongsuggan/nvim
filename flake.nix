@@ -1,5 +1,5 @@
 {
-  description = "Betongsuggans Neovim setup";
+  description = "Betongsuggans Neovim configuration";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -30,6 +30,11 @@
             pkgs.go
             pkgs.gopls
             pkgs.delve
+            # TypeScript/JavaScript development tools
+            pkgs.nodejs_20
+            pkgs.typescript
+            pkgs.nodePackages.typescript-language-server
+            pkgs.nodePackages.vscode-langservers-extracted # For eslint
           ];
         };
       });

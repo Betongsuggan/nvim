@@ -7,7 +7,7 @@
         highlight = { enable = true; };
         indent = { enable = true; };
         ensure_installed =
-          [ "go" "gomod" "gosum" "lua" "nix" "bash" "json" "yaml" "markdown" ];
+          [ "go" "gomod" "gosum" "typescript" "tsx" "javascript" "lua" "nix" "bash" "json" "yaml" "markdown" ];
       };
     };
 
@@ -70,6 +70,108 @@
               return orig_handler(err, result, ctx, config)
             end
 
+          '';
+        };
+        ts_ls = {
+          enable = true;
+          settings = {
+            typescript = {
+              inlayHints = {
+                includeInlayParameterNameHints = "all";
+                includeInlayParameterNameHintsWhenArgumentMatchesName = false;
+                includeInlayFunctionParameterTypeHints = true;
+                includeInlayVariableTypeHints = true;
+                includeInlayPropertyDeclarationTypeHints = true;
+                includeInlayFunctionLikeReturnTypeHints = true;
+                includeInlayEnumMemberValueHints = true;
+              };
+              suggest = {
+                autoImports = true;
+                completeFunctionCalls = true;
+                includeCompletionsForModuleExports = true;
+                includeCompletionsForImportStatements = true;
+              };
+              preferences = {
+                importModuleSpecifier = "shortest";
+                includePackageJsonAutoImports = "on";
+              };
+              format = {
+                enable = true;
+                insertSpaceAfterCommaDelimiter = true;
+                insertSpaceAfterSemicolonInForStatements = true;
+                insertSpaceBeforeAndAfterBinaryOperators = true;
+                insertSpaceAfterConstructor = false;
+                insertSpaceAfterKeywordsInControlFlowStatements = true;
+                insertSpaceAfterFunctionKeywordForAnonymousFunctions = true;
+                insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis = false;
+                insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets = false;
+                insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces = false;
+                placeOpenBraceOnNewLineForFunctions = false;
+                placeOpenBraceOnNewLineForControlBlocks = false;
+              };
+              updateImportsOnFileMove = { enabled = "always"; };
+              workspaceSymbols = { scope = "allOpenProjects"; };
+            };
+            javascript = {
+              inlayHints = {
+                includeInlayParameterNameHints = "all";
+                includeInlayParameterNameHintsWhenArgumentMatchesName = false;
+                includeInlayFunctionParameterTypeHints = true;
+                includeInlayVariableTypeHints = true;
+                includeInlayPropertyDeclarationTypeHints = true;
+                includeInlayFunctionLikeReturnTypeHints = true;
+                includeInlayEnumMemberValueHints = true;
+              };
+              suggest = {
+                autoImports = true;
+                completeFunctionCalls = true;
+                includeCompletionsForModuleExports = true;
+                includeCompletionsForImportStatements = true;
+              };
+              preferences = {
+                importModuleSpecifier = "shortest";
+                includePackageJsonAutoImports = "on";
+              };
+              format = {
+                enable = true;
+                insertSpaceAfterCommaDelimiter = true;
+                insertSpaceAfterSemicolonInForStatements = true;
+                insertSpaceBeforeAndAfterBinaryOperators = true;
+                insertSpaceAfterConstructor = false;
+                insertSpaceAfterKeywordsInControlFlowStatements = true;
+                insertSpaceAfterFunctionKeywordForAnonymousFunctions = true;
+                insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis = false;
+                insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets = false;
+                insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces = false;
+                placeOpenBraceOnNewLineForFunctions = false;
+                placeOpenBraceOnNewLineForControlBlocks = false;
+              };
+              updateImportsOnFileMove = { enabled = "always"; };
+            };
+            completions = {
+              completeFunctionCalls = true;
+            };
+          };
+          onAttach.function = ''
+            -- Enhanced auto-import on completion confirm for TypeScript
+            local orig_handler = vim.lsp.handlers["textDocument/completion"]
+            vim.lsp.handlers["textDocument/completion"] = function(err, result, ctx, config)
+              if result and result.items then
+                for _, item in ipairs(result.items) do
+                  -- Mark items that need auto-import
+                  if item.additionalTextEdits then
+                    if not item.detail then item.detail = "" end
+                    item.detail = item.detail .. " (auto-import)"
+                  end
+                end
+              end
+              return orig_handler(err, result, ctx, config)
+            end
+
+            -- Enable inlay hints if supported
+            if vim.lsp.inlay_hint then
+              vim.lsp.inlay_hint.enable(true, { bufnr = 0 })
+            end
           '';
         };
         nixd = {

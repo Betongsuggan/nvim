@@ -58,7 +58,6 @@
             initial_mode = "normal";
             layout_config = {
               preview_cutoff = 50;
-              preview_width = 0.5;
             };
             show_line = false;
             trim_text = true;

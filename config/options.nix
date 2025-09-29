@@ -47,6 +47,33 @@
 
   # LSP UI configuration for rounded borders
   extraConfigLua = ''
+    -- Prevent duplicate LSP clients on buffer enter
+    vim.api.nvim_create_autocmd("BufEnter", {
+      pattern = "*.go",
+      callback = function()
+        vim.defer_fn(function()
+          local clients = vim.lsp.get_clients({ bufnr = 0, name = "gopls" })
+          if #clients > 1 then
+            -- Keep only the client with full settings (usually the newer one)
+            local keep_client = nil
+            for _, client in ipairs(clients) do
+              if client.config.settings and client.config.settings.gopls then
+                keep_client = client
+                break
+              end
+            end
+            keep_client = keep_client or clients[1]
+            
+            for _, client in ipairs(clients) do
+              if client.id ~= keep_client.id then
+                vim.lsp.stop_client(client.id, true)
+              end
+            end
+          end
+        end, 100)
+      end,
+    })
+
     -- Configure LSP floating windows with rounded borders
     local border_opts = {
       border = "rounded",

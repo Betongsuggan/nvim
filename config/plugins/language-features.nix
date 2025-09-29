@@ -57,6 +57,16 @@
             };
           };
           onAttach.function = ''
+            -- Check if gopls is already running for this buffer
+            local clients = vim.lsp.get_clients({ bufnr = 0, name = "gopls" })
+            if #clients > 1 then
+              -- Stop duplicate clients, keeping only the first one
+              for i = 2, #clients do
+                vim.lsp.stop_client(clients[i].id, true)
+              end
+              return
+            end
+
             -- Enhanced auto-import on completion confirm
             local orig_handler = vim.lsp.handlers["textDocument/completion"]
             vim.lsp.handlers["textDocument/completion"] = function(err, result, ctx, config)

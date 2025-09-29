@@ -17,12 +17,8 @@ in {
       direction = "float";
       float_opts = {
         border = "curved";
-        width = {
-          __raw = "math.floor(vim.o.columns * 0.8)";
-        };
-        height = {
-          __raw = "math.floor(vim.o.lines * 0.8)";
-        };
+        width = { __raw = "math.floor(vim.o.columns * 0.8)"; };
+        height = { __raw = "math.floor(vim.o.lines * 0.8)"; };
       };
       shell = "bash";
     };
@@ -66,6 +62,8 @@ in {
     nixfmt-classic # Nix formatter
     prettierd # TypeScript/JavaScript formatter
     eslint_d # TypeScript/JavaScript linter
+
+    gcc
   ];
 
   # Extra plugins not available in nixvim
@@ -93,7 +91,7 @@ in {
       src = pkgs.fetchFromGitHub {
         owner = "coder";
         repo = "claudecode.nvim";
-        rev = "main";
+        rev = "2e6ea6f2a63cdf4fd3c05e6a054151d46848d319";
         sha256 = "sha256-sOBY2y/buInf+SxLwz6uYlUouDULwebY/nmDlbFbGa8=";
       };
     })

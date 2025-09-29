@@ -13,7 +13,6 @@ function Registry.register(adapter)
     error("Adapter must have a name")
   end
   _G.test_adapters[adapter.name] = adapter
-  print("✓ Registered test adapter: " .. adapter.name)
 end
 
 function Registry.get_adapter_for_file(filepath)
@@ -54,4 +53,3 @@ function Registry.list_adapters()
 end
 
 return Registry
-

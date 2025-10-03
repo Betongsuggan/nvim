@@ -5,9 +5,13 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixvim.url = "github:nix-community/nixvim";
     flake-utils.url = "github:numtide/flake-utils";
+    claudecode-nvim = {
+      url = "github:coder/claudecode.nvim/2e6ea6f2a63cdf4fd3c05e6a054151d46848d319";
+      flake = false;
+    };
   };
 
-  outputs = { nixpkgs, nixvim, flake-utils, ... }:
+  outputs = { nixpkgs, nixvim, flake-utils, claudecode-nvim, ... }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
@@ -16,6 +20,9 @@
         nvim = nixvim'.makeNixvimWithModule {
           inherit pkgs;
           module = ./config;
+          extraSpecialArgs = {
+            inherit claudecode-nvim;
+          };
         };
       in {
         packages = {

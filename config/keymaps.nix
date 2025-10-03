@@ -126,25 +126,25 @@
 
     # Window navigation
     {
-      mode = "n";
+      mode = ["n" "i" "t"];
       key = "<C-h>";
       action = "<C-w>h";
       options = { desc = "Move to left window"; };
     }
     {
-      mode = "n";
+      mode = ["n" "i" "t"];
       key = "<C-j>";
       action = "<C-w>j";
       options = { desc = "Move to bottom window"; };
     }
     {
-      mode = "n";
+      mode = ["n" "i" "t"];
       key = "<C-k>";
       action = "<C-w>k";
       options = { desc = "Move to top window"; };
     }
     {
-      mode = "n";
+      mode = ["n" "i" "t"];
       key = "<C-l>";
       action = "<C-w>l";
       options = { desc = "Move to right window"; };
@@ -205,7 +205,31 @@
     {
       mode = "n";
       key = "<leader>fs";
-      action = "<cmd>AerialToggle<CR>";
+      action = {
+        __raw = ''
+          function()
+            require('telescope.builtin').lsp_document_symbols({
+              prompt_title = "Symbol Outline",
+              results_title = "Symbols",
+              preview_title = "Preview",
+              layout_strategy = "center",
+              layout_config = {
+                center = {
+                  width = 0.8,
+                  height = 0.8,
+                  preview_cutoff = 40,
+                },
+              },
+              sorting_strategy = "ascending",
+              symbols = {
+                "Class", "Constructor", "Enum", "Function", 
+                "Interface", "Module", "Method", "Struct",
+                "Variable", "Field", "Property", "Constant"
+              },
+            })
+          end
+        '';
+      };
       options = { desc = "Symbol outline"; };
     }
     {

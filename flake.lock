@@ -1,5 +1,22 @@
 {
   "nodes": {
+    "claudecode-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1757957646,
+        "narHash": "sha256-sOBY2y/buInf+SxLwz6uYlUouDULwebY/nmDlbFbGa8=",
+        "owner": "coder",
+        "repo": "claudecode.nvim",
+        "rev": "2e6ea6f2a63cdf4fd3c05e6a054151d46848d319",
+        "type": "github"
+      },
+      "original": {
+        "owner": "coder",
+        "repo": "claudecode.nvim",
+        "rev": "2e6ea6f2a63cdf4fd3c05e6a054151d46848d319",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -125,11 +142,11 @@
         "systems": "systems_3"
       },
       "locked": {
-        "lastModified": 1759101862,
-        "narHash": "sha256-Ybe+/vYCPA520Wm9DveaOJa7TQF2M82AtUKUh82vr7U=",
+        "lastModified": 1759279360,
+        "narHash": "sha256-0WavBzKMQ4Pn68fDHR1rigB+w5SlW36+Jxq/EuHmOhw=",
         "owner": "nix-community",
         "repo": "nixvim",
-        "rev": "1c802b3efe45625737d36b3d4b9710193fa39e2a",
+        "rev": "fe059cd395575c00d475ab1c8200dcc3495724d9",
         "type": "github"
       },
       "original": {
@@ -163,6 +180,7 @@
     },
     "root": {
       "inputs": {
+        "claudecode-nvim": "claudecode-nvim",
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs",
         "nixvim": "nixvim"

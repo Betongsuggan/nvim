@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, claudecode-nvim, ... }:
 let theme = import ./theme.nix;
 in {
   imports = [ ./options.nix ./plugins.nix ./keymaps.nix ];
@@ -88,12 +88,7 @@ in {
     # Claude Code integration
     (pkgs.vimUtils.buildVimPlugin {
       name = "claudecode-nvim";
-      src = pkgs.fetchFromGitHub {
-        owner = "coder";
-        repo = "claudecode.nvim";
-        rev = "2e6ea6f2a63cdf4fd3c05e6a054151d46848d319";
-        sha256 = "sha256-sOBY2y/buInf+SxLwz6uYlUouDULwebY/nmDlbFbGa8=";
-      };
+      src = claudecode-nvim;
     })
   ];
 
@@ -112,8 +107,9 @@ in {
 
       diff_opts = {
         auto_close_on_accept = true,
+        auto_close_on_reject = true, -- Also close on reject for consistency
         vertical_split = false, -- Use horizontal split to give more width
-        close_other_windows = true, -- Close other windows to focus on diff
+        close_other_windows = false, -- Don't auto-close other windows
         focus_diff_window = true, -- Focus the diff window when opened
         diff_window_size = 0.8, -- Use 80% of screen for diff view
         on_new_file_reject = "close_window", -- Clean up rejected changes

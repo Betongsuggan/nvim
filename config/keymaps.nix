@@ -50,7 +50,31 @@
     {
       mode = "n";
       key = "<leader>bo";
-      action = { __raw = "function() vim.cmd('%bdelete|edit#|bdelete#') end"; };
+      action = { 
+        __raw = ''
+          function() 
+            local current_buf = vim.api.nvim_get_current_buf()
+            local buffers = vim.api.nvim_list_bufs()
+            for _, buf in ipairs(buffers) do
+              if buf ~= current_buf and vim.api.nvim_buf_is_loaded(buf) then
+                local buf_name = vim.api.nvim_buf_get_name(buf)
+                local buf_type = vim.api.nvim_buf_get_option(buf, 'buftype')
+                local buf_filetype = vim.api.nvim_buf_get_option(buf, 'filetype')
+                
+                -- Skip terminal buffers, special buffer types, and toggleterm
+                local is_terminal = buf_type == 'terminal' or 
+                                    buf_name:match('^term://') or 
+                                    buf_filetype == 'toggleterm' or
+                                    buf_name:match('toggleterm')
+                
+                if not is_terminal then
+                  pcall(vim.api.nvim_buf_delete, buf, {force = false})
+                end
+              end
+            end
+          end
+        '';
+      };
       options = { desc = "Close all other buffers"; };
     }
     {

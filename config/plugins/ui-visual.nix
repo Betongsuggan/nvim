@@ -144,6 +144,11 @@ in {
             icon = "💬";
           }
           {
+            __unkeyed-1 = "<leader>r";
+            group = "Rust";
+            icon = "🦀";
+          }
+          {
             __unkeyed-1 = "<C-a>";
             desc = "Toggle Claude";
             icon = "🤖";

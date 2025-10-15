@@ -7,7 +7,7 @@
         highlight = { enable = true; };
         indent = { enable = true; };
         ensure_installed =
-          [ "go" "gomod" "gosum" "typescript" "tsx" "javascript" "lua" "nix" "bash" "json" "yaml" "markdown" ];
+          [ "go" "gomod" "gosum" "typescript" "tsx" "javascript" "lua" "nix" "bash" "json" "yaml" "markdown" "rust" "toml" "ron" ];
       };
     };
 
@@ -204,6 +204,231 @@
               };
             };
           };
+        };
+        rust_analyzer = {
+          enable = true;
+          installCargo = true;
+          installRustc = true;
+          settings = {
+            # Cargo configuration
+            cargo = {
+              allFeatures = true; # Enable all features for better completions
+              loadOutDirsFromCheck = true; # Load OUT_DIR from check
+              buildScripts = {
+                enable = true; # Enable build script support
+              };
+            };
+            # Procedural macros
+            procMacro = {
+              enable = true;
+              attributes = {
+                enable = true;
+              };
+            };
+            # Check configuration
+            check = {
+              command = "clippy"; # Use clippy instead of check for better lints
+              allTargets = true; # Check all targets
+              extraArgs = [ "--no-deps" ]; # Don't check dependencies
+            };
+            # Diagnostics
+            diagnostics = {
+              enable = true;
+              experimental = {
+                enable = true; # Enable experimental diagnostics
+              };
+              disabled = [ "unresolved-proc-macro" ]; # Disable noisy diagnostics
+              styleLints = {
+                enable = true; # Enable style lints
+              };
+            };
+            # Completion
+            completion = {
+              autoimport = {
+                enable = true;
+              };
+              autoself = {
+                enable = true;
+              };
+              callable = {
+                snippets = "fill_arguments"; # Auto-fill function arguments
+              };
+              postfix = {
+                enable = true; # Enable postfix completions (.if, .match, etc.)
+              };
+              privateEditable = {
+                enable = false; # Don't suggest private items
+              };
+              fullFunctionSignatures = {
+                enable = true; # Show full function signatures
+              };
+            };
+            # Hover actions
+            hover = {
+              actions = {
+                enable = true;
+                run = {
+                  enable = true;
+                };
+                debug = {
+                  enable = true;
+                };
+                gotoTypeDef = {
+                  enable = true;
+                };
+                implementations = {
+                  enable = true;
+                };
+                references = {
+                  enable = true;
+                };
+              };
+              documentation = {
+                enable = true;
+                keywords = {
+                  enable = true;
+                };
+              };
+              links = {
+                enable = true;
+              };
+            };
+            # Inlay hints
+            inlayHints = {
+              bindingModeHints = {
+                enable = false; # Disable binding mode hints (too noisy)
+              };
+              chainingHints = {
+                enable = true; # Show type hints for method chains
+              };
+              closingBraceHints = {
+                enable = true; # Show hints for closing braces
+                minLines = 10; # Only for blocks with 10+ lines
+              };
+              closureReturnTypeHints = {
+                enable = "always"; # Show closure return types
+              };
+              lifetimeElisionHints = {
+                enable = "skip_trivial"; # Show lifetime hints for non-trivial cases
+                useParameterNames = true;
+              };
+              parameterHints = {
+                enable = true; # Show parameter hints
+              };
+              reborrowHints = {
+                enable = "mutable"; # Show reborrow hints for mutable refs
+              };
+              typeHints = {
+                enable = true; # Show type hints
+                hideClosureInitialization = false;
+                hideNamedConstructor = false;
+              };
+            };
+            # Lens (code lens for run/debug)
+            lens = {
+              enable = true;
+              run = {
+                enable = true;
+              };
+              debug = {
+                enable = true;
+              };
+              implementations = {
+                enable = true;
+              };
+              references = {
+                adt = {
+                  enable = true;
+                };
+                enumVariant = {
+                  enable = true;
+                };
+                method = {
+                  enable = true;
+                };
+                trait = {
+                  enable = true;
+                };
+              };
+            };
+            # Semantic highlighting
+            semanticHighlighting = {
+              operator = {
+                enable = true;
+                specialization = {
+                  enable = true;
+                };
+              };
+              punctuation = {
+                enable = true;
+                separate = {
+                  macro = {
+                    bang = true;
+                  };
+                };
+                specialization = {
+                  enable = true;
+                };
+              };
+            };
+            # Workspace symbol search
+            workspace = {
+              symbol = {
+                search = {
+                  kind = "all_symbols";
+                  scope = "workspace_and_dependencies";
+                };
+              };
+            };
+            # Rustfmt
+            rustfmt = {
+              extraArgs = [ "+nightly" ]; # Use nightly for better formatting
+              overrideCommand = null;
+              rangeFormatting = {
+                enable = true;
+              };
+            };
+            # Files to watch
+            files = {
+              excludeDirs = [ ".direnv" "rust-analyzer" "target" ];
+              watcher = "server"; # Use server-side file watching
+            };
+          };
+          onAttach.function = ''
+            -- Enable inlay hints for Rust
+            if vim.lsp.inlay_hint then
+              vim.lsp.inlay_hint.enable(true, { bufnr = 0 })
+            end
+
+            -- Set up custom keybindings for Rust-specific features
+            local bufnr = vim.api.nvim_get_current_buf()
+            local opts = { buffer = bufnr, silent = true }
+
+            -- These keybindings will be overridden by rustaceanvim if available
+            vim.keymap.set("n", "<leader>rr", function()
+              vim.cmd.RustLsp("runnables")
+            end, vim.tbl_extend("force", opts, { desc = "Rust Runnables" }))
+
+            vim.keymap.set("n", "<leader>rd", function()
+              vim.cmd.RustLsp("debuggables")
+            end, vim.tbl_extend("force", opts, { desc = "Rust Debuggables" }))
+
+            vim.keymap.set("n", "<leader>re", function()
+              vim.cmd.RustLsp("expandMacro")
+            end, vim.tbl_extend("force", opts, { desc = "Expand Macro" }))
+
+            vim.keymap.set("n", "<leader>rc", function()
+              vim.cmd.RustLsp("openCargo")
+            end, vim.tbl_extend("force", opts, { desc = "Open Cargo.toml" }))
+
+            vim.keymap.set("n", "<leader>rp", function()
+              vim.cmd.RustLsp("parentModule")
+            end, vim.tbl_extend("force", opts, { desc = "Parent Module" }))
+
+            vim.keymap.set("n", "K", function()
+              vim.cmd.RustLsp({ "hover", "actions" })
+            end, vim.tbl_extend("force", opts, { desc = "Hover Actions" }))
+          '';
         };
       };
     };

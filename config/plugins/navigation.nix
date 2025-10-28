@@ -70,50 +70,48 @@
     # File explorer
     neo-tree = {
       enable = true;
-      closeIfLastWindow = false;
-      popupBorderStyle = "rounded";
-      enableGitStatus = true;
-      enableDiagnostics = true;
-      window = {
-        position = "float";
-        width = 50;
-        mappings = {
-          "o" = "open";
-          "<CR>" = "open";
-          "l" = "open";
-          "h" = "close_node";
-          "z" = "close_all_nodes";
-          "Z" = "expand_all_nodes";
-          "<C-x>" = "open_split";
-          "<C-v>" = "open_vsplit";
-          "P" = "toggle_preview";
-          "S" = "open_split";
-          "s" = "open_vsplit";
+      settings = {
+        close_if_last_window = false;
+        popup_border_style = "rounded";
+        enable_git_status = true;
+        enable_diagnostics = true;
+        window = {
+          position = "float";
+          width = 50;
+          mappings = {
+            "o" = "open";
+            "<CR>" = "open";
+            "l" = "open";
+            "h" = "close_node";
+            "z" = "close_all_nodes";
+            "Z" = "expand_all_nodes";
+            "<C-x>" = "open_split";
+            "<C-v>" = "open_vsplit";
+            "P" = "toggle_preview";
+            "S" = "open_split";
+            "s" = "open_vsplit";
+          };
         };
-        mappingOptions = {
-          noremap = true;
-          nowait = true;
-        };
-      };
-      filesystem = {
-        followCurrentFile = {
-          enabled = true;
-          leaveDirsOpen = true;
-        };
-        hijackNetrwBehavior = "open_current";
-        useLibuvFileWatcher = true;
-        bindToCwd = false;
-        cwdTarget = {
-          sidebar = "tab";
-          current = "window";
-        };
-        filteredItems = {
-          visible = false;
-          hideDotfiles = true;
-          hideGitignored = true;
-          hideHidden = true;
-          hideByName = [ ".DS_Store" "thumbs.db" "node_modules" "__pycache__" ];
-          neverShow = [ ".git" ];
+        filesystem = {
+          follow_current_file = {
+            enabled = true;
+            leave_dirs_open = true;
+          };
+          hijack_netrw_behavior = "open_current";
+          use_libuv_file_watcher = true;
+          bind_to_cwd = false;
+          cwd_target = {
+            sidebar = "tab";
+            current = "window";
+          };
+          filtered_items = {
+            visible = false;
+            hide_dotfiles = true;
+            hide_gitignored = true;
+            hide_hidden = true;
+            hide_by_name = [ ".DS_Store" "thumbs.db" "node_modules" "__pycache__" ];
+            never_show = [ ".git" ];
+          };
         };
       };
     };

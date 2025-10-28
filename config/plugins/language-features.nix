@@ -6,8 +6,23 @@
       settings = {
         highlight = { enable = true; };
         indent = { enable = true; };
-        ensure_installed =
-          [ "go" "gomod" "gosum" "typescript" "tsx" "javascript" "lua" "nix" "bash" "json" "yaml" "markdown" "rust" "toml" "ron" ];
+        ensure_installed = [
+          "go"
+          "gomod"
+          "gosum"
+          "typescript"
+          "tsx"
+          "javascript"
+          "lua"
+          "nix"
+          "bash"
+          "json"
+          "yaml"
+          "markdown"
+          "rust"
+          "toml"
+          "ron"
+        ];
       };
     };
 
@@ -115,9 +130,11 @@
                 insertSpaceAfterConstructor = false;
                 insertSpaceAfterKeywordsInControlFlowStatements = true;
                 insertSpaceAfterFunctionKeywordForAnonymousFunctions = true;
-                insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis = false;
+                insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis =
+                  false;
                 insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets = false;
-                insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces = false;
+                insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces =
+                  false;
                 placeOpenBraceOnNewLineForFunctions = false;
                 placeOpenBraceOnNewLineForControlBlocks = false;
               };
@@ -152,17 +169,17 @@
                 insertSpaceAfterConstructor = false;
                 insertSpaceAfterKeywordsInControlFlowStatements = true;
                 insertSpaceAfterFunctionKeywordForAnonymousFunctions = true;
-                insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis = false;
+                insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis =
+                  false;
                 insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets = false;
-                insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces = false;
+                insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces =
+                  false;
                 placeOpenBraceOnNewLineForFunctions = false;
                 placeOpenBraceOnNewLineForControlBlocks = false;
               };
               updateImportsOnFileMove = { enabled = "always"; };
             };
-            completions = {
-              completeFunctionCalls = true;
-            };
+            completions = { completeFunctionCalls = true; };
           };
           onAttach.function = ''
             -- Enhanced auto-import on completion confirm for TypeScript
@@ -221,9 +238,7 @@
             # Procedural macros
             procMacro = {
               enable = true;
-              attributes = {
-                enable = true;
-              };
+              attributes = { enable = true; };
             };
             # Check configuration
             check = {
@@ -237,19 +252,16 @@
               experimental = {
                 enable = true; # Enable experimental diagnostics
               };
-              disabled = [ "unresolved-proc-macro" ]; # Disable noisy diagnostics
+              disabled =
+                [ "unresolved-proc-macro" ]; # Disable noisy diagnostics
               styleLints = {
                 enable = true; # Enable style lints
               };
             };
             # Completion
             completion = {
-              autoimport = {
-                enable = true;
-              };
-              autoself = {
-                enable = true;
-              };
+              autoimport = { enable = true; };
+              autoself = { enable = true; };
               callable = {
                 snippets = "fill_arguments"; # Auto-fill function arguments
               };
@@ -267,31 +279,17 @@
             hover = {
               actions = {
                 enable = true;
-                run = {
-                  enable = true;
-                };
-                debug = {
-                  enable = true;
-                };
-                gotoTypeDef = {
-                  enable = true;
-                };
-                implementations = {
-                  enable = true;
-                };
-                references = {
-                  enable = true;
-                };
+                run = { enable = true; };
+                debug = { enable = true; };
+                gotoTypeDef = { enable = true; };
+                implementations = { enable = true; };
+                references = { enable = true; };
               };
               documentation = {
                 enable = true;
-                keywords = {
-                  enable = true;
-                };
+                keywords = { enable = true; };
               };
-              links = {
-                enable = true;
-              };
+              links = { enable = true; };
             };
             # Inlay hints
             inlayHints = {
@@ -309,7 +307,8 @@
                 enable = "always"; # Show closure return types
               };
               lifetimeElisionHints = {
-                enable = "skip_trivial"; # Show lifetime hints for non-trivial cases
+                enable =
+                  "skip_trivial"; # Show lifetime hints for non-trivial cases
                 useParameterNames = true;
               };
               parameterHints = {
@@ -327,48 +326,26 @@
             # Lens (code lens for run/debug)
             lens = {
               enable = true;
-              run = {
-                enable = true;
-              };
-              debug = {
-                enable = true;
-              };
-              implementations = {
-                enable = true;
-              };
+              run = { enable = true; };
+              debug = { enable = true; };
+              implementations = { enable = true; };
               references = {
-                adt = {
-                  enable = true;
-                };
-                enumVariant = {
-                  enable = true;
-                };
-                method = {
-                  enable = true;
-                };
-                trait = {
-                  enable = true;
-                };
+                adt = { enable = true; };
+                enumVariant = { enable = true; };
+                method = { enable = true; };
+                trait = { enable = true; };
               };
             };
             # Semantic highlighting
             semanticHighlighting = {
               operator = {
                 enable = true;
-                specialization = {
-                  enable = true;
-                };
+                specialization = { enable = true; };
               };
               punctuation = {
                 enable = true;
-                separate = {
-                  macro = {
-                    bang = true;
-                  };
-                };
-                specialization = {
-                  enable = true;
-                };
+                separate = { macro = { bang = true; }; };
+                specialization = { enable = true; };
               };
             };
             # Workspace symbol search
@@ -384,9 +361,7 @@
             rustfmt = {
               extraArgs = [ "+nightly" ]; # Use nightly for better formatting
               overrideCommand = null;
-              rangeFormatting = {
-                enable = true;
-              };
+              rangeFormatting = { enable = true; };
             };
             # Files to watch
             files = {
@@ -395,9 +370,9 @@
             };
           };
           onAttach.function = ''
-            -- Enable inlay hints for Rust
+            -- Disable inlay hints by default for Rust (use keybind to toggle)
             if vim.lsp.inlay_hint then
-              vim.lsp.inlay_hint.enable(true, { bufnr = 0 })
+              vim.lsp.inlay_hint.enable(false, { bufnr = 0 })
             end
 
             -- Set up custom keybindings for Rust-specific features

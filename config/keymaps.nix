@@ -378,6 +378,21 @@
     # Code Actions (using <leader>c prefix for Code operations)
     {
       mode = "n";
+      key = "<leader>ch";
+      action = {
+        __raw = ''
+          function()
+            local bufnr = vim.api.nvim_get_current_buf()
+            if vim.lsp.inlay_hint then
+              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
+            end
+          end
+        '';
+      };
+      options = { desc = "Toggle inlay hints"; };
+    }
+    {
+      mode = "n";
       key = "<leader>cr";
       action = {
         __raw = ''

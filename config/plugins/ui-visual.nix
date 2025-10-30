@@ -53,15 +53,25 @@ in {
           custom_filter = {
             __raw = ''
               function(buf_number, buf_numbers)
+                -- Safely check if buffer is valid
+                if not vim.api.nvim_buf_is_valid(buf_number) then
+                  return false
+                end
+
                 -- Hide buffers with "claude" in their name
                 local buf_name = vim.fn.bufname(buf_number)
                 if buf_name:match("claude") then
                   return false
                 end
-                -- Hide terminal buffers
-                if vim.api.nvim_buf_get_option(buf_number, 'buftype') == 'terminal' then
+
+                -- Hide terminal buffers (use new API with pcall for safety)
+                local ok, buftype = pcall(function()
+                  return vim.bo[buf_number].buftype
+                end)
+                if ok and buftype == 'terminal' then
                   return false
                 end
+
                 return true
               end
             '';

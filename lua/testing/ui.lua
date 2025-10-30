@@ -123,12 +123,12 @@ function UI.create_popup(content, title, width, height)
     vim.api.nvim_buf_set_lines(buf, 0, -1, false, vim.split(content, "\n"))
   end
 
-  -- Make buffer read-only
-  vim.api.nvim_buf_set_option(buf, "modifiable", false)
-  vim.api.nvim_buf_set_option(buf, "readonly", true)
+  -- Make buffer read-only using new API
+  vim.bo[buf].modifiable = false
+  vim.bo[buf].readonly = true
 
-  -- Set syntax highlighting for test output
-  vim.api.nvim_buf_set_option(buf, "filetype", "test-output")
+  -- Set syntax highlighting for test output using new API
+  vim.bo[buf].filetype = "test-output"
 
   -- Close on q or Escape
   vim.keymap.set("n", "q", function()

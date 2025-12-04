@@ -75,6 +75,13 @@
         popup_border_style = "rounded";
         enable_git_status = true;
         enable_diagnostics = true;
+        git_status_async = true;
+        async_directory_scan = "always";
+        git_status_async_options = {
+          batch_size = 1000;
+          batch_delay = 10;
+          max_lines = 10000;
+        };
         window = {
           position = "float";
           width = 50;

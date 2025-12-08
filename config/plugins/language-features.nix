@@ -40,64 +40,37 @@
                 unusedwrite = true;
                 unreachable = false; # Disable expensive analysis
               };
-              staticcheck = true; # Enable staticcheck for better diagnostics
+              staticcheck = false; # Disabled for performance - use golangci-lint separately if needed
               gofumpt = true;
               completionBudget = "100ms"; # Limit completion time
               matcher = "Fuzzy";
               # Auto-import settings
-              completeUnimported =
-                true; # Include unimported packages in completions
-              deepCompletion = true; # Enable deep completions
+              completeUnimported = true; # Include unimported packages in completions
+              deepCompletion = false; # Disabled for performance with many buffers
               usePlaceholders = true; # Use placeholders in completions
               # Enhanced completion context
-              completionDocumentation =
-                true; # Include documentation in completions
+              completionDocumentation = true; # Include documentation in completions
               hoverKind = "FullDocumentation"; # Full documentation on hover
               linkTarget = "pkg.go.dev"; # Link to documentation
               # Interface implementation settings
               codelenses = {
                 gc_details = false;
                 generate = true;
-                regenerate_cgo = true;
+                regenerate_cgo = false; # Disabled - rarely needed
                 run_govulncheck = false;
                 test = true;
                 tidy = true;
-                upgrade_dependency = true;
-                vendor = true;
+                upgrade_dependency = false; # Disabled for performance
+                vendor = false; # Disabled for performance
               };
-              semanticTokens = true;
+              semanticTokens = false; # Disabled for performance - treesitter handles highlighting
               # Enable better symbol resolution
               symbolMatcher = "FastFuzzy";
               symbolStyle = "Dynamic";
             };
           };
-          onAttach.function = ''
-            -- Check if gopls is already running for this buffer
-            local clients = vim.lsp.get_clients({ bufnr = 0, name = "gopls" })
-            if #clients > 1 then
-              -- Stop duplicate clients, keeping only the first one
-              for i = 2, #clients do
-                vim.lsp.stop_client(clients[i].id, true)
-              end
-              return
-            end
-
-            -- Enhanced auto-import on completion confirm
-            local orig_handler = vim.lsp.handlers["textDocument/completion"]
-            vim.lsp.handlers["textDocument/completion"] = function(err, result, ctx, config)
-              if result and result.items then
-                for _, item in ipairs(result.items) do
-                  -- Mark items that need auto-import
-                  if item.additionalTextEdits then
-                    if not item.detail then item.detail = "" end
-                    item.detail = item.detail .. " (auto-import)"
-                  end
-                end
-              end
-              return orig_handler(err, result, ctx, config)
-            end
-
-          '';
+          # onAttach removed - handler overrides were causing memory leaks
+          # Auto-import labeling now handled globally in options.nix
         };
         ts_ls = {
           enable = true;
@@ -181,27 +154,8 @@
             };
             completions = { completeFunctionCalls = true; };
           };
-          onAttach.function = ''
-            -- Enhanced auto-import on completion confirm for TypeScript
-            local orig_handler = vim.lsp.handlers["textDocument/completion"]
-            vim.lsp.handlers["textDocument/completion"] = function(err, result, ctx, config)
-              if result and result.items then
-                for _, item in ipairs(result.items) do
-                  -- Mark items that need auto-import
-                  if item.additionalTextEdits then
-                    if not item.detail then item.detail = "" end
-                    item.detail = item.detail .. " (auto-import)"
-                  end
-                end
-              end
-              return orig_handler(err, result, ctx, config)
-            end
-
-            -- Enable inlay hints if supported
-            if vim.lsp.inlay_hint then
-              vim.lsp.inlay_hint.enable(true, { bufnr = 0 })
-            end
-          '';
+          # onAttach removed - handler overrides were causing memory leaks
+          # Inlay hints can be toggled with <leader>li keybinding
         };
         nixd = {
           enable = true;

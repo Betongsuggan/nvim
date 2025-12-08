@@ -47,33 +47,6 @@
 
   # LSP UI configuration for rounded borders
   extraConfigLua = ''
-    -- Prevent duplicate LSP clients on buffer enter
-    vim.api.nvim_create_autocmd("BufEnter", {
-      pattern = "*.go",
-      callback = function()
-        vim.defer_fn(function()
-          local clients = vim.lsp.get_clients({ bufnr = 0, name = "gopls" })
-          if #clients > 1 then
-            -- Keep only the client with full settings (usually the newer one)
-            local keep_client = nil
-            for _, client in ipairs(clients) do
-              if client.config.settings and client.config.settings.gopls then
-                keep_client = client
-                break
-              end
-            end
-            keep_client = keep_client or clients[1]
-            
-            for _, client in ipairs(clients) do
-              if client.id ~= keep_client.id then
-                vim.lsp.stop_client(client.id, true)
-              end
-            end
-          end
-        end, 100)
-      end,
-    })
-
     -- Configure LSP floating windows with rounded borders
     local border_opts = {
       border = "rounded",
@@ -117,7 +90,7 @@
         },
       },
       underline = true,
-      update_in_insert = true,
+      update_in_insert = false,  -- Disabled for performance with many buffers
       severity_sort = true,
     })
 
@@ -241,19 +214,7 @@
       end
     end
 
-    -- Simple scrollbar indicator function
-    -- This creates a visual indicator on the right side showing file position and diagnostics
-    local function create_scrollbar_indicator()
-      -- Create a simple scrollbar effect with diagnostic indicators
-      vim.api.nvim_create_autocmd({"CursorMoved", "DiagnosticChanged"}, {
-        callback = function()
-          -- This will be handled by the lualine progress indicator instead
-          -- Combined with the signcolumn diagnostics for comprehensive feedback
-        end,
-      })
-    end
-
-    create_scrollbar_indicator()
+    -- Scrollbar handled by nvim-scrollbar plugin (ui-visual.nix)
 
     -- Show trailing whitespace and problematic whitespace
     vim.opt.list = true
@@ -317,23 +278,8 @@
       end
     end, 100)
 
-    -- Auto-format on save for Go files
-    vim.api.nvim_create_autocmd("BufWritePre", {
-      pattern = { "*.go" },
-      callback = function()
-        local params = vim.lsp.util.make_range_params()
-        params.context = {only = {"source.organizeImports"}}
-        local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, 1000)
-        for _, res in pairs(result or {}) do
-          for _, r in pairs(res.result or {}) do
-            if r.edit then
-              vim.lsp.util.apply_workspace_edit(r.edit, "utf-8")
-            end
-          end
-        end
-        vim.lsp.buf.format()
-      end,
-    })
+    -- Go formatting handled by conform-nvim (editing.nix) for better performance
+    -- Import organization happens via gopls completeUnimported setting
 
     -- Auto-format on save for Nix files
     vim.api.nvim_create_autocmd("BufWritePre", {

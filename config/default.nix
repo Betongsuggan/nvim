@@ -60,7 +60,7 @@ in {
     lldb # LLVM debugger for Rust and C/C++
     # Formatters
     stylua # Lua formatter
-    nixfmt-classic # Nix formatter
+    nixfmt # Nix formatter
     prettierd # TypeScript/JavaScript formatter
     eslint_d # TypeScript/JavaScript linter
     # Rust tooling

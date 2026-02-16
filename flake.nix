@@ -6,13 +6,21 @@
     nixvim.url = "github:nix-community/nixvim";
     flake-utils.url = "github:numtide/flake-utils";
     claudecode-nvim = {
-      url = "github:coder/claudecode.nvim/2e6ea6f2a63cdf4fd3c05e6a054151d46848d319";
+      url = "github:coder/claudecode.nvim";
       flake = false;
     };
   };
 
-  outputs = { nixpkgs, nixvim, flake-utils, claudecode-nvim, ... }:
-    flake-utils.lib.eachDefaultSystem (system:
+  outputs =
+    {
+      nixpkgs,
+      nixvim,
+      flake-utils,
+      claudecode-nvim,
+      ...
+    }:
+    flake-utils.lib.eachDefaultSystem (
+      system:
       let
         pkgs = import nixpkgs { inherit system; };
         nixvim' = nixvim.legacyPackages.${system};
@@ -24,7 +32,8 @@
             inherit claudecode-nvim;
           };
         };
-      in {
+      in
+      {
         packages = {
           default = nvim;
           nvim = nvim;
@@ -45,5 +54,6 @@
             pkgs.nodePackages.vscode-langservers-extracted # For eslint
           ];
         };
-      });
+      }
+    );
 }

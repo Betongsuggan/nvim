@@ -3,17 +3,16 @@
     "claudecode-nvim": {
       "flake": false,
       "locked": {
-        "lastModified": 1757957646,
-        "narHash": "sha256-sOBY2y/buInf+SxLwz6uYlUouDULwebY/nmDlbFbGa8=",
+        "lastModified": 1769438551,
+        "narHash": "sha256-B6BA+3h7RLmk+zk6O365DmY06ALdbbkFBmOaRH9muog=",
         "owner": "coder",
         "repo": "claudecode.nvim",
-        "rev": "2e6ea6f2a63cdf4fd3c05e6a054151d46848d319",
+        "rev": "aa9a5cebebdbfa449c1c5ff229ba5d98e66bafed",
         "type": "github"
       },
       "original": {
         "owner": "coder",
         "repo": "claudecode.nvim",
-        "rev": "2e6ea6f2a63cdf4fd3c05e6a054151d46848d319",
         "type": "github"
       }
     },

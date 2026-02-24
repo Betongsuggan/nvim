@@ -50,49 +50,21 @@
     {
       mode = "n";
       key = "<leader>bo";
-      action = { 
-        __raw = ''
-          function() 
-            local current_buf = vim.api.nvim_get_current_buf()
-            local buffers = vim.api.nvim_list_bufs()
-            for _, buf in ipairs(buffers) do
-              if buf ~= current_buf and vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_is_loaded(buf) then
-                local buf_name = vim.api.nvim_buf_get_name(buf)
-
-                -- Safely get buffer options using new API
-                local buf_type = ""
-                local buf_filetype = ""
-                pcall(function()
-                  buf_type = vim.bo[buf].buftype
-                  buf_filetype = vim.bo[buf].filetype
-                end)
-
-                -- Skip terminal buffers, special buffer types, and toggleterm
-                local is_terminal = buf_type == 'terminal' or
-                                    buf_name:match('^term://') or
-                                    buf_filetype == 'toggleterm' or
-                                    buf_name:match('toggleterm')
-
-                if not is_terminal then
-                  pcall(vim.api.nvim_buf_delete, buf, {force = false})
-                end
-              end
-            end
-          end
-        '';
+      action = {
+        __raw = "function() _G.keymap_close_other_buffers() end";
       };
       options = { desc = "Close all other buffers"; };
     }
     {
       mode = "n";
       key = "[b";
-      action = "<cmd>BufferLineCyclePrev<CR>";
+      action = "<cmd>bprevious<CR>";
       options = { desc = "Previous buffer"; };
     }
     {
       mode = "n";
       key = "]b";
-      action = "<cmd>BufferLineCycleNext<CR>";
+      action = "<cmd>bnext<CR>";
       options = { desc = "Next buffer"; };
     }
     {
@@ -109,11 +81,9 @@
     }
     {
       mode = "n";
-      key = "<leader>bc";
-      action = {
-        __raw = "function() require('bufferline').pick_buffer() end";
-      };
-      options = { desc = "Pick buffer to switch to"; };
+      key = "<leader>bb";
+      action = { __raw = "function() _G.keymap_buffer_picker() end"; };
+      options = { desc = "Buffer picker (telescope)"; };
     }
 
     # Window management
@@ -156,25 +126,25 @@
 
     # Window navigation
     {
-      mode = ["n" "i" "t"];
+      mode = [ "n" "i" "t" ];
       key = "<C-h>";
       action = "<C-w>h";
       options = { desc = "Move to left window"; };
     }
     {
-      mode = ["n" "i" "t"];
+      mode = [ "n" "i" "t" ];
       key = "<C-j>";
       action = "<C-w>j";
       options = { desc = "Move to bottom window"; };
     }
     {
-      mode = ["n" "i" "t"];
+      mode = [ "n" "i" "t" ];
       key = "<C-k>";
       action = "<C-w>k";
       options = { desc = "Move to top window"; };
     }
     {
-      mode = ["n" "i" "t"];
+      mode = [ "n" "i" "t" ];
       key = "<C-l>";
       action = "<C-w>l";
       options = { desc = "Move to right window"; };
@@ -212,54 +182,17 @@
       options = { desc = "Decrease window width"; };
     }
 
-    # Find operations (using <leader>f prefix - Telescope)
+    # Find operations (Telescope)
     {
       mode = "n";
       key = "<leader>fe";
-      action = {
-        __raw = ''
-          function()
-            local current_file = vim.fn.expand('%:p')
-            if current_file and current_file ~= "" then
-              -- If there's a current file, reveal it in neo-tree
-              vim.cmd("Neotree toggle reveal")
-            else
-              -- If no current file, just toggle normally
-              vim.cmd("Neotree toggle")
-            end
-          end
-        '';
-      };
+      action = { __raw = "function() _G.keymap_file_explorer() end"; };
       options = { desc = "File explorer"; };
     }
     {
       mode = "n";
       key = "<leader>fs";
-      action = {
-        __raw = ''
-          function()
-            require('telescope.builtin').lsp_document_symbols({
-              prompt_title = "Symbol Outline",
-              results_title = "Symbols",
-              preview_title = "Preview",
-              layout_strategy = "center",
-              layout_config = {
-                center = {
-                  width = 0.8,
-                  height = 0.8,
-                  preview_cutoff = 40,
-                },
-              },
-              sorting_strategy = "ascending",
-              symbols = {
-                "Class", "Constructor", "Enum", "Function", 
-                "Interface", "Module", "Method", "Struct",
-                "Variable", "Field", "Property", "Constant"
-              },
-            })
-          end
-        '';
-      };
+      action = { __raw = "function() _G.keymap_symbol_outline() end"; };
       options = { desc = "Symbol outline"; };
     }
     {
@@ -277,7 +210,7 @@
     {
       mode = "n";
       key = "<leader>fb";
-      action = "<cmd>Telescope buffers<CR>";
+      action = { __raw = "function() _G.keymap_buffer_picker() end"; };
       options = { desc = "Find buffers"; };
     }
     {
@@ -301,30 +234,11 @@
     {
       mode = "n";
       key = "<leader>fS";
-      action = {
-        __raw = ''
-          function()
-            require('telescope.builtin').lsp_workspace_symbols({
-              prompt_title = "Search Symbols",
-              results_title = "Symbol Results", 
-              preview_title = "Preview",
-              layout_strategy = "horizontal",
-              layout_config = {
-                horizontal = {
-                  prompt_position = "top",
-                  preview_width = 0.5,
-                },
-              },
-              sorting_strategy = "ascending",
-              query = vim.fn.expand('<cword>'),
-            })
-          end
-        '';
-      };
+      action = { __raw = "function() _G.keymap_search_symbols() end"; };
       options = { desc = "Search symbols"; };
     }
 
-    # LSP Navigation (using <leader>l prefix for Language features)
+    # LSP Navigation
     {
       mode = "n";
       key = "<leader>ld";
@@ -342,29 +256,7 @@
     {
       mode = "n";
       key = "<leader>li";
-      action = {
-        __raw = ''
-          function() 
-            require('telescope.builtin').lsp_implementations({
-              show_line = false,
-              trim_text = true,
-              include_declaration = false,
-              include_current_line = false,
-              layout_strategy = "horizontal",
-              layout_config = {
-                preview_width = 0.5,
-                horizontal = {
-                  prompt_position = "top",
-                },
-              },
-              sorting_strategy = "ascending",
-              results_title = "Implementations",
-              prompt_title = "Search Implementations",
-              preview_title = "Preview",
-            })
-          end
-        '';
-      };
+      action = { __raw = "function() _G.keymap_lsp_implementations() end"; };
       options = { desc = "Go to implementations"; };
     }
     {
@@ -381,89 +273,18 @@
       action = { __raw = "function() vim.lsp.buf.hover() end"; };
       options = { desc = "Hover info"; };
     }
-    # Code Actions (using <leader>c prefix for Code operations)
+
+    # Code Actions
     {
       mode = "n";
       key = "<leader>ch";
-      action = {
-        __raw = ''
-          function()
-            local bufnr = vim.api.nvim_get_current_buf()
-            if vim.lsp.inlay_hint then
-              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
-            end
-          end
-        '';
-      };
+      action = { __raw = "function() _G.keymap_toggle_inlay_hints() end"; };
       options = { desc = "Toggle inlay hints"; };
     }
     {
       mode = "n";
       key = "<leader>cr";
-      action = {
-        __raw = ''
-          function()
-            local current_name = vim.fn.expand('<cword>')
-            
-            -- Create input buffer
-            local buf = vim.api.nvim_create_buf(false, true)
-            vim.api.nvim_buf_set_lines(buf, 0, -1, false, { current_name })
-            
-            -- Calculate popup size and position
-            local width = math.max(30, string.len(current_name) + 10)
-            local height = 1
-            local win_opts = {
-              relative = "cursor",
-              width = width,
-              height = height,
-              row = 1,
-              col = 0,
-              style = "minimal",
-              border = "rounded",
-              title = " Rename Symbol ",
-              title_pos = "center"
-            }
-            
-            -- Create floating window
-            local win = vim.api.nvim_open_win(buf, true, win_opts)
-            
-            -- Set up the buffer for input
-            vim.bo[buf].filetype = "text"
-            vim.wo[win].cursorline = false
-            
-            -- Position cursor at end of text and start insert mode
-            vim.api.nvim_win_set_cursor(win, {1, string.len(current_name)})
-            vim.cmd("startinsert!")  -- startinsert! puts cursor at end of line
-            
-            -- Set up keymaps for the rename popup
-            local function rename_and_close()
-              local new_name = vim.api.nvim_buf_get_lines(buf, 0, -1, false)[1]
-              vim.api.nvim_win_close(win, true)
-              if new_name and new_name ~= current_name and new_name ~= "" then
-                vim.lsp.buf.rename(new_name)
-              end
-            end
-            
-            local function close_popup()
-              vim.api.nvim_win_close(win, true)
-            end
-            
-            -- Keymaps for the popup
-            vim.keymap.set({"n", "i"}, "<CR>", rename_and_close, { buffer = buf })
-            vim.keymap.set("n", "q", close_popup, { buffer = buf })
-            
-            -- Smart Escape behavior: insert mode -> normal mode, normal mode -> exit
-            vim.keymap.set("i", "<Esc>", "<Esc>", { buffer = buf })  -- Insert to normal mode
-            vim.keymap.set("n", "<Esc>", close_popup, { buffer = buf })  -- Normal mode exits
-            
-            -- Allow normal vim mode switching behavior
-            vim.keymap.set("i", "<C-c>", close_popup, { buffer = buf })  -- Alternative exit from insert
-            vim.keymap.set("n", "i", "i", { buffer = buf })  -- Allow entering insert mode
-            vim.keymap.set("n", "a", "a", { buffer = buf })  -- Allow append
-            vim.keymap.set("n", "A", "A", { buffer = buf })  -- Allow append at end
-          end
-        '';
-      };
+      action = { __raw = "function() _G.keymap_rename_symbol() end"; };
       options = { desc = "Rename symbol"; };
     }
     {
@@ -500,7 +321,7 @@
       options = { desc = "Organize imports"; };
     }
 
-    # Diagnostics (using <leader>d prefix for Diagnostics)
+    # Diagnostics
     {
       mode = "n";
       key = "[d";
@@ -558,20 +379,7 @@
     {
       mode = "n";
       key = "<leader>de";
-      action = {
-        __raw = ''
-          function() 
-            vim.diagnostic.open_float({
-              border = "rounded",
-              source = "always",
-              header = "",
-              prefix = "",
-              focusable = true,
-              style = "minimal"
-            })
-          end
-        '';
-      };
+      action = { __raw = "function() _G.keymap_show_diagnostic() end"; };
       options = { desc = "Show diagnostic"; };
     }
     {
@@ -641,74 +449,23 @@
       options = { desc = "Undo stage git hunk"; };
     }
 
-    # Project commands (language-agnostic using <leader>p prefix)
+    # Project commands
     {
       mode = "n";
       key = "<leader>pt";
-      action = {
-        __raw = ''
-          function()
-            -- Detect project type and run appropriate test command
-            if vim.fn.filereadable("go.mod") == 1 then
-              vim.cmd("!go test ./...")
-            elseif vim.fn.filereadable("package.json") == 1 then
-              vim.cmd("!npm test")
-            elseif vim.fn.filereadable("Cargo.toml") == 1 then
-              vim.cmd("!cargo test")
-            elseif vim.fn.filereadable("Makefile") == 1 then
-              vim.cmd("!make test")
-            else
-              print("No recognized test framework found")
-            end
-          end
-        '';
-      };
+      action = { __raw = "function() _G.keymap_run_tests() end"; };
       options = { desc = "Run tests"; };
     }
     {
       mode = "n";
       key = "<leader>pr";
-      action = {
-        __raw = ''
-          function()
-            -- Detect project type and run appropriate run command
-            if vim.fn.filereadable("go.mod") == 1 then
-              vim.cmd("!go run .")
-            elseif vim.fn.filereadable("package.json") == 1 then
-              vim.cmd("!npm start")
-            elseif vim.fn.filereadable("Cargo.toml") == 1 then
-              vim.cmd("!cargo run")
-            elseif vim.fn.filereadable("Makefile") == 1 then
-              vim.cmd("!make run")
-            else
-              print("No recognized run command found")
-            end
-          end
-        '';
-      };
+      action = { __raw = "function() _G.keymap_run_project() end"; };
       options = { desc = "Run project"; };
     }
     {
       mode = "n";
       key = "<leader>pb";
-      action = {
-        __raw = ''
-          function()
-            -- Detect project type and run appropriate build command
-            if vim.fn.filereadable("go.mod") == 1 then
-              vim.cmd("!go build")
-            elseif vim.fn.filereadable("package.json") == 1 then
-              vim.cmd("!npm run build")
-            elseif vim.fn.filereadable("Cargo.toml") == 1 then
-              vim.cmd("!cargo build")
-            elseif vim.fn.filereadable("Makefile") == 1 then
-              vim.cmd("!make build")
-            else
-              print("No recognized build command found")
-            end
-          end
-        '';
-      };
+      action = { __raw = "function() _G.keymap_build_project() end"; };
       options = { desc = "Build project"; };
     }
 
@@ -759,4 +516,3 @@
     }
   ];
 }
-

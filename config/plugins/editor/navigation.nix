@@ -1,73 +1,6 @@
+# File navigation plugins (neo-tree, aerial)
 { ... }: {
   plugins = {
-    # File finder and navigation
-    telescope = {
-      enable = true;
-      extensions = { fzf-native = { enable = true; }; };
-      settings = {
-        defaults = {
-          prompt_prefix = " ";
-          selection_caret = "> ";
-          entry_prefix = "  ";
-          initial_mode = "insert";
-          path_display = [ "truncate" ];
-          sorting_strategy = "ascending";
-          borderchars = [ "─" "│" "─" "│" "╭" "╮" "╯" "╰" ];
-          dynamic_preview_title = true;
-          layout_config = {
-            horizontal = {
-              prompt_position = "top";
-              preview_width = 0.55;
-              results_width = 0.8;
-            };
-            vertical = { mirror = false; };
-            width = 0.87;
-            height = 0.8;
-            preview_cutoff = 120;
-          };
-        };
-        pickers = {
-          diagnostics = {
-            theme = "dropdown";
-            initial_mode = "normal";
-            layout_config = { preview_cutoff = 9999; };
-          };
-          lsp_implementations = {
-            theme = "dropdown";
-            initial_mode = "normal";
-            layout_config = {
-              preview_cutoff = 50;
-              preview_width = 0.5;
-            };
-            show_line = false;
-            trim_text = true;
-            include_declaration = false;
-          };
-          lsp_definitions = {
-            theme = "dropdown";
-            initial_mode = "normal";
-            layout_config = {
-              preview_cutoff = 50;
-              preview_width = 0.5;
-            };
-            show_line = false;
-            trim_text = true;
-          };
-          lsp_references = {
-            theme = "dropdown";
-            initial_mode = "normal";
-            layout_config = {
-              preview_cutoff = 50;
-            };
-            show_line = false;
-            trim_text = true;
-            include_declaration = false;
-          };
-        };
-      };
-    };
-
-    # File explorer
     neo-tree = {
       enable = true;
       settings = {
@@ -116,14 +49,14 @@
             hide_dotfiles = true;
             hide_gitignored = true;
             hide_hidden = true;
-            hide_by_name = [ ".DS_Store" "thumbs.db" "node_modules" "__pycache__" ];
+            hide_by_name =
+              [ ".DS_Store" "thumbs.db" "node_modules" "__pycache__" ];
             never_show = [ ".git" ];
           };
         };
       };
     };
 
-    # Symbol outline for code navigation
     aerial = {
       enable = true;
       settings = {
@@ -206,8 +139,7 @@
         on_attach = {
           __raw = ''
             function(bufnr)
-              -- Note: Removed { and } keymaps to preserve default paragraph navigation
-              -- Use [[ and ]] for aerial navigation instead
+              -- Use [[ and ]] for aerial navigation
             end
           '';
         };
@@ -240,7 +172,6 @@
           priority = {
             __raw = ''
               {
-                -- You can set a priority for certain symbols
                 Class = 10,
                 Constructor = 10,
                 Enum = 10,

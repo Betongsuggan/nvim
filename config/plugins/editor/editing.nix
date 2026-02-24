@@ -1,6 +1,7 @@
+# Text editing plugins (autopairs, surround, formatting)
+# Note: Native Neovim 0.10+ commenting (gc/gcc) is used instead of comment.nvim
 { ... }: {
   plugins = {
-    # Auto-pairing for brackets, quotes, etc.
     nvim-autopairs = {
       enable = true;
       settings = {
@@ -12,7 +13,6 @@
       };
     };
 
-    # Surround functionality (add/change/delete surrounding chars)
     nvim-surround = {
       enable = true;
       settings = {
@@ -32,30 +32,6 @@
       };
     };
 
-    # Comment toggling
-    comment = {
-      enable = true;
-      settings = {
-        padding = true;
-        sticky = true;
-        # Comment operations using <leader>/ prefix to avoid conflicts with code actions
-        toggler = {
-          line = "<leader>//";
-          block = "<leader>/?";
-        };
-        opleader = {
-          line = "<leader>/";
-          block = "<leader>?";
-        };
-        extra = {
-          above = "<leader>/O";
-          below = "<leader>/b";
-          eol = "<leader>/A";
-        };
-      };
-    };
-
-    # Formatting with conform.nvim
     conform-nvim = {
       enable = true;
       settings = {
@@ -81,38 +57,17 @@
     };
   };
 
-  # Auto commands for formatting and cleanup
   autoCmd = [{
     event = [ "BufWritePre" ];
     pattern = [ "*" ];
     callback = {
       __raw = ''
         function()
-          -- Save cursor position
           local save = vim.fn.winsaveview()
-          -- Remove trailing whitespace
           vim.cmd([[%s/\s\+$//e]])
-          -- Restore cursor position
           vim.fn.winrestview(save)
         end
       '';
-    };
-  }];
-
-  # Key mappings for manual formatting
-  keymaps = [{
-    mode = "n";
-    key = "<leader>cf";
-    action = {
-      __raw = ''
-        function()
-          require("conform").format({ lsp_fallback = true })
-        end
-      '';
-    };
-    options = {
-      desc = "Format current buffer";
-      silent = true;
     };
   }];
 }

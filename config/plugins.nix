@@ -2,40 +2,67 @@
 let
   # Import theme configuration
   theme = import ./theme.nix;
-  
-  # Import plugin categories
-  languageFeatures = import ./plugins/language-features.nix { };
-  uiVisual = import ./plugins/ui-visual.nix { };
-  editing = import ./plugins/editing.nix { };
-  navigation = import ./plugins/navigation.nix { };
-  testingDebug = import ./plugins/testing-debug.nix { };
-  themes = import ./plugins/themes.nix { inherit theme; };
+
+  # Import plugin categories - new semantic structure
+  # Coding
+  lsp = import ./plugins/coding/lsp.nix { };
+  completion = import ./plugins/coding/completion.nix { };
+  treesitter = import ./plugins/coding/treesitter.nix { };
+
+  # Editor
+  editing = import ./plugins/editor/editing.nix { };
+  navigation = import ./plugins/editor/navigation.nix { };
+
+  # UI
+  statusline = import ./plugins/ui/statusline.nix { inherit theme; };
+  whichKey = import ./plugins/ui/which-key.nix { };
+  icons = import ./plugins/ui/icons.nix { inherit pkgs; };
+
+  # Git
+  gitsigns = import ./plugins/git/gitsigns.nix { };
+
+  # Diagnostics
+  trouble = import ./plugins/diagnostics/trouble.nix { };
+
+  # Testing
+  neotest = import ./plugins/testing/neotest.nix { };
+
+  # Tools
+  telescope = import ./plugins/tools/telescope.nix { };
+  terminal = import ./plugins/tools/terminal.nix { };
+
+  # Snacks.nvim for floating windows (used by claudecode)
+  snacks = {
+    plugins = {
+      snacks = {
+        enable = true;
+      };
+    };
+  };
 in {
   # Merge all plugin configurations
-  plugins = languageFeatures.plugins // uiVisual.plugins // editing.plugins
-    // navigation.plugins // testingDebug.plugins;
+  plugins = lsp.plugins // completion.plugins // treesitter.plugins
+    // editing.plugins // navigation.plugins // statusline.plugins
+    // whichKey.plugins // (icons.plugins or { }) // gitsigns.plugins
+    // trouble.plugins // neotest.plugins // telescope.plugins
+    // terminal.plugins // snacks.plugins;
 
-  # Merge keymaps from all modules
-  keymaps = (languageFeatures.keymaps or [ ]) ++ (uiVisual.keymaps or [ ])
-    ++ (editing.keymaps or [ ]) ++ (navigation.keymaps or [ ])
-    ++ (testingDebug.keymaps or [ ]);
+  # Merge keymaps from modules that define them
+  keymaps = (editing.keymaps or [ ]) ++ (neotest.keymaps or [ ]);
 
-  # Merge extraConfigLua from all modules  
+  # Merge autoCmd from modules
+  autoCmd = (editing.autoCmd or [ ]);
+
+  # Merge extraConfigLua from modules
   extraConfigLua = builtins.concatStringsSep "\n" [
-    (languageFeatures.extraConfigLua or "")
-    (uiVisual.extraConfigLua or "")
-    (editing.extraConfigLua or "")
-    (navigation.extraConfigLua or "")
-    (testingDebug.extraConfigLua or "")
-    (themes.extraConfigLua or "")
+    (neotest.extraConfigLua or "")
+    (icons.extraConfigLua or "")
   ];
 
-  # Add neotest adapters and UI plugins as extra plugins
-  extraPlugins = with pkgs.vimPlugins; [
-    neotest-go
-    neotest-plenary
-    nvim-scrollbar # Scrollbar with diagnostics and git integration
-  ];
+  # Extra plugins not available as nixvim plugins
+  extraPlugins = with pkgs.vimPlugins;
+    [ neotest-go neotest-plenary nvim-scrollbar ]
+    ++ (icons.extraPlugins or [ ]);
 
   # Ensure Go tools are available
   extraPackages = with pkgs; [ go delve ];

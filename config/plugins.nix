@@ -32,10 +32,28 @@ let
   terminal = import ./plugins/tools/terminal.nix { };
 
   # Snacks.nvim for floating windows (used by claudecode)
+  # Only enable terminal/win features, disable others to avoid UI conflicts
   snacks = {
     plugins = {
       snacks = {
         enable = true;
+        settings = {
+          # Disable features that override other plugins
+          bigfile.enabled = false;
+          dashboard.enabled = false;
+          indent.enabled = false;
+          input.enabled = false;
+          notifier.enabled = false;
+          picker.enabled = false;
+          quickfile.enabled = false;
+          scope.enabled = false;
+          scroll.enabled = false;
+          statuscolumn.enabled = false;
+          words.enabled = false;
+          # Keep terminal and win enabled (needed for claudecode)
+          terminal.enabled = true;
+          win.enabled = true;
+        };
       };
     };
   };

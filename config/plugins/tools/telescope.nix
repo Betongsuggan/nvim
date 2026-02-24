@@ -11,7 +11,7 @@
         initial_mode = "insert";
         path_display = [ "truncate" ];
         sorting_strategy = "ascending";
-        borderchars = [ "-" "|" "-" "|" "+" "+" "+" "+" ];
+        borderchars = [ "─" "│" "─" "│" "╭" "╮" "╯" "╰" ];
         dynamic_preview_title = true;
         layout_config = {
           horizontal = {

@@ -73,12 +73,18 @@ local function apply_theme_colors(theme_data)
     highlight TelescopePromptBorder guifg=%s
     highlight TelescopeResultsBorder guifg=%s
     highlight TelescopePreviewBorder guifg=%s
-    highlight FloatBorder guifg=%s
+    highlight FloatBorder guifg=%s guibg=%s
+    highlight NeoTreeFloatBorder guifg=%s guibg=%s
+    highlight NeoTreeFloatNormal guibg=%s
+    highlight NeoTreeNormal guibg=%s
   ]],
     c.border, c.search, c.error, c.warn,
     c.info, c.hint, c.git_add, c.git_change,
     c.git_delete, c.border, c.border, c.border,
-    c.border, c.border
+    c.border, c.border, c.bg,
+    c.border, c.bg,
+    c.bg,
+    c.bg
   ))
 
   -- Update completion menu styling

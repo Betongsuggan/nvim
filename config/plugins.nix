@@ -30,6 +30,7 @@ let
   # Tools
   telescope = import ./plugins/tools/telescope.nix { };
   terminal = import ./plugins/tools/terminal.nix { };
+  markdown = import ./plugins/tools/markdown.nix { inherit pkgs; };
 
   # Snacks.nvim for floating windows (used by claudecode)
   # Only enable terminal/win features, disable others to avoid UI conflicts
@@ -63,10 +64,11 @@ in {
     // editing.plugins // navigation.plugins // statusline.plugins
     // whichKey.plugins // (icons.plugins or { }) // gitsigns.plugins
     // trouble.plugins // neotest.plugins // telescope.plugins
-    // terminal.plugins // snacks.plugins;
+    // terminal.plugins // markdown.plugins // snacks.plugins;
 
   # Merge keymaps from modules that define them
-  keymaps = (editing.keymaps or [ ]) ++ (neotest.keymaps or [ ]);
+  keymaps = (editing.keymaps or [ ]) ++ (neotest.keymaps or [ ])
+    ++ (markdown.keymaps or [ ]);
 
   # Merge autoCmd from modules
   autoCmd = (editing.autoCmd or [ ]);
@@ -75,12 +77,14 @@ in {
   extraConfigLua = builtins.concatStringsSep "\n" [
     (neotest.extraConfigLua or "")
     (icons.extraConfigLua or "")
+    (markdown.extraConfigLua or "")
   ];
 
   # Extra plugins not available as nixvim plugins
   extraPlugins = with pkgs.vimPlugins;
     [ neotest-go neotest-plenary nvim-scrollbar ]
-    ++ (icons.extraPlugins or [ ]);
+    ++ (icons.extraPlugins or [ ])
+    ++ (markdown.extraPlugins or [ ]);
 
   # Ensure Go tools are available
   extraPackages = with pkgs; [ go delve ];

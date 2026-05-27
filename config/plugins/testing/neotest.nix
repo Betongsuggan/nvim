@@ -93,6 +93,45 @@
   ];
 
   extraConfigLua = ''
+    -- Workaround for a TOCTOU race in neotest's async buffer iteration that
+    -- crashes when picker plugins (e.g. snacks.picker.undo) create ephemeral
+    -- scratch buffers and destroy them between list_bufs() and buf_get_name().
+    -- neotest.client returns a factory closure (the Client class is local),
+    -- so we wrap the factory: on first instance, walk its metatable to reach
+    -- the Client class and replace _update_open_buf_positions with a
+    -- validity-checked variant.
+    do
+      local orig_factory = require("neotest.client")
+      local patched = false
+      package.loaded["neotest.client"] = function(adapter_group)
+        local instance = orig_factory(adapter_group)
+        if not patched then
+          local mt = getmetatable(instance)
+          local Client = mt and mt.__index
+          if type(Client) == "table" then
+            Client._update_open_buf_positions = function(self, adapter_id)
+              local adapter = self._adapters[adapter_id]
+              if not adapter then return end
+              local nio = require("nio")
+              for _, bufnr in ipairs(nio.api.nvim_list_bufs()) do
+                if vim.api.nvim_buf_is_valid(bufnr) then
+                  local ok, name = pcall(nio.api.nvim_buf_get_name, bufnr)
+                  if ok and name and name ~= "" then
+                    local file_path = require("neotest.lib").files.path.real(name) or name
+                    if adapter.is_test_file(file_path) then
+                      self:_update_positions(file_path, { adapter = adapter_id })
+                    end
+                  end
+                end
+              end
+            end
+            patched = true
+          end
+        end
+        return instance
+      end
+    end
+
     -- Open a centered floating window for neotest panels (summary/output_panel).
     local function open_centered_float()
       local width  = math.floor(vim.o.columns * 0.85)

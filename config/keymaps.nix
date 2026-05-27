@@ -4,8 +4,25 @@
     {
       mode = "n";
       key = "<Esc>";
-      action = "<cmd>nohlsearch<CR>";
-      options = { desc = "Clear search highlights"; };
+      action = {
+        __raw = ''
+          function()
+            -- Close every focusable floating window (LSP hover, signature_help,
+            -- diagnostic float, gitsigns preview, etc). Pickers/terminals have
+            -- their own buffer-local <Esc>, which preempts this global handler.
+            for _, win in ipairs(vim.api.nvim_list_wins()) do
+              if vim.api.nvim_win_is_valid(win) then
+                local ok, cfg = pcall(vim.api.nvim_win_get_config, win)
+                if ok and cfg.relative ~= "" and cfg.focusable ~= false then
+                  pcall(vim.api.nvim_win_close, win, false)
+                end
+              end
+            end
+            vim.cmd("nohlsearch")
+          end
+        '';
+      };
+      options = { desc = "Close floats + clear search highlights"; };
     }
     {
       mode = "n";

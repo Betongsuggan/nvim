@@ -50,7 +50,7 @@
             # TypeScript/JavaScript development tools
             pkgs.nodejs_22
             pkgs.typescript
-            pkgs.nodePackages.typescript-language-server
+            pkgs.vtsls
             pkgs.nodePackages.vscode-langservers-extracted # For eslint
           ];
         };

@@ -1,85 +1,6 @@
-# File navigation plugins (neo-tree, aerial)
+# File navigation plugins (aerial — file explorer is now snacks.explorer)
 { ... }: {
   plugins = {
-    neo-tree = {
-      enable = true;
-      settings = {
-        close_if_last_window = false;
-        popup_border_style = "rounded";
-        enable_git_status = true;
-        enable_diagnostics = true;
-        git_status_async = true;
-        async_directory_scan = "always";
-        git_status_async_options = {
-          batch_size = 1000;
-          batch_delay = 10;
-          max_lines = 10000;
-        };
-        default_component_configs = {
-          git_status = {
-            symbols = {
-              added     = "";  # nf-fa-plus          U+F067
-              modified  = "";  # nf-fa-pencil        U+F040
-              deleted   = "";  # nf-fa-times         U+F00D
-              renamed   = "";  # nf-fa-arrow_right   U+F061
-              untracked = "";  # nf-fa-question      U+F128
-              ignored   = "";  # nf-fa-eye_slash     U+F070
-              unstaged  = "";  # nf-fa-star          U+F005
-              staged    = "";  # nf-fa-check         U+F00C
-              conflict  = "";  # nf-fa-bolt          U+F0E7
-            };
-          };
-          diagnostics = {
-            symbols = {
-              hint  = "";  # U+F0EB
-              info  = "";  # U+F05A
-              warn  = "";  # U+F071
-              error = "";  # U+F057
-            };
-          };
-        };
-        window = {
-          position = "float";
-          width = 50;
-          mappings = {
-            "o" = "open";
-            "<CR>" = "open";
-            "l" = "open";
-            "h" = "close_node";
-            "z" = "close_all_nodes";
-            "Z" = "expand_all_nodes";
-            "<C-x>" = "open_split";
-            "<C-v>" = "open_vsplit";
-            "P" = "toggle_preview";
-            "S" = "open_split";
-            "s" = "open_vsplit";
-          };
-        };
-        filesystem = {
-          follow_current_file = {
-            enabled = true;
-            leave_dirs_open = true;
-          };
-          hijack_netrw_behavior = "open_current";
-          use_libuv_file_watcher = true;
-          bind_to_cwd = false;
-          cwd_target = {
-            sidebar = "tab";
-            current = "window";
-          };
-          filtered_items = {
-            visible = false;
-            hide_dotfiles = true;
-            hide_gitignored = true;
-            hide_hidden = true;
-            hide_by_name =
-              [ ".DS_Store" "thumbs.db" "node_modules" "__pycache__" ];
-            never_show = [ ".git" ];
-          };
-        };
-      };
-    };
-
     aerial = {
       enable = true;
       settings = {
@@ -159,20 +80,12 @@
         link_folds_to_tree = false;
         link_tree_to_folds = true;
         nerd_font = "auto";
-        on_attach = {
-          __raw = ''
-            function(bufnr)
-              -- Use [[ and ]] for aerial navigation
-            end
-          '';
-        };
         open_automatic = false;
         post_jump_cmd = "normal! zz";
         close_on_select = false;
         update_events = "TextChanged,InsertLeave";
         show_guides = false;
         float = {
-          border = "rounded";
           relative = "cursor";
           max_height = 0.9;
           height = null;

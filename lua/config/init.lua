@@ -4,42 +4,20 @@
 local M = {}
 
 function M.setup()
-  -- Configure LSP floating windows with rounded borders
-  local border_opts = {
-    border = "rounded",
-    winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
-  }
+  -- Global default for every core floating window (hover, signature, code actions,
+  -- diagnostic floats, ui.select). Replaces per-call border overrides.
+  vim.o.winborder = "rounded"
 
-  -- LSP hover/signature_help with rounded borders (replaces deprecated vim.lsp.with)
-  vim.lsp.buf.hover = (function(orig)
-    return function(config)
-      config = vim.tbl_extend("force", { border = "rounded", focusable = true }, config or {})
-      return orig(config)
-    end
-  end)(vim.lsp.buf.hover)
-
-  vim.lsp.buf.signature_help = (function(orig)
-    return function(config)
-      config = vim.tbl_extend("force", { border = "rounded", focusable = false }, config or {})
-      return orig(config)
-    end
-  end)(vim.lsp.buf.signature_help)
-
-  -- Diagnostic configuration with rounded borders and emoji signs
   vim.diagnostic.config({
     float = {
-      border = "rounded",
-      source = "always",
+      source = true,
       header = "",
       prefix = "",
       focusable = false,
       style = "minimal",
     },
-    virtual_text = {
-      spacing = 4,
-      source = "if_many",
-      prefix = "~",
-    },
+    virtual_text = false,
+    virtual_lines = { current_line = true },
     signs = {
       text = {
         [vim.diagnostic.severity.ERROR] = "",  -- nf-fa-times-circle  U+F057
@@ -49,108 +27,12 @@ function M.setup()
       },
     },
     underline = true,
-    update_in_insert = false,  -- Disabled for performance with many buffers
+    update_in_insert = false,
     severity_sort = true,
   })
 
-  -- Define diagnostic signs for the signcolumn
-  vim.fn.sign_define("DiagnosticSignError", { text = "", texthl = "DiagnosticSignError" })
-  vim.fn.sign_define("DiagnosticSignWarn",  { text = "", texthl = "DiagnosticSignWarn"  })
-  vim.fn.sign_define("DiagnosticSignInfo",  { text = "", texthl = "DiagnosticSignInfo"  })
-  vim.fn.sign_define("DiagnosticSignHint",  { text = "", texthl = "DiagnosticSignHint"  })
-
-  -- Additional LSP window configuration
-  local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
-  function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
-    opts = opts or {}
-    opts.border = opts.border or "rounded"
-    return orig_util_open_floating_preview(contents, syntax, opts, ...)
-  end
-
-  -- Use telescope for code actions instead of custom ui.select
-  local has_telescope, telescope = pcall(require, 'telescope')
-  if has_telescope then
-    vim.ui.select = function(items, opts, on_choice)
-      if opts and opts.format_item then
-        -- Use format_item if provided by LSP
-        local formatted_items = {}
-        for i, item in ipairs(items) do
-          formatted_items[i] = opts.format_item(item)
-        end
-        require('telescope.pickers').new({}, {
-          prompt_title = opts.prompt or "Code Actions",
-          finder = require('telescope.finders').new_table {
-            results = formatted_items,
-          },
-          sorter = require('telescope.config').values.generic_sorter({}),
-          layout_strategy = "cursor",
-          layout_config = {
-            cursor = {
-              width = 60,
-              height = 15,
-            }
-          },
-          attach_mappings = function(prompt_bufnr, map)
-            local actions = require('telescope.actions')
-            local action_state = require('telescope.actions.state')
-
-            actions.select_default:replace(function()
-              local selection = action_state.get_selected_entry()
-              actions.close(prompt_bufnr)
-              if selection then
-                on_choice(items[selection.index], selection.index)
-              else
-                on_choice(nil, nil)
-              end
-            end)
-
-            return true
-          end,
-        }):find()
-      else
-        -- Fallback to simple floating window
-        local choices = {}
-        for i, item in ipairs(items) do
-          choices[i] = string.format("%d: %s", i, tostring(item))
-        end
-
-        local buf = vim.api.nvim_create_buf(false, true)
-        vim.api.nvim_buf_set_lines(buf, 0, -1, false, choices)
-
-        local width = 60
-        local height = math.min(#choices, 15)
-        local win = vim.api.nvim_open_win(buf, true, {
-          relative = "cursor",
-          width = width,
-          height = height,
-          row = 1,
-          col = 0,
-          style = "minimal",
-          border = "rounded"
-        })
-        vim.wo[win].cursorline = true
-
-        local function select_and_close(index)
-          vim.api.nvim_win_close(win, true)
-          if index and index > 0 and index <= #items then
-            on_choice(items[index], index)
-          else
-            on_choice(nil, nil)
-          end
-        end
-
-        for i = 1, math.min(#items, 9) do
-          vim.keymap.set("n", tostring(i), function() select_and_close(i) end, { buffer = buf })
-        end
-        vim.keymap.set("n", "<CR>", function()
-          local line = vim.api.nvim_win_get_cursor(win)[1]
-          select_and_close(line)
-        end, { buffer = buf })
-        vim.keymap.set("n", "<Esc>", function() select_and_close(nil) end, { buffer = buf })
-        vim.keymap.set("n", "q", function() select_and_close(nil) end, { buffer = buf })
-      end
-    end
-  end
+  -- vim.ui.select is provided by snacks.picker (settings.picker.ui_select = true).
+  -- vim.ui.input is provided by snacks.input.
 
   -- Show trailing whitespace and problematic whitespace
   vim.opt.list = true
@@ -165,12 +47,13 @@ function M.setup()
   -- Highlight current line with background but no underline
   vim.opt.cursorlineopt = 'both'  -- Highlight both line and number
 
-  -- Enhanced folding with custom markers
-  vim.opt.foldmethod = 'indent'
-  vim.opt.foldlevel = 99  -- Start with all folds open
+  -- Treesitter-aware folding (smarter than indent-based).
+  vim.opt.foldmethod = 'expr'
+  vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+  vim.opt.foldlevel = 99
   vim.opt.foldlevelstart = 99
   vim.opt.foldenable = true
-  vim.opt.foldcolumn = '0'  -- Hide fold column
+  vim.opt.foldcolumn = '0'
 
   -- Custom fold text function
   function _G.custom_fold_text()
@@ -181,15 +64,6 @@ function M.setup()
     return indent .. '| ' .. text .. ' ... ' .. line_count .. ' lines |'
   end
   vim.opt.foldtext = 'v:lua.custom_fold_text()'
-
-  -- Integrate autopairs with cmp (with proper loading check)
-  vim.defer_fn(function()
-    local ok_cmp, cmp = pcall(require, 'cmp')
-    local ok_autopairs, cmp_autopairs = pcall(require, 'nvim-autopairs.completion.cmp')
-    if ok_cmp and ok_autopairs then
-      cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
-    end
-  end, 100)
 
   -- External file change handling
   local file_change_grp = vim.api.nvim_create_augroup("ExternalFileChange", { clear = true })
@@ -269,25 +143,6 @@ function M.setup()
     vim.notify("Sent didChangeWatchedFiles to LSP", vim.log.levels.INFO, { title = "LSP" })
   end, { desc = "Notify LSP clients that the current file changed on disk" })
 
-  -- Enhanced telescope diagnostics function
-  local function telescope_diagnostics_with_preview()
-    require('telescope.builtin').diagnostics({
-      previewer = true,
-      layout_strategy = "horizontal",
-      layout_config = {
-        preview_width = 0.5,
-        horizontal = {
-          prompt_position = "top",
-        },
-      },
-      sorting_strategy = "ascending",
-      results_title = "Diagnostics",
-      prompt_title = "Search Diagnostics",
-      preview_title = "Preview",
-    })
-  end
-
-  _G.telescope_diagnostics_with_preview = telescope_diagnostics_with_preview
 end
 
 return M

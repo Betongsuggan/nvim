@@ -18,13 +18,13 @@
     {
       mode = "n";
       key = "<C-t>";
-      action = "<cmd>ToggleTerm<cr>";
+      action = { __raw = "function() Snacks.terminal.toggle() end"; };
       options = { desc = "Toggle floating terminal"; };
     }
     {
       mode = "t";
       key = "<C-t>";
-      action = "<cmd>ToggleTerm<cr>";
+      action = { __raw = "function() Snacks.terminal.toggle() end"; };
       options = { desc = "Toggle floating terminal"; };
     }
 
@@ -38,14 +38,14 @@
     {
       mode = "n";
       key = "<leader>bd";
-      action = "<cmd>bdelete<CR>";
-      options = { desc = "Delete buffer"; };
+      action = { __raw = "function() Snacks.bufdelete() end"; };
+      options = { desc = "Delete buffer (preserve layout)"; };
     }
     {
       mode = "n";
       key = "<leader>bD";
-      action = "<cmd>bdelete!<CR>";
-      options = { desc = "Force delete buffer"; };
+      action = { __raw = "function() Snacks.bufdelete({ force = true }) end"; };
+      options = { desc = "Force delete buffer (preserve layout)"; };
     }
     {
       mode = "n";
@@ -106,8 +106,8 @@
     {
       mode = "n";
       key = "<leader>bb";
-      action = { __raw = "function() _G.keymap_buffer_picker() end"; };
-      options = { desc = "Buffer picker (telescope)"; };
+      action = { __raw = "function() Snacks.picker.buffers() end"; };
+      options = { desc = "Buffer picker"; };
     }
 
     # Window management
@@ -206,69 +206,85 @@
       options = { desc = "Decrease window width"; };
     }
 
-    # Find operations (Telescope)
+    # Find operations (snacks.picker / snacks.explorer)
     {
       mode = "n";
       key = "<leader>fe";
-      action = { __raw = "function() _G.keymap_file_explorer() end"; };
+      action = { __raw = "function() Snacks.explorer() end"; };
       options = { desc = "File explorer"; };
     }
     {
       mode = "n";
       key = "<leader>fs";
-      action = { __raw = "function() _G.keymap_symbol_outline() end"; };
+      action = { __raw = "function() Snacks.picker.lsp_symbols() end"; };
       options = { desc = "Symbol outline"; };
     }
     {
       mode = "n";
       key = "<leader>ff";
-      action = "<cmd>Telescope find_files<CR>";
+      action = { __raw = "function() Snacks.picker.files() end"; };
       options = { desc = "Find files"; };
     }
     {
       mode = "n";
       key = "<leader>fg";
-      action = "<cmd>Telescope live_grep<CR>";
+      action = { __raw = "function() Snacks.picker.grep() end"; };
       options = { desc = "Find by grep"; };
     }
     {
       mode = "n";
       key = "<leader>fb";
-      action = { __raw = "function() _G.keymap_buffer_picker() end"; };
+      action = { __raw = "function() Snacks.picker.buffers() end"; };
       options = { desc = "Find buffers"; };
     }
     {
       mode = "n";
       key = "<leader>fh";
-      action = "<cmd>Telescope help_tags<CR>";
+      action = { __raw = "function() Snacks.picker.help() end"; };
       options = { desc = "Find help"; };
     }
     {
       mode = "n";
       key = "<leader>fd";
-      action = "<cmd>Telescope lsp_document_symbols<CR>";
+      action = { __raw = "function() Snacks.picker.lsp_symbols() end"; };
       options = { desc = "Document symbols"; };
     }
     {
       mode = "n";
       key = "<leader>fw";
-      action = "<cmd>Telescope lsp_workspace_symbols<CR>";
+      action = { __raw = "function() Snacks.picker.lsp_workspace_symbols() end"; };
       options = { desc = "Workspace symbols"; };
     }
     {
       mode = "n";
       key = "<leader>fS";
-      action = { __raw = "function() _G.keymap_search_symbols() end"; };
-      options = { desc = "Search symbols"; };
+      action = { __raw = "function() Snacks.picker.lsp_workspace_symbols({ pattern = vim.fn.expand('<cword>') }) end"; };
+      options = { desc = "Search symbol under cursor"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>fr";
+      action = { __raw = "function() Snacks.picker.recent() end"; };
+      options = { desc = "Recent files"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>fc";
+      action = { __raw = "function() Snacks.picker.command_history() end"; };
+      options = { desc = "Command history"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>fk";
+      action = { __raw = "function() Snacks.picker.keymaps() end"; };
+      options = { desc = "Keymaps"; };
     }
 
     # LSP Navigation
     {
       mode = "n";
       key = "<leader>ld";
-      action = {
-        __raw = "function() require('telescope.builtin').lsp_definitions() end";
-      };
+      action = { __raw = "function() Snacks.picker.lsp_definitions() end"; };
       options = { desc = "Go to definition"; };
     }
     {
@@ -280,16 +296,20 @@
     {
       mode = "n";
       key = "<leader>li";
-      action = { __raw = "function() _G.keymap_lsp_implementations() end"; };
+      action = { __raw = "function() Snacks.picker.lsp_implementations() end"; };
       options = { desc = "Go to implementations"; };
     }
     {
       mode = "n";
       key = "<leader>lr";
-      action = {
-        __raw = "function() require('telescope.builtin').lsp_references() end";
-      };
+      action = { __raw = "function() Snacks.picker.lsp_references() end"; };
       options = { desc = "Find references"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>lt";
+      action = { __raw = "function() Snacks.picker.lsp_type_definitions() end"; };
+      options = { desc = "Go to type definition"; };
     }
     {
       mode = "n";
@@ -326,8 +346,14 @@
     {
       mode = "n";
       key = "<leader>cr";
-      action = { __raw = "function() _G.keymap_rename_symbol() end"; };
-      options = { desc = "Rename symbol"; };
+      action = { __raw = "function() vim.lsp.buf.rename() end"; };
+      options = { desc = "Rename symbol (LSP)"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>cR";
+      action = { __raw = "function() Snacks.rename.rename_file() end"; };
+      options = { desc = "Rename current file (LSP-aware)"; };
     }
     {
       mode = "n";
@@ -347,16 +373,10 @@
       action = {
         __raw = ''
           function()
-            local params = vim.lsp.util.make_range_params()
-            params.context = {only = {"source.organizeImports"}}
-            local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, 1000)
-            for _, res in pairs(result or {}) do
-              for _, r in pairs(res.result or {}) do
-                if r.edit then
-                  vim.lsp.util.apply_workspace_edit(r.edit, "utf-8")
-                end
-              end
-            end
+            vim.lsp.buf.code_action({
+              context = { only = { "source.organizeImports" }, diagnostics = {} },
+              apply = true,
+            })
           end
         '';
       };
@@ -368,8 +388,7 @@
       mode = "n";
       key = "[d";
       action = {
-        __raw =
-          "function() vim.diagnostic.goto_prev({ border = 'rounded' }) end";
+        __raw = "function() vim.diagnostic.jump({ count = -1, float = true }) end";
       };
       options = { desc = "Previous diagnostic"; };
     }
@@ -377,8 +396,7 @@
       mode = "n";
       key = "]d";
       action = {
-        __raw =
-          "function() vim.diagnostic.goto_next({ border = 'rounded' }) end";
+        __raw = "function() vim.diagnostic.jump({ count = 1, float = true }) end";
       };
       options = { desc = "Next diagnostic"; };
     }
@@ -386,8 +404,7 @@
       mode = "n";
       key = "[e";
       action = {
-        __raw =
-          "function() vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR, border = 'rounded' }) end";
+        __raw = "function() vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.ERROR, float = true }) end";
       };
       options = { desc = "Previous error"; };
     }
@@ -395,8 +412,7 @@
       mode = "n";
       key = "]e";
       action = {
-        __raw =
-          "function() vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR, border = 'rounded' }) end";
+        __raw = "function() vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.ERROR, float = true }) end";
       };
       options = { desc = "Next error"; };
     }
@@ -404,8 +420,7 @@
       mode = "n";
       key = "[w";
       action = {
-        __raw =
-          "function() vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.WARN, border = 'rounded' }) end";
+        __raw = "function() vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.WARN, float = true }) end";
       };
       options = { desc = "Previous warning"; };
     }
@@ -413,8 +428,7 @@
       mode = "n";
       key = "]w";
       action = {
-        __raw =
-          "function() vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.WARN, border = 'rounded' }) end";
+        __raw = "function() vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.WARN, float = true }) end";
       };
       options = { desc = "Next warning"; };
     }
@@ -427,15 +441,13 @@
     {
       mode = "n";
       key = "<leader>da";
-      action = {
-        __raw = "function() _G.telescope_diagnostics_with_preview() end";
-      };
+      action = { __raw = "function() Snacks.picker.diagnostics() end"; };
       options = { desc = "All diagnostics"; };
     }
     {
       mode = "n";
       key = "<leader>df";
-      action = "<cmd>Telescope diagnostics bufnr=0<CR>";
+      action = { __raw = "function() Snacks.picker.diagnostics_buffer() end"; };
       options = { desc = "File diagnostics"; };
     }
     {

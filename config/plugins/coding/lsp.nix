@@ -11,14 +11,13 @@
               unusedparams = true;
               unusedvariable = true;
               unusedwrite = true;
-              unreachable = false; # Disable expensive analysis
+              unreachable = true;
             };
-            staticcheck = false; # Disabled for performance
+            staticcheck = true;
             gofumpt = true;
-            completionBudget = "100ms";
             matcher = "Fuzzy";
             completeUnimported = true;
-            deepCompletion = false; # Disabled for performance
+            deepCompletion = true;
             usePlaceholders = true;
             completionDocumentation = true;
             hoverKind = "FullDocumentation";
@@ -40,18 +39,17 @@
         };
       };
 
-      ts_ls = {
+      vtsls = {
         enable = true;
         settings = {
           typescript = {
             inlayHints = {
-              includeInlayParameterNameHints = "all";
-              includeInlayParameterNameHintsWhenArgumentMatchesName = false;
-              includeInlayFunctionParameterTypeHints = true;
-              includeInlayVariableTypeHints = true;
-              includeInlayPropertyDeclarationTypeHints = true;
-              includeInlayFunctionLikeReturnTypeHints = true;
-              includeInlayEnumMemberValueHints = true;
+              parameterNames = { enabled = "all"; };
+              parameterTypes = { enabled = true; };
+              variableTypes = { enabled = true; };
+              propertyDeclarationTypes = { enabled = true; };
+              functionLikeReturnTypes = { enabled = true; };
+              enumMemberValues = { enabled = true; };
             };
             suggest = {
               autoImports = true;
@@ -62,33 +60,18 @@
             preferences = {
               importModuleSpecifier = "shortest";
               includePackageJsonAutoImports = "on";
-            };
-            format = {
-              enable = true;
-              insertSpaceAfterCommaDelimiter = true;
-              insertSpaceAfterSemicolonInForStatements = true;
-              insertSpaceBeforeAndAfterBinaryOperators = true;
-              insertSpaceAfterConstructor = false;
-              insertSpaceAfterKeywordsInControlFlowStatements = true;
-              insertSpaceAfterFunctionKeywordForAnonymousFunctions = true;
-              insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis = false;
-              insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets = false;
-              insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces = false;
-              placeOpenBraceOnNewLineForFunctions = false;
-              placeOpenBraceOnNewLineForControlBlocks = false;
             };
             updateImportsOnFileMove = { enabled = "always"; };
             workspaceSymbols = { scope = "allOpenProjects"; };
           };
           javascript = {
             inlayHints = {
-              includeInlayParameterNameHints = "all";
-              includeInlayParameterNameHintsWhenArgumentMatchesName = false;
-              includeInlayFunctionParameterTypeHints = true;
-              includeInlayVariableTypeHints = true;
-              includeInlayPropertyDeclarationTypeHints = true;
-              includeInlayFunctionLikeReturnTypeHints = true;
-              includeInlayEnumMemberValueHints = true;
+              parameterNames = { enabled = "all"; };
+              parameterTypes = { enabled = true; };
+              variableTypes = { enabled = true; };
+              propertyDeclarationTypes = { enabled = true; };
+              functionLikeReturnTypes = { enabled = true; };
+              enumMemberValues = { enabled = true; };
             };
             suggest = {
               autoImports = true;
@@ -100,21 +83,13 @@
               importModuleSpecifier = "shortest";
               includePackageJsonAutoImports = "on";
             };
-            format = {
-              enable = true;
-              insertSpaceAfterCommaDelimiter = true;
-              insertSpaceAfterSemicolonInForStatements = true;
-              insertSpaceBeforeAndAfterBinaryOperators = true;
-              insertSpaceAfterConstructor = false;
-              insertSpaceAfterKeywordsInControlFlowStatements = true;
-              insertSpaceAfterFunctionKeywordForAnonymousFunctions = true;
-              insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis = false;
-              insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets = false;
-              insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces = false;
-              placeOpenBraceOnNewLineForFunctions = false;
-              placeOpenBraceOnNewLineForControlBlocks = false;
-            };
             updateImportsOnFileMove = { enabled = "always"; };
+          };
+          vtsls = {
+            autoUseWorkspaceTsdk = true;
+            experimental = {
+              completion = { enableServerSideFuzzyMatch = true; };
+            };
           };
           completions = { completeFunctionCalls = true; };
         };

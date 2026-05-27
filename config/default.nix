@@ -12,43 +12,14 @@ in {
 
   # Include modular Lua files
   extraFiles = {
-    # Theme modules
-    "lua/theme/init.lua" = { text = builtins.readFile ../lua/theme/init.lua; };
-    "lua/theme/colors.lua" = {
-      text = builtins.readFile ../lua/theme/colors.lua;
-    };
-
-    # Config modules
     "lua/config/init.lua" = {
       text = builtins.readFile ../lua/config/init.lua;
     };
-    "lua/config/ui.lua" = { text = builtins.readFile ../lua/config/ui.lua; };
     "lua/config/keymaps.lua" = {
       text = builtins.readFile ../lua/config/keymaps.lua;
     };
     "lua/config/rust.lua" = {
       text = builtins.readFile ../lua/config/rust.lua;
-    };
-
-    # Testing modules
-    "lua/testing/adapter.lua" = {
-      text = builtins.readFile ../lua/testing/adapter.lua;
-    };
-    "lua/testing/registry.lua" = {
-      text = builtins.readFile ../lua/testing/registry.lua;
-    };
-    "lua/testing/runner.lua" = {
-      text = builtins.readFile ../lua/testing/runner.lua;
-    };
-    "lua/testing/ui.lua" = { text = builtins.readFile ../lua/testing/ui.lua; };
-    "lua/testing/telescope.lua" = {
-      text = builtins.readFile ../lua/testing/telescope.lua;
-    };
-    "lua/testing/adapters/go.lua" = {
-      text = builtins.readFile ../lua/testing/adapters/go.lua;
-    };
-    "lua/testing/adapters/typescript.lua" = {
-      text = builtins.readFile ../lua/testing/adapters/typescript.lua;
     };
   };
 
@@ -80,8 +51,6 @@ in {
 
   # Extra plugins not available in nixvim
   extraPlugins = with pkgs.vimPlugins; [
-    nvim-scrollbar
-
     # Popular colorschemes
     gruvbox-nvim
     tokyonight-nvim
@@ -110,28 +79,14 @@ in {
 
   # Initialize all Lua modules
   extraConfigLua = ''
-    -- Initialize theme system with Nix default
-    local theme = require('theme')
-    theme.setup("${theme.name}")
+    -- Core config (LSP handlers, diagnostics, folds, file-change autocmds).
+    require('config').setup()
 
-    -- Initialize core config (LSP handlers, diagnostics, vim.ui.select)
-    local config = require('config')
-    config.setup()
+    -- Keymap helper functions (close_other_buffers, project run/build/test).
+    require('config.keymaps').setup()
 
-    -- Initialize UI components with current theme colors
-    local ui = require('config.ui')
-    local colors = theme.get_colors()
-    if colors then
-      ui.setup(colors)
-    end
-
-    -- Initialize keymap functions
-    local keymaps = require('config.keymaps')
-    keymaps.setup()
-
-    -- Initialize Rust-specific config
-    local rust = require('config.rust')
-    rust.setup()
+    -- Rust-specific config (rustaceanvim + crates.nvim).
+    require('config.rust').setup()
 
     -- Setup claudecode.nvim
     require('claudecode').setup({

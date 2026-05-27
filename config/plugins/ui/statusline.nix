@@ -1,10 +1,12 @@
 # Lualine status bar configuration
-{ theme }: {
+{ ... }: {
   plugins.lualine = {
     enable = true;
     settings = {
       options = {
-        theme = theme.name;
+        # "auto" tracks whatever :colorscheme is active, so it follows
+        # themery's switches automatically without needing a hardcoded name.
+        theme = "auto";
         component_separators = {
           left = "";
           right = "";

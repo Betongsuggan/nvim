@@ -210,7 +210,18 @@
     {
       mode = "n";
       key = "<leader>fe";
-      action = { __raw = "function() Snacks.explorer() end"; };
+      action = {
+        __raw = ''
+          function()
+            Snacks.explorer({
+              layout = {
+                preset = "default",
+                preview = "main",
+              },
+            })
+          end
+        '';
+      };
       options = { desc = "File explorer"; };
     }
     {
@@ -527,7 +538,7 @@
     {
       mode = "n";
       key = "<leader>Th";
-      action = { __raw = "function() _G.theme_picker() end"; };
+      action = "<cmd>Themery<cr>";
       options = { desc = "Theme picker"; };
     }
 

@@ -91,7 +91,7 @@ in {
   ];
 
   extraPlugins = with pkgs.vimPlugins;
-    [ neotest-go neotest-plenary ]
+    [ neotest-golang neotest-plenary ]
     ++ (icons.extraPlugins or [ ])
     ++ (markdown.extraPlugins or [ ])
     ++ (extras.extraPlugins or [ ]);

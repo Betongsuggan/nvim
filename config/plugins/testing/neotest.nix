@@ -10,7 +10,7 @@
         dapBreakpointCondition = { text = "o"; texthl = "DapBreakpoint"; };
         dapBreakpointRejected  = { text = "x"; texthl = "DapBreakpoint"; };
         dapLogPoint            = { text = "@"; texthl = "DapLogPoint";   };
-        dapStopped             = { text = ">"; texthl = "DapStopped";    };
+        dapStopped             = { text = ">"; texthl = "DapStopped"; linehl = "DapStoppedLine"; };
       };
     };
     dap-ui = { enable = true; };
@@ -78,6 +78,8 @@
       action = { __raw = "function() require('neotest').watch.toggle(vim.fn.expand('%')) end"; };
       options = { desc = "Watch tests in current file"; silent = true; };
     }
+    # --- Debug (<leader>d*) ----------------------------------------------
+    # Breakpoints
     {
       mode = "n";
       key = "<leader>db";
@@ -86,9 +88,103 @@
     }
     {
       mode = "n";
+      key = "<leader>dB";
+      action = { __raw = ''
+        function()
+          vim.ui.input({ prompt = "Breakpoint condition: " }, function(cond)
+            if cond and cond ~= "" then require('dap').set_breakpoint(cond) end
+          end)
+        end
+      ''; };
+      options = { desc = "Conditional breakpoint"; silent = true; };
+    }
+    # Control flow
+    {
+      mode = "n";
       key = "<leader>dc";
       action = { __raw = "function() require('dap').continue() end"; };
-      options = { desc = "Continue debugging"; silent = true; };
+      options = { desc = "Continue"; silent = true; };
+    }
+    {
+      mode = "n";
+      key = "<leader>dn";
+      action = { __raw = "function() require('dap').step_over() end"; };
+      options = { desc = "Step over"; silent = true; };
+    }
+    {
+      mode = "n";
+      key = "<leader>di";
+      action = { __raw = "function() require('dap').step_into() end"; };
+      options = { desc = "Step into"; silent = true; };
+    }
+    {
+      mode = "n";
+      key = "<leader>do";
+      action = { __raw = "function() require('dap').step_out() end"; };
+      options = { desc = "Step out"; silent = true; };
+    }
+    {
+      mode = "n";
+      key = "<leader>dC";
+      action = { __raw = "function() require('dap').run_to_cursor() end"; };
+      options = { desc = "Run to cursor"; silent = true; };
+    }
+    {
+      mode = "n";
+      key = "<leader>dq";
+      action = { __raw = "function() require('dap').terminate() end"; };
+      options = { desc = "Terminate session"; silent = true; };
+    }
+    # Inspection (on-demand centered floats)
+    {
+      mode = "n";
+      key = "<leader>dv";
+      action = { __raw = "function() require('dapui').float_element('scopes', { enter = true }) end"; };
+      options = { desc = "Variables (scopes)"; silent = true; };
+    }
+    {
+      mode = "n";
+      key = "<leader>dw";
+      action = { __raw = "function() require('dapui').float_element('watches', { enter = true }) end"; };
+      options = { desc = "Watches"; silent = true; };
+    }
+    {
+      mode = "n";
+      key = "<leader>ds";
+      action = { __raw = "function() require('dapui').float_element('stacks', { enter = true }) end"; };
+      options = { desc = "Call stack"; silent = true; };
+    }
+    {
+      mode = "n";
+      key = "<leader>dl";
+      action = { __raw = "function() require('dapui').float_element('breakpoints', { enter = true }) end"; };
+      options = { desc = "Breakpoints list"; silent = true; };
+    }
+    {
+      mode = "n";
+      key = "<leader>dr";
+      action = { __raw = "function() require('dapui').float_element('repl', { enter = true }) end"; };
+      options = { desc = "REPL"; silent = true; };
+    }
+    {
+      mode = "n";
+      key = "<leader>dh";
+      action = { __raw = "function() require('dapui').eval(nil, { enter = true }) end"; };
+      options = { desc = "Hover / inspect under cursor"; silent = true; };
+    }
+    {
+      mode = "n";
+      key = "<leader>de";
+      action = { __raw = ''
+        function()
+          vim.ui.input({ prompt = "Eval: " }, function(expr)
+            if expr and expr ~= "" then
+              require('dapui').eval(expr, { enter = true })
+            end
+          end)
+        end
+      ''; };
+      options = { desc = "Eval expression"; silent = true; };
     }
   ];
 
@@ -149,7 +245,10 @@
 
     require("neotest").setup({
       adapters = {
-        require("neotest-go"),
+        require("neotest-golang")({
+          go_test_args = { "-v", "-count=1" },
+          dap_go_enabled = true,
+        }),
         require("neotest-jest")({
           jestCommand = "npx jest --",
           jestConfigFile = function()
@@ -184,5 +283,10 @@
         },
       },
     })
+
+    -- Highlight the line where execution is paused. Linked to `Visual` so it
+    -- follows the colorscheme; `default = true` lets the active theme
+    -- override if it defines its own DapStoppedLine.
+    vim.api.nvim_set_hl(0, "DapStoppedLine", { link = "Visual", default = true })
   '';
 }

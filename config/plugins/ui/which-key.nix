@@ -26,7 +26,8 @@
         { __unkeyed-1 = "<leader>t"; group = "Testing"; icon = "T"; }
         { __unkeyed-1 = "<leader>T"; group = "Theme"; icon = "*"; }
         { __unkeyed-1 = "<leader>l"; group = "LSP"; icon = "L"; }
-        { __unkeyed-1 = "<leader>d"; group = "Diagnostics"; icon = "D"; }
+        { __unkeyed-1 = "<leader>d"; group = "Debug"; icon = "D"; }
+        { __unkeyed-1 = "<leader>x"; group = "Trouble"; icon = "!"; }
         { __unkeyed-1 = "<leader>r"; group = "Rust"; icon = "R"; }
         { __unkeyed-1 = "<C-a>"; desc = "Toggle Claude"; icon = "C"; }
         { __unkeyed-1 = "<C-b>"; desc = "Add current buffer to Claude"; icon = "+"; }

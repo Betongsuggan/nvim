@@ -462,37 +462,37 @@
     }
     {
       mode = "n";
-      key = "<leader>de";
+      key = "<leader>xe";
       action = { __raw = "function() _G.keymap_show_diagnostic() end"; };
       options = { desc = "Show diagnostic"; };
     }
     {
       mode = "n";
-      key = "<leader>da";
+      key = "<leader>xa";
       action = { __raw = "function() Snacks.picker.diagnostics() end"; };
       options = { desc = "All diagnostics"; };
     }
     {
       mode = "n";
-      key = "<leader>df";
+      key = "<leader>xf";
       action = { __raw = "function() Snacks.picker.diagnostics_buffer() end"; };
       options = { desc = "File diagnostics"; };
     }
     {
       mode = "n";
-      key = "<leader>dx";
+      key = "<leader>xx";
       action = "<cmd>Trouble diagnostics toggle<CR>";
       options = { desc = "Trouble diagnostics"; };
     }
     {
       mode = "n";
-      key = "<leader>dq";
+      key = "<leader>xq";
       action = "<cmd>Trouble qflist toggle<CR>";
       options = { desc = "Quickfix list"; };
     }
     {
       mode = "n";
-      key = "<leader>dl";
+      key = "<leader>xl";
       action = "<cmd>Trouble loclist toggle<CR>";
       options = { desc = "Location list"; };
     }

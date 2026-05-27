@@ -62,7 +62,7 @@ in {
     rose-pine
 
     # Testing and debugging plugins
-    neotest-go
+    neotest-golang
     neotest-plenary
     neotest-jest
 

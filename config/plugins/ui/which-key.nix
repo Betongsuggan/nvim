@@ -22,6 +22,7 @@
         { __unkeyed-1 = "<leader>p"; group = "Project"; icon = "@"; }
         { __unkeyed-1 = "<leader>b"; group = "Buffer"; icon = "B"; }
         { __unkeyed-1 = "<leader>g"; group = "Git"; icon = "G"; }
+        { __unkeyed-1 = "<leader>gc"; group = "Conflict"; icon = "!"; }
         { __unkeyed-1 = "<leader>w"; group = "Windows"; icon = "W"; }
         { __unkeyed-1 = "<leader>t"; group = "Testing"; icon = "T"; }
         { __unkeyed-1 = "<leader>T"; group = "Theme"; icon = "*"; }

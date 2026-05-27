@@ -115,6 +115,23 @@
         };
       };
 
+      kotlin_lsp = {
+        enable = true;
+        # Binary `kotlin-lsp` comes from extraPackages (our derivation in
+        # ./packages/kotlin-lsp.nix). Newer JetBrains releases bundle their own JRE.
+        cmd = [ "kotlin-lsp" "--stdio" ];
+        filetypes = [ "kotlin" ];
+        rootMarkers = [
+          "settings.gradle.kts"
+          "settings.gradle"
+          "build.gradle.kts"
+          "build.gradle"
+          "pom.xml"
+          "mvnw"
+          ".git"
+        ];
+      };
+
       # Rust LSP is handled by rustaceanvim plugin
       rust_analyzer = { enable = false; };
     };

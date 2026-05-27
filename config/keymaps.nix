@@ -530,6 +530,12 @@
       };
       options = { desc = "Undo stage git hunk"; };
     }
+    {
+      mode = "n";
+      key = "<leader>gR";
+      action = "<cmd>GitRefresh<CR>";
+      options = { desc = "Refresh git state (gitsigns/conflicts/diffview)"; silent = true; };
+    }
 
     # Project commands
     {

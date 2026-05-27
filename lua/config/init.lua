@@ -104,6 +104,53 @@ function M.setup()
     end,
   })
 
+  -- Re-sync git-aware plugins after external git operations. `:checktime`
+  -- (above) reloads file contents when the disk changes, but plugin caches
+  -- — gitsigns hunks, git-conflict's conflict table, the diffview tab —
+  -- are populated from buffer parse events that don't always re-fire on
+  -- branch switches done in an outside terminal. This refresh function
+  -- nudges each plugin to re-scan.
+  local function refresh_git_state(opts)
+    opts = opts or {}
+    pcall(vim.cmd, "checktime")
+
+    local gs_ok, gitsigns = pcall(require, "gitsigns")
+    if gs_ok and gitsigns.refresh then pcall(gitsigns.refresh) end
+
+    -- git-conflict's :GitConflictRefresh re-parses every loaded buffer
+    -- and rebuilds the internal conflict table that backs :GitConflictListQf.
+    pcall(vim.cmd, "silent! GitConflictRefresh")
+
+    -- :DiffviewRefresh is a no-op if no diffview tab is open.
+    pcall(vim.cmd, "silent! DiffviewRefresh")
+
+    if opts.notify then
+      vim.notify("Git state refreshed", vim.log.levels.INFO, { title = "Git" })
+    end
+  end
+
+  local git_refresh_grp = vim.api.nvim_create_augroup("GitRefresh", { clear = true })
+
+  -- FocusGained fires when nvim regains focus from another window — the
+  -- most reliable signal that the user just ran git commands externally.
+  -- TermClose covers the case where they ran the command in nvim's own
+  -- floating terminal (lazygit, raw `git`). DirChanged covers `:cd` /
+  -- session switches into another repo.
+  vim.api.nvim_create_autocmd({ "FocusGained", "TermClose", "DirChanged" }, {
+    group = git_refresh_grp,
+    pattern = "*",
+    callback = function()
+      -- Defer slightly so any in-flight checktime / file reload settles
+      -- before we ask plugins to re-scan from disk.
+      vim.defer_fn(function() refresh_git_state() end, 100)
+    end,
+    desc = "Refresh gitsigns/git-conflict/diffview state",
+  })
+
+  vim.api.nvim_create_user_command("GitRefresh",
+    function() refresh_git_state({ notify = true }) end,
+    { desc = "Re-sync git-aware plugins (gitsigns, git-conflict, diffview)" })
+
   -- Native LSP restart for the current buffer (replaces lspconfig's :LspRestart).
   -- Stops attached clients, then re-edits the buffer so configured servers re-attach.
   local function restart_lsp(bufnr)

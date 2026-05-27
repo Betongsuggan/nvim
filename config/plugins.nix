@@ -15,6 +15,9 @@ let
   icons = import ./plugins/ui/icons.nix { inherit pkgs; };
 
   gitsigns = import ./plugins/git/gitsigns.nix { };
+  diffview = import ./plugins/git/diffview.nix { };
+  floatingDiff = import ./plugins/git/floating-diff.nix { };
+  gitConflict = import ./plugins/git/git-conflict.nix { };
 
   trouble = import ./plugins/diagnostics/trouble.nix { };
 
@@ -75,11 +78,15 @@ in {
   plugins = lsp.plugins // completion.plugins // treesitter.plugins
     // editing.plugins // navigation.plugins // extras.plugins
     // statusline.plugins // whichKey.plugins // (icons.plugins or { })
-    // gitsigns.plugins // trouble.plugins // neotest.plugins
+    // gitsigns.plugins // (diffview.plugins or { })
+    // (gitConflict.plugins or { })
+    // trouble.plugins // neotest.plugins
     // markdown.plugins // snacks.plugins;
 
   keymaps = (editing.keymaps or [ ]) ++ (neotest.keymaps or [ ])
-    ++ (markdown.keymaps or [ ]) ++ (extras.keymaps or [ ]);
+    ++ (markdown.keymaps or [ ]) ++ (extras.keymaps or [ ])
+    ++ (diffview.keymaps or [ ]) ++ (floatingDiff.keymaps or [ ])
+    ++ (gitConflict.keymaps or [ ]);
 
   autoCmd = (editing.autoCmd or [ ]);
 
@@ -88,6 +95,7 @@ in {
     (icons.extraConfigLua or "")
     (markdown.extraConfigLua or "")
     (extras.extraConfigLua or "")
+    (floatingDiff.extraConfigLua or "")
   ];
 
   extraPlugins = with pkgs.vimPlugins;

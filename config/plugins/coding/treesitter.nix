@@ -21,6 +21,7 @@
         "rust"
         "toml"
         "ron"
+        "kotlin"
       ];
     };
   };

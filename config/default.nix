@@ -1,5 +1,7 @@
 { pkgs, claudecode-nvim, ... }:
-let theme = import ./theme.nix;
+let
+  theme = import ./theme.nix;
+  kotlin-lsp = pkgs.callPackage ./packages/kotlin-lsp.nix { };
 in {
   imports = [ ./options.nix ./plugins.nix ./keymaps.nix ];
 
@@ -45,6 +47,10 @@ in {
     clippy # Rust linter
     cargo # Rust package manager
     rustc # Rust compiler
+
+    # Kotlin tooling
+    kotlin-lsp # Official JetBrains Kotlin LSP (packaged in ./packages/)
+    ktfmt # Kotlin formatter (Google)
 
     gcc
   ];

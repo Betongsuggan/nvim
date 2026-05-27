@@ -15,6 +15,29 @@
           batch_delay = 10;
           max_lines = 10000;
         };
+        default_component_configs = {
+          git_status = {
+            symbols = {
+              added     = "";  # nf-fa-plus          U+F067
+              modified  = "";  # nf-fa-pencil        U+F040
+              deleted   = "";  # nf-fa-times         U+F00D
+              renamed   = "";  # nf-fa-arrow_right   U+F061
+              untracked = "";  # nf-fa-question      U+F128
+              ignored   = "";  # nf-fa-eye_slash     U+F070
+              unstaged  = "";  # nf-fa-star          U+F005
+              staged    = "";  # nf-fa-check         U+F00C
+              conflict  = "";  # nf-fa-bolt          U+F0E7
+            };
+          };
+          diagnostics = {
+            symbols = {
+              hint  = "";  # U+F0EB
+              info  = "";  # U+F05A
+              warn  = "";  # U+F071
+              error = "";  # U+F057
+            };
+          };
+        };
         window = {
           position = "float";
           width = 50;

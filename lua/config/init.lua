@@ -42,10 +42,10 @@ function M.setup()
     },
     signs = {
       text = {
-        [vim.diagnostic.severity.ERROR] = "E",
-        [vim.diagnostic.severity.WARN] = "W",
-        [vim.diagnostic.severity.INFO] = "I",
-        [vim.diagnostic.severity.HINT] = "H",
+        [vim.diagnostic.severity.ERROR] = "",  -- nf-fa-times-circle  U+F057
+        [vim.diagnostic.severity.WARN]  = "",  -- nf-fa-warning       U+F071
+        [vim.diagnostic.severity.INFO]  = "",  -- nf-fa-info-circle   U+F05A
+        [vim.diagnostic.severity.HINT]  = "",  -- nf-fa-lightbulb_o   U+F0EB
       },
     },
     underline = true,
@@ -54,22 +54,10 @@ function M.setup()
   })
 
   -- Define diagnostic signs for the signcolumn
-  vim.fn.sign_define("DiagnosticSignError", {
-    text = "E",
-    texthl = "DiagnosticSignError"
-  })
-  vim.fn.sign_define("DiagnosticSignWarn", {
-    text = "W",
-    texthl = "DiagnosticSignWarn"
-  })
-  vim.fn.sign_define("DiagnosticSignInfo", {
-    text = "I",
-    texthl = "DiagnosticSignInfo"
-  })
-  vim.fn.sign_define("DiagnosticSignHint", {
-    text = "H",
-    texthl = "DiagnosticSignHint"
-  })
+  vim.fn.sign_define("DiagnosticSignError", { text = "", texthl = "DiagnosticSignError" })
+  vim.fn.sign_define("DiagnosticSignWarn",  { text = "", texthl = "DiagnosticSignWarn"  })
+  vim.fn.sign_define("DiagnosticSignInfo",  { text = "", texthl = "DiagnosticSignInfo"  })
+  vim.fn.sign_define("DiagnosticSignHint",  { text = "", texthl = "DiagnosticSignHint"  })
 
   -- Additional LSP window configuration
   local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview

@@ -33,6 +33,7 @@
     writebackup = false;
     swapfile = false;
     undofile = true;
+    autoread = true;
 
     # Performance
     updatetime = 1000;

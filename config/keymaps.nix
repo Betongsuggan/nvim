@@ -49,6 +49,30 @@
     }
     {
       mode = "n";
+      key = "<leader>br";
+      action = "<cmd>checktime<CR>";
+      options = { desc = "Reload: check buffer against disk"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>bR";
+      action = "<cmd>edit!<CR>";
+      options = { desc = "Reload: discard buffer, take disk version"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>bW";
+      action = "<cmd>write!<CR>";
+      options = { desc = "Force write: overwrite disk with buffer"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>bf";
+      action = "<cmd>diffsplit %<CR>";
+      options = { desc = "Diff buffer vs. disk version"; };
+    }
+    {
+      mode = "n";
       key = "<leader>bo";
       action = {
         __raw = "function() _G.keymap_close_other_buffers() end";
@@ -272,6 +296,24 @@
       key = "<leader>lh";
       action = { __raw = "function() vim.lsp.buf.hover() end"; };
       options = { desc = "Hover info"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>sr";
+      action = "<cmd>LspRestart<CR>";
+      options = { desc = "LSP: restart clients for buffer"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>ss";
+      action = "<cmd>LspRefresh<CR>";
+      options = { desc = "LSP: sync (notify of disk change)"; };
+    }
+    {
+      mode = "n";
+      key = "<leader>sh";
+      action = "<cmd>checkhealth vim.lsp<CR>";
+      options = { desc = "LSP: health check"; };
     }
 
     # Code Actions

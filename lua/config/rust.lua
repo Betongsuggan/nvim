@@ -306,10 +306,11 @@ function M.setup_crates()
       min_width = 20,
       padding = 1,
     },
-    completion = {
-      cmp = {
-        enabled = true, -- Enable nvim-cmp integration
-      },
+    lsp = {
+      enabled = true,
+      actions = true,
+      completion = true,
+      hover = true,
     },
   })
 
@@ -380,13 +381,6 @@ function M.setup_crates()
         require('crates').open_repository()
       end, vim.tbl_extend("force", opts, { desc = "Open Repository" }))
 
-      -- Enable cmp source for crates
-      local cmp_ok, cmp = pcall(require, 'cmp')
-      if cmp_ok then
-        cmp.setup.buffer({
-          sources = { { name = "crates" } }
-        })
-      end
     end,
   })
 end

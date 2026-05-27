@@ -48,7 +48,7 @@
             pkgs.delve
             pkgs.golines
             # TypeScript/JavaScript development tools
-            pkgs.nodejs_20
+            pkgs.nodejs_22
             pkgs.typescript
             pkgs.nodePackages.typescript-language-server
             pkgs.nodePackages.vscode-langservers-extracted # For eslint

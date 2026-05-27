@@ -61,7 +61,7 @@ in {
     nerd-fonts.hack
     # Debugging tools
     delve # Go debugger
-    nodejs_20 # Node.js runtime for TypeScript/JavaScript debugging
+    nodejs_22 # Node.js runtime for TypeScript/JavaScript debugging
     lldb # LLVM debugger for Rust and C/C++
     # Formatters
     stylua # Lua formatter

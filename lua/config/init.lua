@@ -10,18 +10,20 @@ function M.setup()
     winhighlight = "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
   }
 
-  -- LSP handlers with rounded borders
-  vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-    border = "rounded",
-    focusable = true,
-    style = "minimal",
-    source = "always",
-  })
-  vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-    border = "rounded",
-    focusable = false,
-    style = "minimal",
-  })
+  -- LSP hover/signature_help with rounded borders (replaces deprecated vim.lsp.with)
+  vim.lsp.buf.hover = (function(orig)
+    return function(config)
+      config = vim.tbl_extend("force", { border = "rounded", focusable = true }, config or {})
+      return orig(config)
+    end
+  end)(vim.lsp.buf.hover)
+
+  vim.lsp.buf.signature_help = (function(orig)
+    return function(config)
+      config = vim.tbl_extend("force", { border = "rounded", focusable = false }, config or {})
+      return orig(config)
+    end
+  end)(vim.lsp.buf.signature_help)
 
   -- Diagnostic configuration with rounded borders and emoji signs
   vim.diagnostic.config({
@@ -76,15 +78,6 @@ function M.setup()
     opts.border = opts.border or "rounded"
     return orig_util_open_floating_preview(contents, syntax, opts, ...)
   end
-
-  -- Configure code action menu with rounded borders
-  vim.lsp.handlers["textDocument/codeAction"] = vim.lsp.with(
-    vim.lsp.handlers["textDocument/codeAction"], {
-      border = "rounded",
-      focusable = true,
-      style = "minimal",
-    }
-  )
 
   -- Use telescope for code actions instead of custom ui.select
   local has_telescope, telescope = pcall(require, 'telescope')
@@ -210,13 +203,83 @@ function M.setup()
     end
   end, 100)
 
-  -- Auto-format on save for Nix files
-  vim.api.nvim_create_autocmd("BufWritePre", {
-    pattern = { "*.nix" },
+  -- External file change handling
+  local file_change_grp = vim.api.nvim_create_augroup("ExternalFileChange", { clear = true })
+
+  vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
+    group = file_change_grp,
+    pattern = "*",
     callback = function()
-      vim.lsp.buf.format()
+      if vim.fn.mode() == "c" then return end
+      if vim.bo.buftype ~= "" then return end
+      if vim.fn.expand("%") == "" then return end
+      vim.cmd("checktime")
+    end,
+    desc = "Check for external file changes",
+  })
+
+  vim.api.nvim_create_autocmd("FileChangedShellPost", {
+    group = file_change_grp,
+    pattern = "*",
+    callback = function()
+      vim.notify(
+        "File changed on disk. Buffer reloaded: " .. vim.fn.expand("%:."),
+        vim.log.levels.WARN,
+        { title = "autoread" }
+      )
     end,
   })
+
+  vim.api.nvim_create_autocmd("FileChangedShell", {
+    group = file_change_grp,
+    pattern = "*",
+    callback = function()
+      vim.notify(
+        "CONFLICT: buffer and disk both changed for " .. vim.fn.expand("<afile>:."),
+        vim.log.levels.ERROR,
+        { title = "autoread" }
+      )
+    end,
+  })
+
+  -- Native LSP restart for the current buffer (replaces lspconfig's :LspRestart).
+  -- Stops attached clients, then re-edits the buffer so configured servers re-attach.
+  local function restart_lsp(bufnr)
+    bufnr = bufnr or vim.api.nvim_get_current_buf()
+    local clients = vim.lsp.get_clients({ bufnr = bufnr })
+    if vim.tbl_isempty(clients) then
+      vim.notify("No LSP clients attached", vim.log.levels.INFO, { title = "LSP" })
+      return
+    end
+    local names = vim.tbl_map(function(c) return c.name end, clients)
+    for _, client in ipairs(clients) do
+      vim.lsp.stop_client(client.id, true)
+    end
+    vim.defer_fn(function()
+      vim.cmd("edit")
+      vim.notify("Restarted LSP: " .. table.concat(names, ", "), vim.log.levels.INFO, { title = "LSP" })
+    end, 200)
+  end
+
+  vim.api.nvim_create_user_command("LspRestart", function() restart_lsp() end,
+    { desc = "Restart LSP clients attached to the current buffer" })
+
+  -- Notify all LSP clients that a watched file changed. Useful after a git
+  -- checkout/rebase if the server's own file watcher missed it.
+  vim.api.nvim_create_user_command("LspRefresh", function()
+    local clients = vim.lsp.get_clients()
+    if vim.tbl_isempty(clients) then
+      vim.notify("No LSP clients running", vim.log.levels.INFO, { title = "LSP" })
+      return
+    end
+    local file = vim.uri_from_bufnr(0)
+    for _, client in ipairs(clients) do
+      client:notify("workspace/didChangeWatchedFiles", {
+        changes = { { uri = file, type = 2 } },  -- 2 = Changed
+      })
+    end
+    vim.notify("Sent didChangeWatchedFiles to LSP", vim.log.levels.INFO, { title = "LSP" })
+  end, { desc = "Notify LSP clients that the current file changed on disk" })
 
   -- Enhanced telescope diagnostics function
   local function telescope_diagnostics_with_preview()

@@ -52,6 +52,20 @@
     }
     {
       mode = "n";
+      key = "<leader>gR";
+      action.__raw = ''
+        function()
+          vim.ui.input({ prompt = "Diffview against ref: ", default = "HEAD" }, function(rev)
+            if rev and rev ~= "" then
+              vim.cmd("DiffviewOpen " .. rev)
+            end
+          end)
+        end
+      '';
+      options = { desc = "Diffview: working tree vs <ref>"; silent = true; };
+    }
+    {
+      mode = "n";
       key = "<leader>gH";
       action = "<cmd>DiffviewFileHistory %<CR>";
       options = { desc = "Diffview: history of current file"; silent = true; };

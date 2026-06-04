@@ -1,5 +1,25 @@
 # LSP server configurations
 { ... }: {
+  # Fidget surfaces $/progress notifications from LSP servers in the corner of
+  # the screen — important for the JetBrains kotlin-lsp, which takes ~9 s on a
+  # warm cache (and ~25 s cold) to finish Gradle re-validation and workspace
+  # model load before completion/hover/goto-def respond. Leaves vim.notify
+  # alone so snacks.notifier remains the toast renderer.
+  plugins.fidget = {
+    enable = true;
+    settings = {
+      progress = {
+        display = {
+          done_icon = "";
+          progress_icon = { pattern = "dots"; period = 1; };
+        };
+      };
+      notification = {
+        override_vim_notify = false;
+      };
+    };
+  };
+
   plugins.lsp = {
     enable = true;
     servers = {

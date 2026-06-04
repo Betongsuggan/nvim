@@ -36,7 +36,27 @@ stdenv.mkDerivation rec {
     cp -r server/* $out/share/kotlin-lsp/
     chmod +x $out/share/kotlin-lsp/bin/intellij-server
 
-    makeWrapper $out/share/kotlin-lsp/bin/intellij-server $out/bin/kotlin-lsp
+    # Pin idea.config.path / idea.system.path to a stable per-project cache
+    # so the LSP doesn't re-import Gradle (~24s) every nvim session. JetBrains
+    # products read IJ_JAVA_OPTIONS at launch and append it to the JVM args.
+    makeWrapper $out/share/kotlin-lsp/bin/intellij-server $out/bin/kotlin-lsp \
+      --run '
+        # Walk all the way to / and keep the OUTERMOST directory holding any
+        # marker, so a multi-module Gradle build (which has build.gradle.kts
+        # in subprojects too) collapses to the single settings.gradle.kts
+        # root instead of branching into per-subdir caches.
+        _root="$PWD"; _dir="$PWD"
+        while [ "$_dir" != "/" ] && [ -n "$_dir" ]; do
+          for _m in settings.gradle.kts settings.gradle build.gradle.kts build.gradle pom.xml; do
+            if [ -e "$_dir/$_m" ]; then _root="$_dir"; break; fi
+          done
+          _dir="$(dirname "$_dir")"
+        done
+        _hash="$(printf "%s" "$_root" | sha256sum | cut -c1-16)"
+        _cache="''${XDG_CACHE_HOME:-$HOME/.cache}/kotlin-lsp/$_hash"
+        mkdir -p "$_cache/config" "$_cache/system"
+        export IJ_JAVA_OPTIONS="''${IJ_JAVA_OPTIONS:-} -Didea.config.path=$_cache/config -Didea.system.path=$_cache/system"
+      '
 
     runHook postInstall
   '';

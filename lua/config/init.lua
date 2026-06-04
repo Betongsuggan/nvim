@@ -190,6 +190,49 @@ function M.setup()
     vim.notify("Sent didChangeWatchedFiles to LSP", vim.log.levels.INFO, { title = "LSP" })
   end, { desc = "Notify LSP clients that the current file changed on disk" })
 
+  -- The JetBrains kotlin-lsp returns goto-definition results for stdlib /
+  -- dependency symbols as `jar:///path/to/foo.jar!/inner/Path.kt` URIs.
+  -- Neovim doesn't know how to materialize those, so the buffer ends up
+  -- empty (0 lines) and any consumer that tries to position the cursor
+  -- (snacks.picker preview, native goto-def jump) crashes with
+  -- "Invalid cursor line: out of range". This BufReadCmd extracts the
+  -- entry from the jar at read time so the buffer has real content.
+  vim.api.nvim_create_autocmd("BufReadCmd", {
+    group = vim.api.nvim_create_augroup("JarUriRead", { clear = true }),
+    pattern = { "jar://*", "zipfile://*" },
+    callback = function(args)
+      local uri = args.match
+      -- Strip "jar:" / "zipfile:" scheme and optional "file://" prefix,
+      -- collapse leading slashes. Result: "<absolute-jar-path>!/<inner>".
+      local rest = uri:gsub("^jar:", ""):gsub("^zipfile:", ""):gsub("^file://", "")
+      rest = rest:gsub("^/+", "/")
+      local jar, inner = rest:match("^(.-)!/(.+)$")
+      if not jar or not inner then
+        vim.notify("Could not parse jar URI: " .. uri, vim.log.levels.ERROR, { title = "jar" })
+        return
+      end
+
+      local lines = vim.fn.systemlist({ "unzip", "-p", jar, inner })
+      if vim.v.shell_error ~= 0 then
+        vim.notify(
+          "unzip failed for " .. inner .. " in " .. jar,
+          vim.log.levels.ERROR,
+          { title = "jar" }
+        )
+        return
+      end
+
+      vim.api.nvim_buf_set_lines(args.buf, 0, -1, false, lines)
+      vim.bo[args.buf].modifiable = false
+      vim.bo[args.buf].readonly = true
+      vim.bo[args.buf].buftype = "nofile"
+      vim.bo[args.buf].swapfile = false
+      local ft = vim.filetype.match({ filename = inner })
+      if ft then vim.bo[args.buf].filetype = ft end
+    end,
+    desc = "Read source entries from inside JAR archives (kotlin-lsp goto-def)",
+  })
+
 end
 
 return M

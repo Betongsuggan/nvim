@@ -8,6 +8,30 @@ function M.setup()
   -- diagnostic floats, ui.select). Replaces per-call border overrides.
   vim.o.winborder = "rounded"
 
+  -- Over SSH there is no local xclip/wl-copy/pbcopy, so `clipboard=unnamedplus`
+  -- has nothing to write to. Route the + and * registers through OSC 52 so the
+  -- terminal forwards yanks to the local client's clipboard instead.
+  if vim.env.SSH_TTY or vim.env.SSH_CONNECTION then
+    local osc52 = require("vim.ui.clipboard.osc52")
+    local function paste_unnamed()
+      return {
+        vim.fn.split(vim.fn.getreg(""), "\n"),
+        vim.fn.getregtype(""),
+      }
+    end
+    vim.g.clipboard = {
+      name = "OSC 52",
+      copy = {
+        ["+"] = osc52.copy("+"),
+        ["*"] = osc52.copy("*"),
+      },
+      paste = {
+        ["+"] = paste_unnamed,
+        ["*"] = paste_unnamed,
+      },
+    }
+  end
+
   vim.diagnostic.config({
     float = {
       source = true,

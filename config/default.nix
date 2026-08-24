@@ -108,6 +108,12 @@ in {
           width = 0.9,
           height = 0.9,
           border = "rounded",
+          wo = {
+            -- Non-zero scrolloff desyncs the drawn cursor row from the
+            -- terminal grid row until a resize forces a re-render
+            scrolloff = 0,
+            sidescrolloff = 0,
+          },
         },
       },
 

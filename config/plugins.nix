@@ -67,6 +67,10 @@ let
               width = 0.9;
               height = 0.9;
               border = "rounded";
+              wo = {
+                scrolloff = 0;
+                sidescrolloff = 0;
+              };
             };
           };
           win.enabled = true;

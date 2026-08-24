@@ -24,9 +24,6 @@ in
     "lua/config/keymaps.lua" = {
       text = builtins.readFile ../lua/config/keymaps.lua;
     };
-    "lua/config/rust.lua" = {
-      text = builtins.readFile ../lua/config/rust.lua;
-    };
   };
 
   # Additional packages needed by plugins
@@ -75,9 +72,6 @@ in
     kanagawa-nvim
     rose-pine
 
-    # Rust plugins
-    rustaceanvim
-    crates-nvim
   ];
 
   # Initialize all Lua modules
@@ -87,8 +81,5 @@ in
 
     -- Keymap helper functions (close_other_buffers, project run/build/test).
     require('config.keymaps').setup()
-
-    -- Rust-specific config (rustaceanvim + crates.nvim).
-    require('config.rust').setup()
   '';
 }

@@ -98,6 +98,21 @@
           icon = "R";
         }
         {
+          __unkeyed-1 = "<leader>C";
+          group = "Crates";
+          icon = "C";
+        }
+        {
+          __unkeyed-1 = "<leader>m";
+          group = "Markdown";
+          icon = "M";
+        }
+        {
+          __unkeyed-1 = "<leader>q";
+          group = "Quit/Session";
+          icon = "Q";
+        }
+        {
           __unkeyed-1 = "<C-a>";
           desc = "Toggle Claude";
           icon = "C";

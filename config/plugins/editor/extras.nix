@@ -1,4 +1,4 @@
-# Phase 5 ergonomic plugins: flash, grug-far, undotree, themery, persistence.
+# Ergonomic plugins: flash, grug-far, themery, persistence.
 { pkgs, ... }:
 {
   plugins = {

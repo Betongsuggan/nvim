@@ -46,6 +46,5 @@
     maplocalleader = " ";
   };
 
-  # LSP UI, diagnostics, and other config is now in lua/config/init.lua
-  # Theme colors and UI setup is now in lua/theme/ and lua/config/ui.lua
+  # LSP UI, diagnostics, and other config is in lua/config/init.lua
 }

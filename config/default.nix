@@ -24,16 +24,15 @@ in
     "lua/config/keymaps.lua" = {
       text = builtins.readFile ../lua/config/keymaps.lua;
     };
+    "lua/config/floating_diff.lua" = {
+      text = builtins.readFile ../lua/config/floating_diff.lua;
+    };
   };
 
   # Additional packages needed by plugins
   extraPackages = with pkgs; [
     ripgrep # Required by Snacks.picker.grep
     unzip # Required by the kotlin-lsp jar:// reader (lua/config/init.lua)
-    # Nerd Fonts for proper icon display
-    nerd-fonts.fira-code
-    nerd-fonts.jetbrains-mono
-    nerd-fonts.hack
     # Go tooling
     go # Required by neotest-golang test runs
     # Debugging tools
@@ -45,8 +44,6 @@ in
     nixfmt # Nix formatter
     golines # Go line-length formatter (conform)
     gofumpt # Go formatter, golines base formatter (conform)
-    prettierd # TypeScript/JavaScript formatter
-    eslint_d # TypeScript/JavaScript linter
     # Rust tooling
     rust-analyzer # Rust language server
     rustfmt # Rust formatter

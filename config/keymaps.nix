@@ -144,32 +144,6 @@
         desc = "Next buffer";
       };
     }
-    {
-      mode = "n";
-      key = "<leader>bn";
-      action = "<cmd>bnext<CR>";
-      options = {
-        desc = "Next buffer";
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>bp";
-      action = "<cmd>bprevious<CR>";
-      options = {
-        desc = "Previous buffer";
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>bb";
-      action = {
-        __raw = "function() Snacks.picker.buffers() end";
-      };
-      options = {
-        desc = "Buffer picker";
-      };
-    }
 
     # Window management
     {
@@ -381,16 +355,6 @@
     }
     {
       mode = "n";
-      key = "<leader>fd";
-      action = {
-        __raw = "function() Snacks.picker.lsp_symbols() end";
-      };
-      options = {
-        desc = "Document symbols";
-      };
-    }
-    {
-      mode = "n";
       key = "<leader>fw";
       action = {
         __raw = "function() Snacks.picker.lsp_workspace_symbols() end";
@@ -503,7 +467,7 @@
     }
     {
       mode = "n";
-      key = "<leader>sr";
+      key = "<leader>lR";
       action = "<cmd>LspRestart<CR>";
       options = {
         desc = "LSP: restart clients for buffer";
@@ -511,7 +475,7 @@
     }
     {
       mode = "n";
-      key = "<leader>ss";
+      key = "<leader>ls";
       action = "<cmd>LspRefresh<CR>";
       options = {
         desc = "LSP: sync (notify of disk change)";
@@ -519,7 +483,7 @@
     }
     {
       mode = "n";
-      key = "<leader>sh";
+      key = "<leader>lH";
       action = "<cmd>checkhealth vim.lsp<CR>";
       options = {
         desc = "LSP: health check";

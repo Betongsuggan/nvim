@@ -1,4 +1,5 @@
-{ pkgs, ... }: {
+{ ... }:
+{
   plugins.markdown-preview = {
     enable = true;
     settings = {
@@ -8,7 +9,43 @@
     };
   };
 
-  extraPlugins = [ pkgs.vimPlugins.render-markdown-nvim ];
+  # render-markdown: In-editor visual rendering
+  plugins.render-markdown = {
+    enable = true;
+    settings = {
+      enabled = true;
+      render_modes = [
+        "n"
+        "c"
+      ];
+      file_types = [ "markdown" ];
+      heading = {
+        enabled = true;
+        icons = [
+          "󰲡 "
+          "󰲣 "
+          "󰲥 "
+          "󰲧 "
+          "󰲩 "
+          "󰲫 "
+        ];
+      };
+      code = {
+        enabled = true;
+        style = "full";
+        border = "thin";
+      };
+      checkbox = {
+        enabled = true;
+        unchecked = {
+          icon = "󰄱 ";
+        };
+        checked = {
+          icon = "󰄵 ";
+        };
+      };
+    };
+  };
 
   extraConfigLua = ''
     -- markdown-preview: Open in new Firefox window
@@ -18,27 +55,6 @@
       endfunction
       let g:mkdp_browserfunc = 'OpenMarkdownPreview'
     ]])
-
-    -- render-markdown: In-editor visual rendering
-    require('render-markdown').setup({
-      enabled = true,
-      render_modes = { 'n', 'c' },
-      file_types = { 'markdown' },
-      heading = {
-        enabled = true,
-        icons = { '󰲡 ', '󰲣 ', '󰲥 ', '󰲧 ', '󰲩 ', '󰲫 ' },
-      },
-      code = {
-        enabled = true,
-        style = 'full',
-        border = 'thin',
-      },
-      checkbox = {
-        enabled = true,
-        unchecked = { icon = '󰄱 ' },
-        checked = { icon = '󰄵 ' },
-      },
-    })
   '';
 
   keymaps = [

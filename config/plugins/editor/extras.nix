@@ -2,6 +2,23 @@
 { pkgs, ... }:
 {
   plugins = {
+    # flash.nvim: treesitter-aware motions
+    flash = {
+      enable = true;
+      settings = {
+        labels = "asdfghjklqwertyuiopzxcvbnm";
+        modes = {
+          char = {
+            enabled = true;
+            jump_labels = true;
+          };
+          search = {
+            enabled = false;
+          };
+        };
+      };
+    };
+
     # Project-wide search & replace with live preview, per-result opt-out.
     grug-far = {
       enable = true;
@@ -26,12 +43,9 @@
     };
   };
 
-  # flash.nvim and themery.nvim aren't exposed as nixvim module wrappers,
-  # so we install them as raw plugins and configure them in Lua.
-  extraPlugins = [
-    pkgs.vimPlugins.flash-nvim
-    pkgs.vimPlugins.themery-nvim
-  ];
+  # themery.nvim has no nixvim module wrapper, so it stays a raw plugin
+  # configured in Lua below.
+  extraPlugins = [ pkgs.vimPlugins.themery-nvim ];
 
   keymaps = [
     # flash.nvim motions
@@ -161,15 +175,6 @@
   ];
 
   extraConfigLua = ''
-    -- flash.nvim: treesitter-aware motions
-    require('flash').setup({
-      labels = "asdfghjklqwertyuiopzxcvbnm",
-      modes = {
-        char = { enabled = true, jump_labels = true },
-        search = { enabled = false },
-      },
-    })
-
     -- themery.nvim: theme switcher with live preview + persistence
     require('themery').setup({
       themes = {

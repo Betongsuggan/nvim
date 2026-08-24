@@ -1,7 +1,6 @@
 { pkgs, ... }:
 let
   theme = import ./theme.nix;
-  kotlin-lsp = pkgs.callPackage ./packages/kotlin-lsp.nix { };
 in
 {
   imports = [
@@ -58,8 +57,7 @@ in
     cargo # Rust package manager
     rustc # Rust compiler
 
-    # Kotlin tooling
-    kotlin-lsp # Official JetBrains Kotlin LSP (packaged in ./packages/)
+    # Kotlin tooling (kotlin-lsp itself comes via plugins.lsp.servers.kotlin_lsp.package)
     ktfmt # Kotlin formatter (Google)
 
     gcc

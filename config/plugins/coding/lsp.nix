@@ -1,5 +1,6 @@
 # LSP server configurations
-{ ... }: {
+{ pkgs, ... }:
+{
   # Fidget surfaces $/progress notifications from LSP servers in the corner of
   # the screen — important for the JetBrains kotlin-lsp, which takes ~9 s on a
   # warm cache (and ~25 s cold) to finish Gradle re-validation and workspace
@@ -157,18 +158,12 @@
         settings = {
           nixd = {
             nixpkgs = {
-              expr = "import <nixpkgs> { }";
+              # Pin to the flake's own nixpkgs; <nixpkgs> needs NIX_PATH,
+              # which this flake-built nvim doesn't have.
+              expr = "import ${pkgs.path} { }";
             };
             formatting = {
               command = [ "nixfmt" ];
-            };
-            options = {
-              nixos = {
-                expr = ''(builtins.getFlake "/etc/nixos").nixosConfigurations.HOSTNAME.options'';
-              };
-              home_manager = {
-                expr = ''(builtins.getFlake "/etc/nixos").homeConfigurations.USERNAME.options'';
-              };
             };
           };
         };
@@ -176,8 +171,9 @@
 
       kotlin_lsp = {
         enable = true;
-        # Binary `kotlin-lsp` comes from extraPackages (our derivation in
-        # ./packages/kotlin-lsp.nix). Newer JetBrains releases bundle their own JRE.
+        # Our own derivation — nixpkgs has no kotlin-lsp package. Newer
+        # JetBrains releases bundle their own JRE.
+        package = pkgs.callPackage ../../packages/kotlin-lsp.nix { };
         cmd = [
           "kotlin-lsp"
           "--stdio"

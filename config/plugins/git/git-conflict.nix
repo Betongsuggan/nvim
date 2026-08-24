@@ -29,43 +29,64 @@
       mode = "n";
       key = "<leader>gco";
       action = "<cmd>GitConflictChooseOurs<CR>";
-      options = { desc = "Conflict: choose ours"; silent = true; };
+      options = {
+        desc = "Conflict: choose ours";
+        silent = true;
+      };
     }
     {
       mode = "n";
       key = "<leader>gct";
       action = "<cmd>GitConflictChooseTheirs<CR>";
-      options = { desc = "Conflict: choose theirs"; silent = true; };
+      options = {
+        desc = "Conflict: choose theirs";
+        silent = true;
+      };
     }
     {
       mode = "n";
       key = "<leader>gcb";
       action = "<cmd>GitConflictChooseBoth<CR>";
-      options = { desc = "Conflict: choose both"; silent = true; };
+      options = {
+        desc = "Conflict: choose both";
+        silent = true;
+      };
     }
     {
       mode = "n";
       key = "<leader>gcn";
       action = "<cmd>GitConflictChooseNone<CR>";
-      options = { desc = "Conflict: choose none"; silent = true; };
+      options = {
+        desc = "Conflict: choose none";
+        silent = true;
+      };
     }
     {
       mode = "n";
       key = "<leader>gcl";
       action = "<cmd>GitConflictListQf<CR>";
-      options = { desc = "Conflict: list project conflicts (float)"; silent = true; };
+      options = {
+        desc = "Conflict: list project conflicts (float)";
+        silent = true;
+      };
     }
     {
       mode = "n";
       key = "<leader>gcN";
       action = "<cmd>GitConflictNextConflict<CR>";
-      options = { desc = "Conflict: next"; silent = true; };
+      options = {
+        desc = "Conflict: next";
+        silent = true;
+      };
     }
     {
       mode = "n";
       key = "<leader>gcp";
       action = "<cmd>GitConflictPrevConflict<CR>";
-      options = { desc = "Conflict: previous"; silent = true; };
+      options = {
+        desc = "Conflict: previous";
+        silent = true;
+      };
     }
   ];
 }

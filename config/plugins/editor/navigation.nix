@@ -4,9 +4,18 @@
     aerial = {
       enable = true;
       settings = {
-        backends = [ "lsp" "treesitter" "markdown" "asciidoc" "man" ];
+        backends = [
+          "lsp"
+          "treesitter"
+          "markdown"
+          "asciidoc"
+          "man"
+        ];
         layout = {
-          max_width = [ 40 0.2 ];
+          max_width = [
+            40
+            0.2
+          ];
           width = null;
           min_width = 10;
           win_opts = { };
@@ -89,7 +98,10 @@
           relative = "cursor";
           max_height = 0.9;
           height = null;
-          min_height = [ 8 0.1 ];
+          min_height = [
+            8
+            0.1
+          ];
           override = {
             __raw = ''
               function(conf, source_winid)
@@ -120,8 +132,12 @@
             '';
           };
         };
-        treesitter = { update_delay = 300; };
-        markdown = { update_delay = 300; };
+        treesitter = {
+          update_delay = 300;
+        };
+        markdown = {
+          update_delay = 300;
+        };
       };
     };
   };

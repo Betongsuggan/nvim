@@ -12,14 +12,24 @@
     {
       mode = "n";
       key = "<leader>gd";
-      action = { __raw = "function() _G.git_floating_diff('HEAD') end"; };
-      options = { desc = "Diff current file vs HEAD (float)"; silent = true; };
+      action = {
+        __raw = "function() _G.git_floating_diff('HEAD') end";
+      };
+      options = {
+        desc = "Diff current file vs HEAD (float)";
+        silent = true;
+      };
     }
     {
       mode = "n";
       key = "<leader>gr";
-      action = { __raw = "function() _G.git_floating_diff_prompt() end"; };
-      options = { desc = "Diff current file vs <ref> (float)"; silent = true; };
+      action = {
+        __raw = "function() _G.git_floating_diff_prompt() end";
+      };
+      options = {
+        desc = "Diff current file vs <ref> (float)";
+        silent = true;
+      };
     }
   ];
 

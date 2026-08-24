@@ -1,6 +1,5 @@
 { pkgs, ... }:
 let
-  theme = import ./theme.nix;
 
   lsp = import ./plugins/coding/lsp.nix { };
   completion = import ./plugins/coding/completion.nix { };
@@ -37,8 +36,12 @@ let
           dashboard.enabled = false;
           indent = {
             enabled = true;
-            indent = { enabled = false; };  # no full-height indent guide lines
-            scope = { enabled = true; };    # keep the scope highlight at the cursor
+            indent = {
+              enabled = false;
+            }; # no full-height indent guide lines
+            scope = {
+              enabled = true;
+            }; # keep the scope highlight at the cursor
           };
           input.enabled = true;
           notifier = {
@@ -48,16 +51,29 @@ let
           picker = {
             enabled = true;
             ui_select = true;
-            layout = { preset = "default"; };
+            layout = {
+              preset = "default";
+            };
           };
           quickfile.enabled = true;
           scope.enabled = false;
           scroll.enabled = false;
           statuscolumn = {
             enabled = true;
-            left = [ "mark" "sign" ];
-            right = [ "fold" "git" ];
-            git = { patterns = [ "GitSign" "MiniDiffSign" ]; };
+            left = [
+              "mark"
+              "sign"
+            ];
+            right = [
+              "fold"
+              "git"
+            ];
+            git = {
+              patterns = [
+                "GitSign"
+                "MiniDiffSign"
+              ];
+            };
           };
           words.enabled = true;
           terminal = {
@@ -78,18 +94,33 @@ let
       };
     };
   };
-in {
-  plugins = lsp.plugins // completion.plugins // treesitter.plugins
-    // editing.plugins // navigation.plugins // extras.plugins
-    // statusline.plugins // whichKey.plugins // (icons.plugins or { })
-    // gitsigns.plugins // (diffview.plugins or { })
+in
+{
+  plugins =
+    lsp.plugins
+    // completion.plugins
+    // treesitter.plugins
+    // editing.plugins
+    // navigation.plugins
+    // extras.plugins
+    // statusline.plugins
+    // whichKey.plugins
+    // (icons.plugins or { })
+    // gitsigns.plugins
+    // (diffview.plugins or { })
     // (gitConflict.plugins or { })
-    // trouble.plugins // neotest.plugins
-    // markdown.plugins // snacks.plugins;
+    // trouble.plugins
+    // neotest.plugins
+    // markdown.plugins
+    // snacks.plugins;
 
-  keymaps = (editing.keymaps or [ ]) ++ (neotest.keymaps or [ ])
-    ++ (markdown.keymaps or [ ]) ++ (extras.keymaps or [ ])
-    ++ (diffview.keymaps or [ ]) ++ (floatingDiff.keymaps or [ ])
+  keymaps =
+    (editing.keymaps or [ ])
+    ++ (neotest.keymaps or [ ])
+    ++ (markdown.keymaps or [ ])
+    ++ (extras.keymaps or [ ])
+    ++ (diffview.keymaps or [ ])
+    ++ (floatingDiff.keymaps or [ ])
     ++ (gitConflict.keymaps or [ ]);
 
   autoCmd = (editing.autoCmd or [ ]);
@@ -102,11 +133,20 @@ in {
     (floatingDiff.extraConfigLua or "")
   ];
 
-  extraPlugins = with pkgs.vimPlugins;
-    [ neotest-golang neotest-jest neotest-gradle neotest-plenary ]
+  extraPlugins =
+    with pkgs.vimPlugins;
+    [
+      neotest-golang
+      neotest-jest
+      neotest-gradle
+      neotest-plenary
+    ]
     ++ (icons.extraPlugins or [ ])
     ++ (markdown.extraPlugins or [ ])
     ++ (extras.extraPlugins or [ ]);
 
-  extraPackages = with pkgs; [ go delve ];
+  extraPackages = with pkgs; [
+    go
+    delve
+  ];
 }

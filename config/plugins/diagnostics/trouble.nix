@@ -12,7 +12,10 @@
             border = "rounded";
             title = "Preview";
             title_pos = "center";
-            position = [ 0 2 ];
+            position = [
+              0
+              2
+            ];
             size = {
               width = 0.4;
               height = 0.4;
@@ -22,14 +25,19 @@
         };
         buffer_diagnostics = {
           mode = "diagnostics";
-          filter = { buf = 0; };
+          filter = {
+            buf = 0;
+          };
           preview = {
             type = "float";
             relative = "editor";
             border = "rounded";
             title = "Preview";
             title_pos = "center";
-            position = [ 0 2 ];
+            position = [
+              0
+              2
+            ];
             size = {
               width = 0.4;
               height = 0.4;
@@ -95,7 +103,10 @@
         border = "rounded";
         title = "Preview";
         title_pos = "center";
-        position = [ 0 2 ];
+        position = [
+          0
+          2
+        ];
         size = {
           width = 0.4;
           height = 0.4;
@@ -128,7 +139,10 @@
         "{" = "prev";
         "[[" = "prev";
         dd = "delete";
-        d = { action = "delete"; mode = "v"; };
+        d = {
+          action = "delete";
+          mode = "v";
+        };
         i = "inspect";
         p = "preview";
         P = "toggle_preview";

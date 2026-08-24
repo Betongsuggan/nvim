@@ -11,7 +11,10 @@
       progress = {
         display = {
           done_icon = "";
-          progress_icon = { pattern = "dots"; period = 1; };
+          progress_icon = {
+            pattern = "dots";
+            period = 1;
+          };
         };
       };
       notification = {
@@ -64,12 +67,24 @@
         settings = {
           typescript = {
             inlayHints = {
-              parameterNames = { enabled = "all"; };
-              parameterTypes = { enabled = true; };
-              variableTypes = { enabled = true; };
-              propertyDeclarationTypes = { enabled = true; };
-              functionLikeReturnTypes = { enabled = true; };
-              enumMemberValues = { enabled = true; };
+              parameterNames = {
+                enabled = "all";
+              };
+              parameterTypes = {
+                enabled = true;
+              };
+              variableTypes = {
+                enabled = true;
+              };
+              propertyDeclarationTypes = {
+                enabled = true;
+              };
+              functionLikeReturnTypes = {
+                enabled = true;
+              };
+              enumMemberValues = {
+                enabled = true;
+              };
             };
             suggest = {
               autoImports = true;
@@ -81,17 +96,33 @@
               importModuleSpecifier = "shortest";
               includePackageJsonAutoImports = "on";
             };
-            updateImportsOnFileMove = { enabled = "always"; };
-            workspaceSymbols = { scope = "allOpenProjects"; };
+            updateImportsOnFileMove = {
+              enabled = "always";
+            };
+            workspaceSymbols = {
+              scope = "allOpenProjects";
+            };
           };
           javascript = {
             inlayHints = {
-              parameterNames = { enabled = "all"; };
-              parameterTypes = { enabled = true; };
-              variableTypes = { enabled = true; };
-              propertyDeclarationTypes = { enabled = true; };
-              functionLikeReturnTypes = { enabled = true; };
-              enumMemberValues = { enabled = true; };
+              parameterNames = {
+                enabled = "all";
+              };
+              parameterTypes = {
+                enabled = true;
+              };
+              variableTypes = {
+                enabled = true;
+              };
+              propertyDeclarationTypes = {
+                enabled = true;
+              };
+              functionLikeReturnTypes = {
+                enabled = true;
+              };
+              enumMemberValues = {
+                enabled = true;
+              };
             };
             suggest = {
               autoImports = true;
@@ -103,15 +134,21 @@
               importModuleSpecifier = "shortest";
               includePackageJsonAutoImports = "on";
             };
-            updateImportsOnFileMove = { enabled = "always"; };
+            updateImportsOnFileMove = {
+              enabled = "always";
+            };
           };
           vtsls = {
             autoUseWorkspaceTsdk = true;
             experimental = {
-              completion = { enableServerSideFuzzyMatch = true; };
+              completion = {
+                enableServerSideFuzzyMatch = true;
+              };
             };
           };
-          completions = { completeFunctionCalls = true; };
+          completions = {
+            completeFunctionCalls = true;
+          };
         };
       };
 
@@ -119,16 +156,18 @@
         enable = true;
         settings = {
           nixd = {
-            nixpkgs = { expr = "import <nixpkgs> { }"; };
-            formatting = { command = [ "nixfmt" ]; };
+            nixpkgs = {
+              expr = "import <nixpkgs> { }";
+            };
+            formatting = {
+              command = [ "nixfmt" ];
+            };
             options = {
               nixos = {
-                expr = ''
-                  (builtins.getFlake "/etc/nixos").nixosConfigurations.HOSTNAME.options'';
+                expr = ''(builtins.getFlake "/etc/nixos").nixosConfigurations.HOSTNAME.options'';
               };
               home_manager = {
-                expr = ''
-                  (builtins.getFlake "/etc/nixos").homeConfigurations.USERNAME.options'';
+                expr = ''(builtins.getFlake "/etc/nixos").homeConfigurations.USERNAME.options'';
               };
             };
           };
@@ -139,7 +178,10 @@
         enable = true;
         # Binary `kotlin-lsp` comes from extraPackages (our derivation in
         # ./packages/kotlin-lsp.nix). Newer JetBrains releases bundle their own JRE.
-        cmd = [ "kotlin-lsp" "--stdio" ];
+        cmd = [
+          "kotlin-lsp"
+          "--stdio"
+        ];
         filetypes = [ "kotlin" ];
         rootMarkers = [
           "settings.gradle.kts"
@@ -153,7 +195,9 @@
       };
 
       # Rust LSP is handled by rustaceanvim plugin
-      rust_analyzer = { enable = false; };
+      rust_analyzer = {
+        enable = false;
+      };
     };
   };
 }

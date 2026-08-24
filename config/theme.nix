@@ -24,7 +24,8 @@ let
   # nord, onedark, nightfox, dracula, kanagawa, rose-pine
   defaultTheme = "catppuccin";
 
-in {
+in
+{
   # Theme name (used by lualine and passed to Lua setup)
   name = defaultTheme;
 

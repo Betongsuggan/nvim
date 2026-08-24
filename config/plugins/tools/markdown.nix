@@ -46,13 +46,19 @@
       mode = "n";
       key = "<leader>mp";
       action = "<cmd>MarkdownPreviewToggle<CR>";
-      options = { desc = "Toggle markdown preview (browser)"; };
+      options = {
+        desc = "Toggle markdown preview (browser)";
+      };
     }
     {
       mode = "n";
       key = "<leader>mr";
-      action = { __raw = "function() require('render-markdown').toggle() end"; };
-      options = { desc = "Toggle render-markdown (in-editor)"; };
+      action = {
+        __raw = "function() require('render-markdown').toggle() end";
+      };
+      options = {
+        desc = "Toggle render-markdown (in-editor)";
+      };
     }
   ];
 }

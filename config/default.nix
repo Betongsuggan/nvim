@@ -2,8 +2,13 @@
 let
   theme = import ./theme.nix;
   kotlin-lsp = pkgs.callPackage ./packages/kotlin-lsp.nix { };
-in {
-  imports = [ ./options.nix ./plugins.nix ./keymaps.nix ];
+in
+{
+  imports = [
+    ./options.nix
+    ./plugins.nix
+    ./keymaps.nix
+  ];
 
   # Core nixvim configuration
   viAlias = true;

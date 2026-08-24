@@ -8,8 +8,12 @@ function M.close_other_buffers()
   local current_buf = vim.api.nvim_get_current_buf()
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
     if buf ~= current_buf and vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_buf_is_loaded(buf) then
-      local ok_t, buftype = pcall(function() return vim.bo[buf].buftype end)
-      local ok_f, filetype = pcall(function() return vim.bo[buf].filetype end)
+      local ok_t, buftype = pcall(function()
+        return vim.bo[buf].buftype
+      end)
+      local ok_f, filetype = pcall(function()
+        return vim.bo[buf].filetype
+      end)
       local name = vim.api.nvim_buf_get_name(buf)
       local is_terminal = (ok_t and buftype == "terminal")
         or name:match("^term://")
@@ -37,17 +41,25 @@ function M.toggle_inlay_hints()
 end
 
 local function detect_project_type()
-  if vim.fn.filereadable("go.mod") == 1 then return "go"
-  elseif vim.fn.filereadable("package.json") == 1 then return "node"
-  elseif vim.fn.filereadable("Cargo.toml") == 1 then return "rust"
-  elseif vim.fn.filereadable("Makefile") == 1 then return "make"
+  if vim.fn.filereadable("go.mod") == 1 then
+    return "go"
+  elseif vim.fn.filereadable("package.json") == 1 then
+    return "node"
+  elseif vim.fn.filereadable("Cargo.toml") == 1 then
+    return "rust"
+  elseif vim.fn.filereadable("Makefile") == 1 then
+    return "make"
   end
   return nil
 end
 
 local function run_cmd_for(project, cmds)
   local cmd = cmds[project]
-  if cmd then vim.cmd("!" .. cmd) else print("No recognized project type") end
+  if cmd then
+    vim.cmd("!" .. cmd)
+  else
+    print("No recognized project type")
+  end
 end
 
 function M.run_tests()

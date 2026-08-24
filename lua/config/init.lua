@@ -44,10 +44,10 @@ function M.setup()
     virtual_lines = { current_line = true },
     signs = {
       text = {
-        [vim.diagnostic.severity.ERROR] = "",  -- nf-fa-times-circle  U+F057
-        [vim.diagnostic.severity.WARN]  = "",  -- nf-fa-warning       U+F071
-        [vim.diagnostic.severity.INFO]  = "",  -- nf-fa-info-circle   U+F05A
-        [vim.diagnostic.severity.HINT]  = "",  -- nf-fa-lightbulb_o   U+F0EB
+        [vim.diagnostic.severity.ERROR] = "", -- nf-fa-times-circle  U+F057
+        [vim.diagnostic.severity.WARN] = "", -- nf-fa-warning       U+F071
+        [vim.diagnostic.severity.INFO] = "", -- nf-fa-info-circle   U+F05A
+        [vim.diagnostic.severity.HINT] = "", -- nf-fa-lightbulb_o   U+F0EB
       },
     },
     underline = true,
@@ -61,33 +61,33 @@ function M.setup()
   -- Show trailing whitespace and problematic whitespace
   vim.opt.list = true
   vim.opt.listchars = {
-    trail = '.',      -- Show trailing spaces
-    tab = '  ',       -- Don't show tabs (use spaces consistently)
-    nbsp = '_',       -- Show non-breaking spaces
-    extends = '>',    -- Show when line continues beyond screen
-    precedes = '<'    -- Show when line begins beyond screen
+    trail = ".", -- Show trailing spaces
+    tab = "  ", -- Don't show tabs (use spaces consistently)
+    nbsp = "_", -- Show non-breaking spaces
+    extends = ">", -- Show when line continues beyond screen
+    precedes = "<", -- Show when line begins beyond screen
   }
 
   -- Highlight current line with background but no underline
-  vim.opt.cursorlineopt = 'both'  -- Highlight both line and number
+  vim.opt.cursorlineopt = "both" -- Highlight both line and number
 
   -- Treesitter-aware folding (smarter than indent-based).
-  vim.opt.foldmethod = 'expr'
-  vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+  vim.opt.foldmethod = "expr"
+  vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
   vim.opt.foldlevel = 99
   vim.opt.foldlevelstart = 99
   vim.opt.foldenable = true
-  vim.opt.foldcolumn = '0'
+  vim.opt.foldcolumn = "0"
 
   -- Custom fold text function
   function _G.custom_fold_text()
     local line = vim.fn.getline(vim.v.foldstart)
     local line_count = vim.v.foldend - vim.v.foldstart + 1
-    local indent = string.match(line, '^%s*') or ""
-    local text = string.gsub(line, '^%s*', "")
-    return indent .. '| ' .. text .. ' ... ' .. line_count .. ' lines |'
+    local indent = string.match(line, "^%s*") or ""
+    local text = string.gsub(line, "^%s*", "")
+    return indent .. "| " .. text .. " ... " .. line_count .. " lines |"
   end
-  vim.opt.foldtext = 'v:lua.custom_fold_text()'
+  vim.opt.foldtext = "v:lua.custom_fold_text()"
 
   -- External file change handling
   local file_change_grp = vim.api.nvim_create_augroup("ExternalFileChange", { clear = true })
@@ -96,9 +96,15 @@ function M.setup()
     group = file_change_grp,
     pattern = "*",
     callback = function()
-      if vim.fn.mode() == "c" then return end
-      if vim.bo.buftype ~= "" then return end
-      if vim.fn.expand("%") == "" then return end
+      if vim.fn.mode() == "c" then
+        return
+      end
+      if vim.bo.buftype ~= "" then
+        return
+      end
+      if vim.fn.expand("%") == "" then
+        return
+      end
       vim.cmd("checktime")
     end,
     desc = "Check for external file changes",
@@ -139,7 +145,9 @@ function M.setup()
     pcall(vim.cmd, "checktime")
 
     local gs_ok, gitsigns = pcall(require, "gitsigns")
-    if gs_ok and gitsigns.refresh then pcall(gitsigns.refresh) end
+    if gs_ok and gitsigns.refresh then
+      pcall(gitsigns.refresh)
+    end
 
     -- git-conflict's :GitConflictRefresh re-parses every loaded buffer
     -- and rebuilds the internal conflict table that backs :GitConflictListQf.
@@ -166,14 +174,16 @@ function M.setup()
     callback = function()
       -- Defer slightly so any in-flight checktime / file reload settles
       -- before we ask plugins to re-scan from disk.
-      vim.defer_fn(function() refresh_git_state() end, 100)
+      vim.defer_fn(function()
+        refresh_git_state()
+      end, 100)
     end,
     desc = "Refresh gitsigns/git-conflict/diffview state",
   })
 
-  vim.api.nvim_create_user_command("GitRefresh",
-    function() refresh_git_state({ notify = true }) end,
-    { desc = "Re-sync git-aware plugins (gitsigns, git-conflict, diffview)" })
+  vim.api.nvim_create_user_command("GitRefresh", function()
+    refresh_git_state({ notify = true })
+  end, { desc = "Re-sync git-aware plugins (gitsigns, git-conflict, diffview)" })
 
   -- Native LSP restart for the current buffer (replaces lspconfig's :LspRestart).
   -- Stops attached clients, then re-edits the buffer so configured servers re-attach.
@@ -184,7 +194,9 @@ function M.setup()
       vim.notify("No LSP clients attached", vim.log.levels.INFO, { title = "LSP" })
       return
     end
-    local names = vim.tbl_map(function(c) return c.name end, clients)
+    local names = vim.tbl_map(function(c)
+      return c.name
+    end, clients)
     for _, client in ipairs(clients) do
       vim.lsp.stop_client(client.id, true)
     end
@@ -194,8 +206,9 @@ function M.setup()
     end, 200)
   end
 
-  vim.api.nvim_create_user_command("LspRestart", function() restart_lsp() end,
-    { desc = "Restart LSP clients attached to the current buffer" })
+  vim.api.nvim_create_user_command("LspRestart", function()
+    restart_lsp()
+  end, { desc = "Restart LSP clients attached to the current buffer" })
 
   -- Notify all LSP clients that a watched file changed. Useful after a git
   -- checkout/rebase if the server's own file watcher missed it.
@@ -208,7 +221,7 @@ function M.setup()
     local file = vim.uri_from_bufnr(0)
     for _, client in ipairs(clients) do
       client:notify("workspace/didChangeWatchedFiles", {
-        changes = { { uri = file, type = 2 } },  -- 2 = Changed
+        changes = { { uri = file, type = 2 } }, -- 2 = Changed
       })
     end
     vim.notify("Sent didChangeWatchedFiles to LSP", vim.log.levels.INFO, { title = "LSP" })
@@ -238,11 +251,7 @@ function M.setup()
 
       local lines = vim.fn.systemlist({ "unzip", "-p", jar, inner })
       if vim.v.shell_error ~= 0 then
-        vim.notify(
-          "unzip failed for " .. inner .. " in " .. jar,
-          vim.log.levels.ERROR,
-          { title = "jar" }
-        )
+        vim.notify("unzip failed for " .. inner .. " in " .. jar, vim.log.levels.ERROR, { title = "jar" })
         return
       end
 
@@ -252,11 +261,12 @@ function M.setup()
       vim.bo[args.buf].buftype = "nofile"
       vim.bo[args.buf].swapfile = false
       local ft = vim.filetype.match({ filename = inner })
-      if ft then vim.bo[args.buf].filetype = ft end
+      if ft then
+        vim.bo[args.buf].filetype = ft
+      end
     end,
     desc = "Read source entries from inside JAR archives (kotlin-lsp goto-def)",
   })
-
 end
 
 return M

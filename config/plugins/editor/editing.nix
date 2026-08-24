@@ -25,7 +25,10 @@
         formatters_by_ft = {
           lua = [ "stylua" ];
           nix = [ "nixfmt" ];
-          go = [ "golines" "gofumpt" ];
+          go = [
+            "golines"
+            "gofumpt"
+          ];
           kotlin = [ "ktfmt" ];
         };
         format_on_save = {
@@ -34,28 +37,43 @@
         };
         formatters = {
           stylua = {
-            prepend_args = [ "--indent-type" "Spaces" "--indent-width" "2" ];
+            prepend_args = [
+              "--indent-type"
+              "Spaces"
+              "--indent-width"
+              "2"
+            ];
           };
-          nixfmt = { prepend_args = [ "--width" "80" ]; };
+          nixfmt = {
+            prepend_args = [
+              "--width"
+              "80"
+            ];
+          };
           golines = {
-            prepend_args = [ "--max-len=120" "--base-formatter=gofumpt" ];
+            prepend_args = [
+              "--max-len=120"
+              "--base-formatter=gofumpt"
+            ];
           };
         };
       };
     };
   };
 
-  autoCmd = [{
-    event = [ "BufWritePre" ];
-    pattern = [ "*" ];
-    callback = {
-      __raw = ''
-        function()
-          local save = vim.fn.winsaveview()
-          vim.cmd([[%s/\s\+$//e]])
-          vim.fn.winrestview(save)
-        end
-      '';
-    };
-  }];
+  autoCmd = [
+    {
+      event = [ "BufWritePre" ];
+      pattern = [ "*" ];
+      callback = {
+        __raw = ''
+          function()
+            local save = vim.fn.winsaveview()
+            vim.cmd([[%s/\s\+$//e]])
+            vim.fn.winrestview(save)
+          end
+        '';
+      };
+    }
+  ];
 }

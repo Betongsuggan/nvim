@@ -48,7 +48,10 @@
       mode = "n";
       key = "<leader>gD";
       action = "<cmd>DiffviewOpen<CR>";
-      options = { desc = "Diffview: working tree vs HEAD"; silent = true; };
+      options = {
+        desc = "Diffview: working tree vs HEAD";
+        silent = true;
+      };
     }
     {
       mode = "n";
@@ -62,25 +65,37 @@
           end)
         end
       '';
-      options = { desc = "Diffview: working tree vs <ref>"; silent = true; };
+      options = {
+        desc = "Diffview: working tree vs <ref>";
+        silent = true;
+      };
     }
     {
       mode = "n";
       key = "<leader>gH";
       action = "<cmd>DiffviewFileHistory %<CR>";
-      options = { desc = "Diffview: history of current file"; silent = true; };
+      options = {
+        desc = "Diffview: history of current file";
+        silent = true;
+      };
     }
     {
       mode = "n";
       key = "<leader>gL";
       action = "<cmd>DiffviewFileHistory<CR>";
-      options = { desc = "Diffview: history of branch"; silent = true; };
+      options = {
+        desc = "Diffview: history of branch";
+        silent = true;
+      };
     }
     {
       mode = "n";
       key = "<leader>gq";
       action = "<cmd>DiffviewClose<CR>";
-      options = { desc = "Diffview: close current view"; silent = true; };
+      options = {
+        desc = "Diffview: close current view";
+        silent = true;
+      };
     }
   ];
 }

@@ -1,4 +1,12 @@
-{ stdenv, fetchurl, autoPatchelfHook, makeWrapper, unzip, zlib, lib }:
+{
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  makeWrapper,
+  unzip,
+  zlib,
+  lib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "kotlin-lsp";
@@ -18,12 +26,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-8DTptlDfDMStXRRaAXEM4OG/wU21owpC9ijtuWuojAA=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper unzip ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeWrapper
+    unzip
+  ];
 
   # The bundled JetBrains Runtime carries native libs for AWT/Swing, Wayland/X11,
   # audio, etc. None of these are reached when running headless over stdio, so we
   # let autoPatchelf skip them. zlib *is* used at runtime (JAR loading, libzip).
-  buildInputs = [ stdenv.cc.cc.lib zlib ];
+  buildInputs = [
+    stdenv.cc.cc.lib
+    zlib
+  ];
   autoPatchelfIgnoreMissingDeps = true;
 
   dontConfigure = true;

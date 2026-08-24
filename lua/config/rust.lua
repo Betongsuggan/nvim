@@ -5,35 +5,35 @@ local M = {}
 
 -- Setup DAP for Rust debugging with LLDB
 function M.setup_dap()
-  local ok, dap = pcall(require, 'dap')
+  local ok, dap = pcall(require, "dap")
   if not ok then
     return
   end
 
   -- LLDB adapter for Rust
   dap.adapters.lldb = {
-    type = 'executable',
-    command = 'lldb-vscode', -- or 'lldb-dap' depending on your LLDB version
-    name = 'lldb'
+    type = "executable",
+    command = "lldb-vscode", -- or 'lldb-dap' depending on your LLDB version
+    name = "lldb",
   }
 
   -- Rust debugging configuration
   dap.configurations.rust = {
     {
-      name = 'Launch',
-      type = 'lldb',
-      request = 'launch',
+      name = "Launch",
+      type = "lldb",
+      request = "launch",
       program = function()
         -- Try to find the executable in target/debug
         local cwd = vim.fn.getcwd()
-        local package_name = vim.fn.fnamemodify(cwd, ':t')
-        local executable = cwd .. '/target/debug/' .. package_name
+        local package_name = vim.fn.fnamemodify(cwd, ":t")
+        local executable = cwd .. "/target/debug/" .. package_name
 
         -- Check if it exists, otherwise prompt
         if vim.fn.filereadable(executable) == 1 then
           return executable
         else
-          return vim.fn.input('Path to executable: ', cwd .. '/target/debug/', 'file')
+          return vim.fn.input("Path to executable: ", cwd .. "/target/debug/", "file")
         end
       end,
       cwd = vim.fn.getcwd(),
@@ -42,18 +42,18 @@ function M.setup_dap()
       runInTerminal = false,
     },
     {
-      name = 'Launch with arguments',
-      type = 'lldb',
-      request = 'launch',
+      name = "Launch with arguments",
+      type = "lldb",
+      request = "launch",
       program = function()
         local cwd = vim.fn.getcwd()
-        local package_name = vim.fn.fnamemodify(cwd, ':t')
-        return cwd .. '/target/debug/' .. package_name
+        local package_name = vim.fn.fnamemodify(cwd, ":t")
+        return cwd .. "/target/debug/" .. package_name
       end,
       cwd = vim.fn.getcwd(),
       stopOnEntry = false,
       args = function()
-        local args_string = vim.fn.input('Arguments: ')
+        local args_string = vim.fn.input("Arguments: ")
         return vim.split(args_string, " +")
       end,
       runInTerminal = false,
@@ -160,7 +160,7 @@ function M.setup_rustaceanvim()
         end, vim.tbl_extend("force", opts, { desc = "Move Item Down" }))
       end,
       default_settings = {
-        ['rust-analyzer'] = {
+        ["rust-analyzer"] = {
           -- Cargo configuration
           cargo = {
             allFeatures = true,
@@ -271,7 +271,7 @@ end
 
 -- Setup crates.nvim for Cargo.toml management
 function M.setup_crates()
-  local ok, crates = pcall(require, 'crates')
+  local ok, crates = pcall(require, "crates")
   if not ok then
     return
   end
@@ -323,64 +323,63 @@ function M.setup_crates()
 
       -- Toggle extra information
       vim.keymap.set("n", "<leader>ct", function()
-        require('crates').toggle()
+        require("crates").toggle()
       end, vim.tbl_extend("force", opts, { desc = "Toggle Crate Info" }))
 
       -- Reload crate information
       vim.keymap.set("n", "<leader>cR", function()
-        require('crates').reload()
+        require("crates").reload()
       end, vim.tbl_extend("force", opts, { desc = "Reload Crates" }))
 
       -- Show crate versions
       vim.keymap.set("n", "<leader>cv", function()
-        require('crates').show_versions_popup()
+        require("crates").show_versions_popup()
       end, vim.tbl_extend("force", opts, { desc = "Show Versions" }))
 
       -- Show crate features
       vim.keymap.set("n", "<leader>cF", function()
-        require('crates').show_features_popup()
+        require("crates").show_features_popup()
       end, vim.tbl_extend("force", opts, { desc = "Show Features" }))
 
       -- Show crate dependencies
       vim.keymap.set("n", "<leader>cd", function()
-        require('crates').show_dependencies_popup()
+        require("crates").show_dependencies_popup()
       end, vim.tbl_extend("force", opts, { desc = "Show Dependencies" }))
 
       -- Update crate
       vim.keymap.set("n", "<leader>cu", function()
-        require('crates').update_crate()
+        require("crates").update_crate()
       end, vim.tbl_extend("force", opts, { desc = "Update Crate" }))
 
       -- Update all crates
       vim.keymap.set("n", "<leader>cU", function()
-        require('crates').update_all_crates()
+        require("crates").update_all_crates()
       end, vim.tbl_extend("force", opts, { desc = "Update All Crates" }))
 
       -- Upgrade crate
       vim.keymap.set("n", "<leader>cg", function()
-        require('crates').upgrade_crate()
+        require("crates").upgrade_crate()
       end, vim.tbl_extend("force", opts, { desc = "Upgrade Crate" }))
 
       -- Upgrade all crates
       vim.keymap.set("n", "<leader>cG", function()
-        require('crates').upgrade_all_crates()
+        require("crates").upgrade_all_crates()
       end, vim.tbl_extend("force", opts, { desc = "Upgrade All Crates" }))
 
       -- Open documentation
       vim.keymap.set("n", "<leader>cD", function()
-        require('crates').open_documentation()
+        require("crates").open_documentation()
       end, vim.tbl_extend("force", opts, { desc = "Open Documentation" }))
 
       -- Open homepage
       vim.keymap.set("n", "<leader>cH", function()
-        require('crates').open_homepage()
+        require("crates").open_homepage()
       end, vim.tbl_extend("force", opts, { desc = "Open Homepage" }))
 
       -- Open repository
       vim.keymap.set("n", "<leader>cP", function()
-        require('crates').open_repository()
+        require("crates").open_repository()
       end, vim.tbl_extend("force", opts, { desc = "Open Repository" }))
-
     end,
   })
 end

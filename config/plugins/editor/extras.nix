@@ -1,5 +1,9 @@
 # Phase 5 ergonomic plugins: flash, grug-far, undotree, themery, persistence.
-{ pkgs ? null, ... }: {
+{
+  pkgs ? null,
+  ...
+}:
+{
   plugins = {
     # Project-wide search & replace with live preview, per-result opt-out.
     grug-far = {
@@ -12,47 +16,92 @@
     persistence = {
       enable = true;
       settings = {
-        options = [ "buffers" "curdir" "tabpages" "winsize" "help" "globals" "skiprtp" ];
+        options = [
+          "buffers"
+          "curdir"
+          "tabpages"
+          "winsize"
+          "help"
+          "globals"
+          "skiprtp"
+        ];
       };
     };
   };
 
   # flash.nvim and themery.nvim aren't exposed as nixvim module wrappers,
   # so we install them as raw plugins and configure them in Lua.
-  extraPlugins = if pkgs == null then [ ] else
-    [ pkgs.vimPlugins.flash-nvim pkgs.vimPlugins.themery-nvim ];
+  extraPlugins =
+    if pkgs == null then
+      [ ]
+    else
+      [
+        pkgs.vimPlugins.flash-nvim
+        pkgs.vimPlugins.themery-nvim
+      ];
 
   keymaps = [
     # flash.nvim motions
     {
-      mode = [ "n" "x" "o" ];
+      mode = [
+        "n"
+        "x"
+        "o"
+      ];
       key = "s";
-      action = { __raw = "function() require('flash').jump() end"; };
-      options = { desc = "Flash jump"; };
+      action = {
+        __raw = "function() require('flash').jump() end";
+      };
+      options = {
+        desc = "Flash jump";
+      };
     }
     {
-      mode = [ "n" "x" "o" ];
+      mode = [
+        "n"
+        "x"
+        "o"
+      ];
       key = "S";
-      action = { __raw = "function() require('flash').treesitter() end"; };
-      options = { desc = "Flash treesitter"; };
+      action = {
+        __raw = "function() require('flash').treesitter() end";
+      };
+      options = {
+        desc = "Flash treesitter";
+      };
     }
     {
       mode = "o";
       key = "r";
-      action = { __raw = "function() require('flash').remote() end"; };
-      options = { desc = "Flash remote operation"; };
+      action = {
+        __raw = "function() require('flash').remote() end";
+      };
+      options = {
+        desc = "Flash remote operation";
+      };
     }
     {
-      mode = [ "o" "x" ];
+      mode = [
+        "o"
+        "x"
+      ];
       key = "R";
-      action = { __raw = "function() require('flash').treesitter_search() end"; };
-      options = { desc = "Flash treesitter search"; };
+      action = {
+        __raw = "function() require('flash').treesitter_search() end";
+      };
+      options = {
+        desc = "Flash treesitter search";
+      };
     }
     {
       mode = "c";
       key = "<C-s>";
-      action = { __raw = "function() require('flash').toggle() end"; };
-      options = { desc = "Toggle Flash search"; };
+      action = {
+        __raw = "function() require('flash').toggle() end";
+      };
+      options = {
+        desc = "Toggle Flash search";
+      };
     }
 
     # grug-far: project-wide search/replace
@@ -60,41 +109,61 @@
       mode = "n";
       key = "<leader>R";
       action = "<cmd>GrugFar<cr>";
-      options = { desc = "Search & replace (grug-far)"; };
+      options = {
+        desc = "Search & replace (grug-far)";
+      };
     }
     {
       mode = "v";
       key = "<leader>R";
       action = "<esc><cmd>GrugFar<cr>";
-      options = { desc = "Search & replace (grug-far)"; };
+      options = {
+        desc = "Search & replace (grug-far)";
+      };
     }
 
     # Undo history (snacks.picker — floating picker with diff preview)
     {
       mode = "n";
       key = "<leader>u";
-      action = { __raw = "function() Snacks.picker.undo() end"; };
-      options = { desc = "Undo history"; };
+      action = {
+        __raw = "function() Snacks.picker.undo() end";
+      };
+      options = {
+        desc = "Undo history";
+      };
     }
 
     # persistence: session restore
     {
       mode = "n";
       key = "<leader>qs";
-      action = { __raw = "function() require('persistence').load() end"; };
-      options = { desc = "Restore session for cwd"; };
+      action = {
+        __raw = "function() require('persistence').load() end";
+      };
+      options = {
+        desc = "Restore session for cwd";
+      };
     }
     {
       mode = "n";
       key = "<leader>ql";
-      action = { __raw = "function() require('persistence').load({ last = true }) end"; };
-      options = { desc = "Restore last session"; };
+      action = {
+        __raw = "function() require('persistence').load({ last = true }) end";
+      };
+      options = {
+        desc = "Restore last session";
+      };
     }
     {
       mode = "n";
       key = "<leader>qd";
-      action = { __raw = "function() require('persistence').stop() end"; };
-      options = { desc = "Don't save current session"; };
+      action = {
+        __raw = "function() require('persistence').stop() end";
+      };
+      options = {
+        desc = "Don't save current session";
+      };
     }
   ];
 

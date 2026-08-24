@@ -169,11 +169,14 @@
         };
       };
 
-      kotlin_lsp = {
-        enable = true;
+      kotlin_lsp = rec {
+        # Our derivation repacks JetBrains' x86_64-linux VSIX; other systems
+        # get no kotlin-lsp rather than a broken build.
+        enable = pkgs.stdenv.hostPlatform.system == "x86_64-linux";
         # Our own derivation — nixpkgs has no kotlin-lsp package. Newer
         # JetBrains releases bundle their own JRE.
-        package = pkgs.callPackage ../../packages/kotlin-lsp.nix { };
+        package =
+          if enable then pkgs.callPackage ../../packages/kotlin-lsp.nix { } else null;
         cmd = [
           "kotlin-lsp"
           "--stdio"

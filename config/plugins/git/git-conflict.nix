@@ -6,7 +6,11 @@
 # conflicted buffers only — we keep those and add `<leader>gc*`
 # globals so the actions surface in which-key. `<leader>gcl` opens the
 # project-wide conflict list through Snacks for the floating picker UX.
-{ ... }: {
+{ ... }:
+let
+  inherit (import ../../lib.nix) nmapSilent;
+in
+{
   plugins.git-conflict = {
     enable = true;
     settings = {
@@ -25,68 +29,24 @@
   };
 
   keymaps = [
-    {
-      mode = "n";
-      key = "<leader>gco";
-      action = "<cmd>GitConflictChooseOurs<CR>";
-      options = {
-        desc = "Conflict: choose ours";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>gct";
-      action = "<cmd>GitConflictChooseTheirs<CR>";
-      options = {
-        desc = "Conflict: choose theirs";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>gcb";
-      action = "<cmd>GitConflictChooseBoth<CR>";
-      options = {
-        desc = "Conflict: choose both";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>gcn";
-      action = "<cmd>GitConflictChooseNone<CR>";
-      options = {
-        desc = "Conflict: choose none";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>gcl";
-      action = "<cmd>GitConflictListQf<CR>";
-      options = {
-        desc = "Conflict: list project conflicts (float)";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>gcN";
-      action = "<cmd>GitConflictNextConflict<CR>";
-      options = {
-        desc = "Conflict: next";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>gcp";
-      action = "<cmd>GitConflictPrevConflict<CR>";
-      options = {
-        desc = "Conflict: previous";
-        silent = true;
-      };
-    }
+    (nmapSilent "<leader>gco" "<cmd>GitConflictChooseOurs<CR>"
+      "Conflict: choose ours"
+    )
+    (nmapSilent "<leader>gct" "<cmd>GitConflictChooseTheirs<CR>"
+      "Conflict: choose theirs"
+    )
+    (nmapSilent "<leader>gcb" "<cmd>GitConflictChooseBoth<CR>"
+      "Conflict: choose both"
+    )
+    (nmapSilent "<leader>gcn" "<cmd>GitConflictChooseNone<CR>"
+      "Conflict: choose none"
+    )
+    (nmapSilent "<leader>gcl" "<cmd>GitConflictListQf<CR>"
+      "Conflict: list project conflicts (float)"
+    )
+    (nmapSilent "<leader>gcN" "<cmd>GitConflictNextConflict<CR>" "Conflict: next")
+    (nmapSilent "<leader>gcp" "<cmd>GitConflictPrevConflict<CR>"
+      "Conflict: previous"
+    )
   ];
 }

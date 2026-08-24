@@ -1,4 +1,7 @@
 { ... }:
+let
+  inherit (import ../../lib.nix) nmap luaFn;
+in
 {
   plugins.markdown-preview = {
     enable = true;
@@ -58,23 +61,11 @@
   '';
 
   keymaps = [
-    {
-      mode = "n";
-      key = "<leader>mp";
-      action = "<cmd>MarkdownPreviewToggle<CR>";
-      options = {
-        desc = "Toggle markdown preview (browser)";
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>mr";
-      action = {
-        __raw = "function() require('render-markdown').toggle() end";
-      };
-      options = {
-        desc = "Toggle render-markdown (in-editor)";
-      };
-    }
+    (nmap "<leader>mp" "<cmd>MarkdownPreviewToggle<CR>"
+      "Toggle markdown preview (browser)"
+    )
+    (nmap "<leader>mr" (luaFn "require('render-markdown').toggle()")
+      "Toggle render-markdown (in-editor)"
+    )
   ];
 }

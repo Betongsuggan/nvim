@@ -4,7 +4,11 @@
 # the merge tool. It is architecturally locked to a tabpage and cannot
 # be wrapped in a floating window — closing the tab (or running
 # `:DiffviewClose`) returns to the previous layout intact.
-{ ... }: {
+{ ... }:
+let
+  inherit (import ../../lib.nix) nmapSilent;
+in
+{
   plugins.diffview = {
     enable = true;
     settings = {
@@ -44,15 +48,9 @@
   };
 
   keymaps = [
-    {
-      mode = "n";
-      key = "<leader>gD";
-      action = "<cmd>DiffviewOpen<CR>";
-      options = {
-        desc = "Diffview: working tree vs HEAD";
-        silent = true;
-      };
-    }
+    (nmapSilent "<leader>gD" "<cmd>DiffviewOpen<CR>"
+      "Diffview: working tree vs HEAD"
+    )
     {
       mode = "n";
       key = "<leader>gR";
@@ -70,32 +68,14 @@
         silent = true;
       };
     }
-    {
-      mode = "n";
-      key = "<leader>gH";
-      action = "<cmd>DiffviewFileHistory %<CR>";
-      options = {
-        desc = "Diffview: history of current file";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>gL";
-      action = "<cmd>DiffviewFileHistory<CR>";
-      options = {
-        desc = "Diffview: history of branch";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>gq";
-      action = "<cmd>DiffviewClose<CR>";
-      options = {
-        desc = "Diffview: close current view";
-        silent = true;
-      };
-    }
+    (nmapSilent "<leader>gH" "<cmd>DiffviewFileHistory %<CR>"
+      "Diffview: history of current file"
+    )
+    (nmapSilent "<leader>gL" "<cmd>DiffviewFileHistory<CR>"
+      "Diffview: history of branch"
+    )
+    (nmapSilent "<leader>gq" "<cmd>DiffviewClose<CR>"
+      "Diffview: close current view"
+    )
   ];
 }

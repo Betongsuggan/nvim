@@ -1,5 +1,8 @@
 # Ergonomic plugins: flash, grug-far, themery, persistence.
 { pkgs, ... }:
+let
+  inherit (import ../../lib.nix) nmap luaFn;
+in
 {
   plugins = {
     # flash.nvim: treesitter-aware motions
@@ -112,14 +115,7 @@
     }
 
     # grug-far: project-wide search/replace
-    {
-      mode = "n";
-      key = "<leader>R";
-      action = "<cmd>GrugFar<cr>";
-      options = {
-        desc = "Search & replace (grug-far)";
-      };
-    }
+    (nmap "<leader>R" "<cmd>GrugFar<cr>" "Search & replace (grug-far)")
     {
       mode = "v";
       key = "<leader>R";
@@ -130,48 +126,18 @@
     }
 
     # Undo history (snacks.picker — floating picker with diff preview)
-    {
-      mode = "n";
-      key = "<leader>u";
-      action = {
-        __raw = "function() Snacks.picker.undo() end";
-      };
-      options = {
-        desc = "Undo history";
-      };
-    }
+    (nmap "<leader>u" (luaFn "Snacks.picker.undo()") "Undo history")
 
     # persistence: session restore
-    {
-      mode = "n";
-      key = "<leader>qs";
-      action = {
-        __raw = "function() require('persistence').load() end";
-      };
-      options = {
-        desc = "Restore session for cwd";
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>ql";
-      action = {
-        __raw = "function() require('persistence').load({ last = true }) end";
-      };
-      options = {
-        desc = "Restore last session";
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>qd";
-      action = {
-        __raw = "function() require('persistence').stop() end";
-      };
-      options = {
-        desc = "Don't save current session";
-      };
-    }
+    (nmap "<leader>qs" (luaFn "require('persistence').load()")
+      "Restore session for cwd"
+    )
+    (nmap "<leader>ql" (luaFn "require('persistence').load({ last = true })")
+      "Restore last session"
+    )
+    (nmap "<leader>qd" (luaFn "require('persistence').stop()")
+      "Don't save current session"
+    )
   ];
 
   extraConfigLua = ''

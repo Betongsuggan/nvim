@@ -2,29 +2,16 @@
 # lua/config/floating_diff.lua (shipped via extraFiles in default.nix and
 # require'd lazily on keypress).
 { ... }:
+let
+  inherit (import ../../lib.nix) nmapLua;
+in
 {
   keymaps = [
-    {
-      mode = "n";
-      key = "<leader>gd";
-      action = {
-        __raw = "function() require('config.floating_diff').diff('HEAD') end";
-      };
-      options = {
-        desc = "Diff current file vs HEAD (float)";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>gr";
-      action = {
-        __raw = "function() require('config.floating_diff').prompt() end";
-      };
-      options = {
-        desc = "Diff current file vs <ref> (float)";
-        silent = true;
-      };
-    }
+    (nmapLua "<leader>gd" "require('config.floating_diff').diff('HEAD')"
+      "Diff current file vs HEAD (float)"
+    )
+    (nmapLua "<leader>gr" "require('config.floating_diff').prompt()"
+      "Diff current file vs <ref> (float)"
+    )
   ];
 }

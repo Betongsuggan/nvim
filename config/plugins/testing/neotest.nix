@@ -1,5 +1,8 @@
 # Neotest + DAP. Replaces the prior custom test runner.
 { ... }:
+let
+  inherit (import ../../lib.nix) nmapLua;
+in
 {
   plugins = {
     neotest = {
@@ -308,129 +311,34 @@
   };
 
   keymaps = [
-    {
-      mode = "n";
-      key = "<leader>tt";
-      action = {
-        __raw = "function() require('neotest').run.run() end";
-      };
-      options = {
-        desc = "Run nearest test";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>tf";
-      action = {
-        __raw = "function() require('neotest').run.run(vim.fn.expand('%')) end";
-      };
-      options = {
-        desc = "Run tests in current file";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>ta";
-      action = {
-        __raw = "function() require('neotest').run.run(vim.fn.getcwd()) end";
-      };
-      options = {
-        desc = "Run all tests in cwd";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>tl";
-      action = {
-        __raw = "function() require('neotest').run.run_last() end";
-      };
-      options = {
-        desc = "Run last test";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>ti";
-      action = {
-        __raw = "function() require('neotest').summary.toggle() end";
-      };
-      options = {
-        desc = "Test summary panel";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>to";
-      action = {
-        __raw = "function() require('neotest').output.open({ enter = true, auto_close = true }) end";
-      };
-      options = {
-        desc = "Open test output (last)";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>tr";
-      action = {
-        __raw = "function() require('neotest').output_panel.toggle() end";
-      };
-      options = {
-        desc = "Toggle raw output panel";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>ts";
-      action = {
-        __raw = "function() require('neotest').run.stop() end";
-      };
-      options = {
-        desc = "Stop running test";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>td";
-      action = {
-        __raw = "function() require('neotest').run.run({ strategy = 'dap' }) end";
-      };
-      options = {
-        desc = "Debug nearest test (DAP)";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>tw";
-      action = {
-        __raw = "function() require('neotest').watch.toggle(vim.fn.expand('%')) end";
-      };
-      options = {
-        desc = "Watch tests in current file";
-        silent = true;
-      };
-    }
+    (nmapLua "<leader>tt" "require('neotest').run.run()" "Run nearest test")
+    (nmapLua "<leader>tf" "require('neotest').run.run(vim.fn.expand('%'))"
+      "Run tests in current file"
+    )
+    (nmapLua "<leader>ta" "require('neotest').run.run(vim.fn.getcwd())"
+      "Run all tests in cwd"
+    )
+    (nmapLua "<leader>tl" "require('neotest').run.run_last()" "Run last test")
+    (nmapLua "<leader>ti" "require('neotest').summary.toggle()"
+      "Test summary panel"
+    )
+    (nmapLua "<leader>to"
+      "require('neotest').output.open({ enter = true, auto_close = true })"
+      "Open test output (last)"
+    )
+    (nmapLua "<leader>tr" "require('neotest').output_panel.toggle()"
+      "Toggle raw output panel"
+    )
+    (nmapLua "<leader>ts" "require('neotest').run.stop()" "Stop running test")
+    (nmapLua "<leader>td" "require('neotest').run.run({ strategy = 'dap' })"
+      "Debug nearest test (DAP)"
+    )
+    (nmapLua "<leader>tw" "require('neotest').watch.toggle(vim.fn.expand('%'))"
+      "Watch tests in current file"
+    )
     # --- Debug (<leader>d*) ----------------------------------------------
     # Breakpoints
-    {
-      mode = "n";
-      key = "<leader>db";
-      action = {
-        __raw = "function() require('dap').toggle_breakpoint() end";
-      };
-      options = {
-        desc = "Toggle breakpoint";
-        silent = true;
-      };
-    }
+    (nmapLua "<leader>db" "require('dap').toggle_breakpoint()" "Toggle breakpoint")
     {
       mode = "n";
       key = "<leader>dB";
@@ -449,139 +357,35 @@
       };
     }
     # Control flow
-    {
-      mode = "n";
-      key = "<leader>dc";
-      action = {
-        __raw = "function() require('dap').continue() end";
-      };
-      options = {
-        desc = "Continue";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>dn";
-      action = {
-        __raw = "function() require('dap').step_over() end";
-      };
-      options = {
-        desc = "Step over";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>di";
-      action = {
-        __raw = "function() require('dap').step_into() end";
-      };
-      options = {
-        desc = "Step into";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>do";
-      action = {
-        __raw = "function() require('dap').step_out() end";
-      };
-      options = {
-        desc = "Step out";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>dC";
-      action = {
-        __raw = "function() require('dap').run_to_cursor() end";
-      };
-      options = {
-        desc = "Run to cursor";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>dq";
-      action = {
-        __raw = "function() require('dap').terminate() end";
-      };
-      options = {
-        desc = "Terminate session";
-        silent = true;
-      };
-    }
+    (nmapLua "<leader>dc" "require('dap').continue()" "Continue")
+    (nmapLua "<leader>dn" "require('dap').step_over()" "Step over")
+    (nmapLua "<leader>di" "require('dap').step_into()" "Step into")
+    (nmapLua "<leader>do" "require('dap').step_out()" "Step out")
+    (nmapLua "<leader>dC" "require('dap').run_to_cursor()" "Run to cursor")
+    (nmapLua "<leader>dq" "require('dap').terminate()" "Terminate session")
     # Inspection (on-demand centered floats)
-    {
-      mode = "n";
-      key = "<leader>dv";
-      action = {
-        __raw = "function() require('dapui').float_element('scopes', { enter = true }) end";
-      };
-      options = {
-        desc = "Variables (scopes)";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>dw";
-      action = {
-        __raw = "function() require('dapui').float_element('watches', { enter = true }) end";
-      };
-      options = {
-        desc = "Watches";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>ds";
-      action = {
-        __raw = "function() require('dapui').float_element('stacks', { enter = true }) end";
-      };
-      options = {
-        desc = "Call stack";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>dl";
-      action = {
-        __raw = "function() require('dapui').float_element('breakpoints', { enter = true }) end";
-      };
-      options = {
-        desc = "Breakpoints list";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>dr";
-      action = {
-        __raw = "function() require('dapui').float_element('repl', { enter = true }) end";
-      };
-      options = {
-        desc = "REPL";
-        silent = true;
-      };
-    }
-    {
-      mode = "n";
-      key = "<leader>dh";
-      action = {
-        __raw = "function() require('dapui').eval(nil, { enter = true }) end";
-      };
-      options = {
-        desc = "Hover / inspect under cursor";
-        silent = true;
-      };
-    }
+    (nmapLua "<leader>dv"
+      "require('dapui').float_element('scopes', { enter = true })"
+      "Variables (scopes)"
+    )
+    (nmapLua "<leader>dw"
+      "require('dapui').float_element('watches', { enter = true })"
+      "Watches"
+    )
+    (nmapLua "<leader>ds"
+      "require('dapui').float_element('stacks', { enter = true })"
+      "Call stack"
+    )
+    (nmapLua "<leader>dl"
+      "require('dapui').float_element('breakpoints', { enter = true })"
+      "Breakpoints list"
+    )
+    (nmapLua "<leader>dr" "require('dapui').float_element('repl', { enter = true })"
+      "REPL"
+    )
+    (nmapLua "<leader>dh" "require('dapui').eval(nil, { enter = true })"
+      "Hover / inspect under cursor"
+    )
     {
       mode = "n";
       key = "<leader>de";

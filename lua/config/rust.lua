@@ -13,7 +13,7 @@ function M.setup_dap()
   -- LLDB adapter for Rust
   dap.adapters.lldb = {
     type = "executable",
-    command = "lldb-vscode", -- or 'lldb-dap' depending on your LLDB version
+    command = "lldb-dap", -- binary name in nixpkgs lldb (lldb-vscode was renamed upstream)
     name = "lldb",
   }
 

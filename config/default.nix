@@ -32,7 +32,8 @@ in
 
   # Additional packages needed by plugins
   extraPackages = with pkgs; [
-    ripgrep # Required by telescope live_grep
+    ripgrep # Required by Snacks.picker.grep
+    unzip # Required by the kotlin-lsp jar:// reader (lua/config/init.lua)
     # Nerd Fonts for proper icon display
     nerd-fonts.fira-code
     nerd-fonts.jetbrains-mono
@@ -44,6 +45,8 @@ in
     # Formatters
     stylua # Lua formatter
     nixfmt # Nix formatter
+    golines # Go line-length formatter (conform)
+    gofumpt # Go formatter, golines base formatter (conform)
     prettierd # TypeScript/JavaScript formatter
     eslint_d # TypeScript/JavaScript linter
     # Rust tooling

@@ -225,7 +225,6 @@
     {
       mode = [
         "n"
-        "i"
         "t"
       ];
       key = "<C-h>";
@@ -237,7 +236,6 @@
     {
       mode = [
         "n"
-        "i"
         "t"
       ];
       key = "<C-j>";
@@ -249,7 +247,6 @@
     {
       mode = [
         "n"
-        "i"
         "t"
       ];
       key = "<C-k>";
@@ -261,7 +258,6 @@
     {
       mode = [
         "n"
-        "i"
         "t"
       ];
       key = "<C-l>";
@@ -768,7 +764,7 @@
     }
     {
       mode = "n";
-      key = "<leader>gR";
+      key = "<leader>gX";
       action = "<cmd>GitRefresh<CR>";
       options = {
         desc = "Refresh git state (gitsigns/conflicts/diffview)";

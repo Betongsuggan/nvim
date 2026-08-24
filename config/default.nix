@@ -38,6 +38,8 @@ in
     nerd-fonts.fira-code
     nerd-fonts.jetbrains-mono
     nerd-fonts.hack
+    # Go tooling
+    go # Required by neotest-golang test runs
     # Debugging tools
     delve # Go debugger
     nodejs_22 # Node.js runtime for TypeScript/JavaScript debugging
@@ -74,11 +76,6 @@ in
     dracula-nvim
     kanagawa-nvim
     rose-pine
-
-    # Testing and debugging plugins
-    neotest-golang
-    neotest-plenary
-    neotest-jest
 
     # Rust plugins
     rustaceanvim

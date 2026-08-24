@@ -1,8 +1,5 @@
 # Phase 5 ergonomic plugins: flash, grug-far, undotree, themery, persistence.
-{
-  pkgs ? null,
-  ...
-}:
+{ pkgs, ... }:
 {
   plugins = {
     # Project-wide search & replace with live preview, per-result opt-out.
@@ -31,14 +28,10 @@
 
   # flash.nvim and themery.nvim aren't exposed as nixvim module wrappers,
   # so we install them as raw plugins and configure them in Lua.
-  extraPlugins =
-    if pkgs == null then
-      [ ]
-    else
-      [
-        pkgs.vimPlugins.flash-nvim
-        pkgs.vimPlugins.themery-nvim
-      ];
+  extraPlugins = [
+    pkgs.vimPlugins.flash-nvim
+    pkgs.vimPlugins.themery-nvim
+  ];
 
   keymaps = [
     # flash.nvim motions

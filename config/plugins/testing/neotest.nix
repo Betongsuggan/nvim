@@ -1,5 +1,15 @@
 # Neotest + DAP. Replaces the prior custom test runner.
-{ ... }: {
+{ pkgs, ... }:
+{
+  # Adapters aren't nixvim-wrapped options yet at this call site; the Lua
+  # setup below wires them up.
+  extraPlugins = with pkgs.vimPlugins; [
+    neotest-golang
+    neotest-jest
+    neotest-gradle
+    neotest-plenary
+  ];
+
   plugins = {
     neotest = {
       enable = true;

@@ -89,13 +89,4 @@ function M.build_project()
   })
 end
 
-function M.setup()
-  _G.keymap_close_other_buffers = M.close_other_buffers
-  _G.keymap_run_tests = M.run_tests
-  _G.keymap_run_project = M.run_project
-  _G.keymap_build_project = M.build_project
-  _G.keymap_toggle_inlay_hints = M.toggle_inlay_hints
-  _G.keymap_show_diagnostic = M.show_diagnostic
-end
-
 return M

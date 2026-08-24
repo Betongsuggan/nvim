@@ -75,8 +75,5 @@ in
   extraConfigLua = ''
     -- Core config (LSP handlers, diagnostics, folds, file-change autocmds).
     require('config').setup()
-
-    -- Keymap helper functions (close_other_buffers, project run/build/test).
-    require('config.keymaps').setup()
   '';
 }

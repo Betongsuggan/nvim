@@ -57,7 +57,7 @@ in
     (nmap "<leader>bR" "<cmd>edit!<CR>" "Reload: discard buffer, take disk version")
     (nmap "<leader>bW" "<cmd>write!<CR>" "Force write: overwrite disk with buffer")
     (nmap "<leader>bf" "<cmd>diffsplit %<CR>" "Diff buffer vs. disk version")
-    (nmap "<leader>bo" (luaFn "_G.keymap_close_other_buffers()")
+    (nmap "<leader>bo" (luaFn "require('config.keymaps').close_other_buffers()")
       "Close all other buffers"
     )
     (nmap "[b" "<cmd>bprevious<CR>" "Previous buffer")
@@ -176,7 +176,7 @@ in
     (nmap "<leader>lH" "<cmd>checkhealth vim.lsp<CR>" "LSP: health check")
 
     # Code Actions
-    (nmap "<leader>ch" (luaFn "_G.keymap_toggle_inlay_hints()")
+    (nmap "<leader>ch" (luaFn "require('config.keymaps').toggle_inlay_hints()")
       "Toggle inlay hints"
     )
     (nmap "<leader>cr" (luaFn "vim.lsp.buf.rename()") "Rename symbol (LSP)")
@@ -226,7 +226,9 @@ in
       (luaFn "vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.WARN, float = true })")
       "Next warning"
     )
-    (nmap "<leader>xe" (luaFn "_G.keymap_show_diagnostic()") "Show diagnostic")
+    (nmap "<leader>xe" (luaFn "require('config.keymaps').show_diagnostic()")
+      "Show diagnostic"
+    )
     (nmap "<leader>xa" (luaFn "Snacks.picker.diagnostics()") "All diagnostics")
     (nmap "<leader>xf" (luaFn "Snacks.picker.diagnostics_buffer()")
       "File diagnostics"
@@ -250,9 +252,13 @@ in
     )
 
     # Project commands
-    (nmap "<leader>pt" (luaFn "_G.keymap_run_tests()") "Run tests")
-    (nmap "<leader>pr" (luaFn "_G.keymap_run_project()") "Run project")
-    (nmap "<leader>pb" (luaFn "_G.keymap_build_project()") "Build project")
+    (nmap "<leader>pt" (luaFn "require('config.keymaps').run_tests()") "Run tests")
+    (nmap "<leader>pr" (luaFn "require('config.keymaps').run_project()")
+      "Run project"
+    )
+    (nmap "<leader>pb" (luaFn "require('config.keymaps').build_project()")
+      "Build project"
+    )
 
     # Theme switching
     (nmap "<leader>Th" "<cmd>Themery<cr>" "Theme picker")

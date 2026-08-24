@@ -26,5 +26,6 @@
     ./plugins/testing/neotest.nix
 
     ./plugins/tools/markdown.nix
+    ./plugins/tools/claudecode.nix
   ];
 }

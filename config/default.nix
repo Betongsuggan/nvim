@@ -1,4 +1,4 @@
-{ pkgs, claudecode-nvim, ... }:
+{ pkgs, ... }:
 let
   theme = import ./theme.nix;
   kotlin-lsp = pkgs.callPackage ./packages/kotlin-lsp.nix { };
@@ -80,12 +80,6 @@ in
     # Rust plugins
     rustaceanvim
     crates-nvim
-
-    # Claude Code integration
-    (pkgs.vimUtils.buildVimPlugin {
-      name = "claudecode-nvim";
-      src = claudecode-nvim;
-    })
   ];
 
   # Initialize all Lua modules
@@ -98,41 +92,5 @@ in
 
     -- Rust-specific config (rustaceanvim + crates.nvim).
     require('config.rust').setup()
-
-    -- Setup claudecode.nvim
-    require('claudecode').setup({
-      terminal_cmd = nil,
-      auto_start = true,
-      log_level = "info",
-
-      terminal = {
-        provider = "snacks",
-        auto_close = false,
-        snacks_win_opts = {
-          position = "float",
-          width = 0.9,
-          height = 0.9,
-          border = "rounded",
-          wo = {
-            -- Non-zero scrolloff desyncs the drawn cursor row from the
-            -- terminal grid row until a resize forces a re-render
-            scrolloff = 0,
-            sidescrolloff = 0,
-          },
-        },
-      },
-
-      diff_opts = {
-        auto_close_on_accept = true,
-        auto_close_on_reject = true,
-        vertical_split = false,
-        close_other_windows = false,
-        focus_diff_window = true,
-        diff_window_size = 0.8,
-        on_new_file_reject = "close_window",
-        preview_context = 5,
-        wrap_lines = false
-      }
-    })
   '';
 }

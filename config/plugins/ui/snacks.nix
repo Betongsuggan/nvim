@@ -2,6 +2,9 @@
 # telescope, neo-tree, toggleterm, and a pile of custom Lua. `terminal` and
 # `win` were already on for claudecode.nvim; everything else is now real.
 { ... }:
+let
+  shared = import ../../lib.nix;
+in
 {
   plugins.snacks = {
     enable = true;
@@ -52,16 +55,7 @@
       words.enabled = true;
       terminal = {
         enabled = true;
-        win = {
-          position = "float";
-          width = 0.9;
-          height = 0.9;
-          border = "rounded";
-          wo = {
-            scrolloff = 0;
-            sidescrolloff = 0;
-          };
-        };
+        win = shared.floatTerminalWin;
       };
       win.enabled = true;
     };

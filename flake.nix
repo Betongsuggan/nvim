@@ -13,10 +13,6 @@
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    claudecode-nvim = {
-      url = "github:coder/claudecode.nvim";
-      flake = false;
-    };
   };
 
   outputs =
@@ -25,7 +21,6 @@
       nixpkgs,
       nixvim,
       treefmt-nix,
-      claudecode-nvim,
       ...
     }:
     let
@@ -64,9 +59,6 @@
         nixvim.legacyPackages.${system}.makeNixvimWithModule {
           pkgs = pkgsFor system;
           module = ./config;
-          extraSpecialArgs = {
-            inherit claudecode-nvim;
-          };
         };
     in
     {

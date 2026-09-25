@@ -13,6 +13,29 @@ in
   viAlias = true;
   vimAlias = true;
 
+  # Startup speed: Neovim's module loader caches resolved Lua modules, and
+  # everything (init.lua, plugins, runtime, lua libs) ships as bytecode.
+  luaLoader.enable = true;
+  performance = {
+    byteCompileLua = {
+      enable = true;
+      plugins = true;
+      nvimRuntime = true;
+      luaLib = true;
+    };
+    # One runtimepath entry for all plugins instead of one per plugin. The
+    # standalone ones ship files that collide with another plugin's.
+    combinePlugins = {
+      enable = true;
+      standalonePlugins = [
+        "snacks.nvim" # queries/markdown/injections.scm (treesitter queries)
+        "blink.cmp" # doc/recipes.md (conform)
+        "nord.nvim" # lua/lualine/themes/nord.lua (lualine)
+        "onedark.nvim" # lua/lualine/themes/onedark.lua (lualine)
+      ];
+    };
+  };
+
   # No remote-plugin hosts: no plugin here is written against them, and each
   # adds its interpreter to the closure
   withPython3 = false;

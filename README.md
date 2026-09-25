@@ -7,7 +7,7 @@ about 35 ms.
 ## Usage
 
 ```sh
-nix run .            # core: Nix, Lua, Markdown, bash/JSON/YAML/TOML
+nix run .            # core: Lua, Markdown, highlighting for Nix/bash/JSON/YAML/TOML
 nix run .#full       # every language
 nix develop          # devShell: the editor + flake tooling (nixd, statix, deadnix, stylua)
 nix fmt              # treefmt: nixfmt (width 80) + stylua + deadnix
@@ -29,6 +29,7 @@ inputs.nvim.packages.${system}.default.extend {
     typescript.enable = true;  # vtsls, neotest-jest
     kotlin.enable = true;      # kotlin-lsp, ktfmt, neotest-gradle (x86_64)
     lua.enable = true;         # lua_ls (Lua is always formatted/highlighted)
+    nix.enable = true;         # nixd, nixfmt
     nix.server = "nixd";       # or "nil" (~600 MiB smaller, no evaluation)
     nix.nixd.options.nixos = ''(builtins.getFlake "/path/to/flake").nixosConfigurations.host.options'';
   };

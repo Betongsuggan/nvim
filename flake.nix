@@ -58,7 +58,8 @@
       # nixvim configuration (programs.nixvim.imports, makeNixvimWithModule)
       nixvimModules.default = ./config;
 
-      # Core (Nix, Lua, Markdown, data formats). Other languages:
+      # Core (the editor; Lua and Markdown; highlighting of Nix and data
+      # formats). Languages:
       #   packages.<system>.default.extend { languages.go.enable = true; }
       packages = forAllSystems (system: rec {
         default = nvim;
@@ -68,6 +69,7 @@
           languages =
             lib.genAttrs
               [
+                "nix"
                 "go"
                 "rust"
                 "typescript"

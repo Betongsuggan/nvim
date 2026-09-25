@@ -1,7 +1,7 @@
 # Every language in one registry: its language server, formatter, grammars,
 # test adapter, debugger and tools, enabled by `languages.<name>.enable`
-# (options.nix). Nix, Lua (formatting), Markdown and the data formats are
-# always on. The generic modules (plugins/) hold only language-independent
+# (options.nix). Lua formatting, Markdown and highlighting of Nix and the
+# data formats are always on. The generic modules (plugins/) hold only language-independent
 # behavior; language servers are all defined here, except rust-analyzer,
 # which rustaceanvim runs (languages/rust.nix).
 {
@@ -39,9 +39,8 @@ let
 
   registry = {
     nix = {
-      enable = true;
+      inherit (cfg.nix) enable;
       config = {
-        plugins.treesitter.grammarPackages = [ grammars.nix ];
         plugins.conform-nvim.settings = {
           formatters_by_ft.nix = [ "nixfmt" ];
           formatters.nixfmt.prepend_args = [
@@ -105,10 +104,11 @@ let
       };
     };
 
-    # Syntax only
+    # Syntax only (Nix too, so .nix files are highlighted without nixd)
     data = {
       enable = true;
       config.plugins.treesitter.grammarPackages = with grammars; [
+        nix
         bash
         json
         yaml

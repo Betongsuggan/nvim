@@ -9,10 +9,10 @@ let
 in
 {
   options = {
-    # Nix, Lua, Markdown and the data formats are always supported; the
-    # others add a language with its toolchain integration (languages.nix)
+    # Highlighting for every language here, Lua formatting and Markdown are
+    # always on; each language adds its toolchain integration (languages.nix)
     languages = {
-      nix = {
+      nix = language "Nix" // {
         server = mkOption {
           type = types.enum [
             "nixd"

@@ -1,50 +1,34 @@
-{ ... }: {
-  # Basic editor options
-  opts = {
-    # Line numbers and UI
-    number = true;
-    relativenumber = true;
-    signcolumn = "yes";
-    cursorline = true;
-    colorcolumn = "120";
-
-    # Indentation and formatting
-    tabstop = 2;
-    shiftwidth = 2;
-    expandtab = true;
-    autoindent = true;
-    smartindent = true;
-
-    # Search
-    ignorecase = true;
-    smartcase = true;
-    hlsearch = true;
-    incsearch = true;
-
-    # Editor behavior
-    wrap = false;
-    scrolloff = 8;
-    sidescrolloff = 8;
-    mouse = "a";
-    clipboard = "unnamedplus";
-
-    # File handling
-    backup = false;
-    writebackup = false;
-    swapfile = false;
-    undofile = true;
-    autoread = true;
-
-    # Performance
-    updatetime = 1000;
-    timeoutlen = 300;
+# The flake's own options: what a consumer chooses with
+#   inputs.nvim.packages.${system}.default.extend { languages.go.enable = true; }
+{ lib, ... }:
+let
+  inherit (lib) mkEnableOption mkOption types;
+  language = name: {
+    enable = mkEnableOption "${name} support (language server, formatter, tests, debugging)";
   };
+in
+{
+  options = {
+    # Nix, Lua, Markdown and the data formats are always supported; these add
+    # a language with its whole toolchain integration (see languages.nix)
+    languages = {
+      go = language "Go";
+      rust = language "Rust";
+      typescript = language "TypeScript/JavaScript";
+      kotlin = language "Kotlin";
+    };
 
-  # Global variables
-  globals = {
-    mapleader = " ";
-    maplocalleader = " ";
+    theme.base16 = mkOption {
+      type = types.nullOr (types.attrsOf types.str);
+      default = null;
+      example = {
+        base00 = "#1e1e2e";
+        base0D = "#89b4fa";
+      };
+      description = ''
+        A base16 palette (base00 … base0F, "#rrggbb") to color the editor with,
+        e.g. the desktop's stylix colors. null uses catppuccin mocha.
+      '';
+    };
   };
-
-  # LSP UI, diagnostics, and other config is in lua/config/init.lua
 }

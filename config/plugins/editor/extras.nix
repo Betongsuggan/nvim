@@ -1,5 +1,5 @@
-# Ergonomic plugins: flash, grug-far, themery, persistence.
-{ pkgs, ... }:
+# Ergonomic plugins: flash, grug-far, persistence.
+{ ... }:
 let
   inherit (import ../../lib.nix) nmap luaFn;
 in
@@ -45,10 +45,6 @@ in
       };
     };
   };
-
-  # themery.nvim has no nixvim module wrapper, so it stays a raw plugin
-  # configured in Lua below.
-  extraPlugins = [ pkgs.vimPlugins.themery-nvim ];
 
   keymaps = [
     # flash.nvim motions
@@ -141,22 +137,6 @@ in
   ];
 
   extraConfigLua = ''
-    -- themery.nvim: theme switcher with live preview + persistence
-    require('themery').setup({
-      themes = {
-        "catppuccin",
-        "gruvbox",
-        "tokyonight",
-        "nord",
-        "onedark",
-        "nightfox",
-        "dracula",
-        "kanagawa",
-        "rose-pine",
-      },
-      livePreview = true,
-    })
-
     -- Auto-restore the per-cwd session on bare nvim startup (no file args).
     local persistence_grp = vim.api.nvim_create_augroup("PersistenceAutoload", { clear = true })
     vim.api.nvim_create_autocmd("VimEnter", {

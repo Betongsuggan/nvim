@@ -1,27 +1,22 @@
-# Default colorscheme (build-time). Runtime theme switching is themery
-# (config/plugins/editor/extras.nix); the other colorschemes it offers are
-# raw plugins in config/default.nix.
+# Colors: a base16 palette when one is given (theme.base16, e.g. the
+# desktop's stylix scheme), otherwise catppuccin mocha. mini.base16 covers the
+# highlight groups of the plugins used here (snacks, blink, which-key,
+# gitsigns, neotest, dap, mini.icons); catppuccin detects them itself.
+{ config, lib, ... }:
 let
-  # Colorscheme plugin configurations (NixVim settings)
-  colorschemes = {
-    catppuccin = {
-      enable = true;
-      settings = {
-        flavour = "mocha";
-        transparent_background = false;
-      };
-    };
-  };
-
-  # Default theme selection
-  # Available themes (runtime switchable via themery): catppuccin, gruvbox,
-  # tokyonight, nord, onedark, nightfox, dracula, kanagawa, rose-pine
-  defaultTheme = "catppuccin";
+  palette = config.theme.base16;
 in
 {
-  # Theme name (used by colorschemes.${name} in default.nix)
-  name = defaultTheme;
+  colorschemes.mini-base16 = lib.mkIf (palette != null) {
+    enable = true;
+    settings = { inherit palette; };
+  };
 
-  # NixVim colorscheme configuration
-  colorscheme = colorschemes.${defaultTheme};
+  colorschemes.catppuccin = lib.mkIf (palette == null) {
+    enable = true;
+    settings = {
+      flavour = "mocha";
+      auto_integrations = true;
+    };
+  };
 }

@@ -1,4 +1,4 @@
-# Treesitter syntax highlighting configuration
+# Treesitter: highlighting, indentation and folding
 { config, ... }:
 {
   plugins.treesitter = {
@@ -35,13 +35,8 @@
       git_rebase
       diff
     ];
-    settings = {
-      highlight = {
-        enable = true;
-      };
-      indent = {
-        enable = true;
-      };
-    };
+    highlight.enable = true;
+    indent.enable = true;
+    folding.enable = true;
   };
 }

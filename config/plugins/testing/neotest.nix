@@ -1,5 +1,5 @@
 # Neotest + DAP. Replaces the prior custom test runner.
-{ pkgs, ... }:
+{ pkgs, icons, ... }:
 let
   inherit (import ../../lib.nix) nmapLua;
   gradleInitScript = pkgs.writeText "neotest-gradle-init.gradle" ''
@@ -274,23 +274,23 @@ in
       enable = true;
       signs = {
         dapBreakpoint = {
-          text = "*";
+          text = icons.dap.breakpoint;
           texthl = "DapBreakpoint";
         };
         dapBreakpointCondition = {
-          text = "o";
+          text = icons.dap.condition;
           texthl = "DapBreakpoint";
         };
         dapBreakpointRejected = {
-          text = "x";
+          text = icons.dap.rejected;
           texthl = "DapBreakpoint";
         };
         dapLogPoint = {
-          text = "@";
+          text = icons.dap.log;
           texthl = "DapLogPoint";
         };
         dapStopped = {
-          text = ">";
+          text = icons.dap.stopped;
           texthl = "DapStopped";
           linehl = "DapStoppedLine";
         };

@@ -260,9 +260,6 @@ in
       "Build project"
     )
 
-    # Theme switching
-    (nmap "<leader>Th" "<cmd>Themery<cr>" "Theme picker")
-
     # Claude Code keymaps
     (nmap "<C-a>" "<cmd>ClaudeCode<cr>" "Toggle Claude")
     (nmap "<C-b>" "<cmd>ClaudeCodeAdd %<cr>" "Add current buffer")

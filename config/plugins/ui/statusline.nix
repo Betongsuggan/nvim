@@ -1,19 +1,20 @@
 # Lualine status bar configuration
-{ ... }: {
+{ icons, ... }:
+{
   plugins.lualine = {
     enable = true;
     settings = {
       options = {
-        # "auto" tracks whatever :colorscheme is active, so it follows
-        # themery's switches automatically without needing a hardcoded name.
+        # Derived from the active colorscheme's highlight groups
         theme = "auto";
+        # Rounded caps on the outer sections only
         component_separators = {
           left = "";
           right = "";
         };
         section_separators = {
-          left = "";
-          right = "";
+          left = icons.separators.right;
+          right = icons.separators.left;
         };
         globalstatus = true;
         # lualine redraws on editor events; its queue is drained every
@@ -45,7 +46,7 @@
           {
             __unkeyed-1 = "mode";
             separator = {
-              left = "";
+              left = icons.separators.left;
             };
             right_padding = 2;
           }
@@ -64,7 +65,7 @@
         lualine_c = [
           {
             __unkeyed-1 = "branch";
-            icon = "";
+            icon = icons.git.branch;
           }
           {
             __unkeyed-1 = "diff";
@@ -96,16 +97,10 @@
         lualine_x = [
           {
             __unkeyed-1 = "diagnostics";
-            sources = [
-              "nvim_diagnostic"
-              "nvim_lsp"
-            ];
-            symbols = {
-              error = "E ";
-              warn = "W ";
-              info = "I ";
-              hint = "H ";
-            };
+            # One source: lualine adds the sources up, and nvim_lsp's are
+            # the same diagnostics again
+            sources = [ "nvim_diagnostic" ];
+            symbols = builtins.mapAttrs (_: glyph: "${glyph} ") icons.diagnostics;
           }
           {
             __unkeyed-1 = "encoding";
@@ -128,7 +123,7 @@
           {
             __unkeyed-1 = "location";
             separator = {
-              right = "";
+              right = icons.separators.right;
             };
             left_padding = 2;
           }

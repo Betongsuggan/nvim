@@ -7,12 +7,19 @@ Nix flake for my Neovim setup, built on [nixvim](https://github.com/nix-communit
 ```sh
 nix run .            # launch directly
 nix build .#nvim     # build; binary at ./result/bin/nvim
-nix develop          # devShell: the editor + Go/TS toolchains + flake tooling
+nix develop          # devShell: the editor + flake tooling (nixd, statix, deadnix, stylua)
 nix fmt              # treefmt: nixfmt (width 80) + stylua + deadnix
 nix flake check      # build + headless startup smoke test + formatting
 ```
 
 With [direnv](https://direnv.net/), `direnv allow` loads the devShell automatically (`.envrc`).
+
+The package bundles language servers, formatters and debuggers, but no
+compilers or build tools: `go`, `cargo`/`clippy`/`rustfmt`, `node` and so on
+come from the project's own devShell (or `PATH`), so the editor always uses
+the project's toolchain. nixpkgs tracks a NixOS release (`nixos-26.05`, with
+nixvim's matching branch) so a NixOS flake on that release can make this
+input follow its nixpkgs.
 
 ## Layout
 
@@ -60,6 +67,9 @@ extraPackages).
 ```sh
 nix flake update && nix flake check
 ```
+
+On a new NixOS release, move `nixpkgs` and `nixvim` to the new
+`nixos-YY.MM` branches together.
 
 The smoke check executes the full generated `init.lua`, which catches most
 plugin breakage from bumps before it reaches an interactive session.

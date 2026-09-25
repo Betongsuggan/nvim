@@ -1,7 +1,20 @@
 # Neotest + DAP. Replaces the prior custom test runner.
-{ ... }:
+{ pkgs, ... }:
 let
   inherit (import ../../lib.nix) nmapLua;
+  gradleInitScript = pkgs.writeText "neotest-gradle-init.gradle" ''
+    allprojects {
+      tasks.withType(Test).configureEach {
+        testLogging {
+          events 'failed'
+          showExceptions = true
+          showCauses = true
+          showStackTraces = true
+          exceptionFormat = 'full'
+        }
+      }
+    }
+  '';
 in
 {
   plugins = {
@@ -104,29 +117,10 @@ in
           local find_project_directory = require("neotest-gradle.hooks.find_project_directory")
           local orig_build_spec = gradle_adapter.build_spec
 
-          -- One-shot init script: turn on FULL exception formatting so the
-          -- captured Gradle stdout (what <leader>to opens) contains the actual
-          -- assertion diff + stack trace, not just the exception type.
-          local init_script = vim.fn.stdpath("cache") .. "/neotest-gradle-init.gradle"
-          do
-            local f = io.open(init_script, "w")
-            if f then
-              f:write([[
-        allprojects {
-          tasks.withType(Test).configureEach {
-            testLogging {
-              events 'failed'
-              showExceptions = true
-              showCauses = true
-              showStackTraces = true
-              exceptionFormat = 'full'
-            }
-          }
-        }
-        ]])
-              f:close()
-            end
-          end
+          -- Init script turning on FULL exception formatting, so the captured
+          -- Gradle stdout (what <leader>to opens) contains the actual assertion
+          -- diff + stack trace, not just the exception type.
+          local init_script = "${gradleInitScript}"
 
           gradle_adapter.build_spec = function(args)
             local spec = orig_build_spec(args)

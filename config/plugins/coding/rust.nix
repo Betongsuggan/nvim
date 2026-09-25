@@ -275,13 +275,8 @@
                 };
               };
             };
-            # Rustfmt
-            rustfmt = {
-              extraArgs = [ "+nightly" ];
-              rangeFormatting = {
-                enable = true;
-              };
-            };
+            # Whole-file rustfmt only: range formatting needs a nightly
+            # rustfmt (`+nightly` is rustup syntax and fails with Nix's)
             # Files to watch
             files = {
               excludeDirs = [

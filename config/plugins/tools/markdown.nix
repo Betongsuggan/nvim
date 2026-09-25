@@ -50,14 +50,12 @@ in
     };
   };
 
-  extraConfigLua = ''
-    -- markdown-preview: Open in new Firefox window
-    vim.cmd([[
-      function! OpenMarkdownPreview(url)
-        execute "silent !firefox --new-window " . a:url . " &"
-      endfunction
-      let g:mkdp_browserfunc = 'OpenMarkdownPreview'
-    ]])
+  # Preview in the desktop's default browser
+  plugins.markdown-preview.settings.browserfunc = "OpenMarkdownPreview";
+  extraConfigVim = ''
+    function! OpenMarkdownPreview(url)
+      call jobstart(['xdg-open', a:url], {'detach': v:true})
+    endfunction
   '';
 
   keymaps = [

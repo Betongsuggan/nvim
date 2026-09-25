@@ -1,9 +1,8 @@
 # Debugging: nvim-dap with dap-view (panels, inline values, controls).
-# Adapters and launch configurations come with each language.
-{ icons, ... }:
+# The languages with a debugger enable it (languages.nix).
+{ config, icons, ... }:
 {
   plugins.dap = {
-    enable = true;
     signs = {
       dapBreakpoint = {
         text = icons.dap.breakpoint;
@@ -36,7 +35,7 @@
   # Panels for scopes, watches, breakpoints, threads and the REPL, opened
   # and closed with the debug session; variable values inline in the code
   plugins.dap-view = {
-    enable = true;
+    inherit (config.plugins.dap) enable;
     settings = {
       auto_toggle = true;
       virtual_text.enabled = true;
@@ -46,7 +45,4 @@
       };
     };
   };
-
-  # Go: delve through dap-go (also the strategy neotest-golang debugs with)
-  plugins.dap-go.enable = true;
 }

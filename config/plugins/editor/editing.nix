@@ -16,41 +16,11 @@
         cmd = "ConformInfo";
       };
       settings = {
-        formatters_by_ft = {
-          lua = [ "stylua" ];
-          nix = [ "nixfmt" ];
-          # golines runs gofumpt itself (--base-formatter)
-          go = [ "golines" ];
-          kotlin = [ "ktfmt" ];
-          # Formatted by their language server (lsp_format fallback)
-          rust = [ ];
-          typescript = [ ];
-          typescriptreact = [ ];
-          javascript = [ ];
-          javascriptreact = [ ];
-          # Trailing spaces are line breaks in markdown
-          markdown = [ ];
-          # Everything without a formatter of its own
-          "_" = [ "trim_whitespace" ];
-        };
+        # Formatters per filetype: languages.nix. Everything without one
+        # (and no language server formatting it) just loses trailing space.
+        formatters_by_ft."_" = [ "trim_whitespace" ];
         default_format_opts.lsp_format = "fallback";
         format_on_save.timeout_ms = 2000;
-        formatters = {
-          stylua.prepend_args = [
-            "--indent-type"
-            "Spaces"
-            "--indent-width"
-            "2"
-          ];
-          nixfmt.prepend_args = [
-            "--width"
-            "80"
-          ];
-          golines.prepend_args = [
-            "--max-len=120"
-            "--base-formatter=gofumpt"
-          ];
-        };
       };
     };
   };

@@ -9,9 +9,32 @@ let
 in
 {
   options = {
-    # Nix, Lua, Markdown and the data formats are always supported; these add
-    # a language with its whole toolchain integration (see languages.nix)
+    # Nix, Lua, Markdown and the data formats are always supported; the
+    # others add a language with its toolchain integration (languages.nix)
     languages = {
+      nix = {
+        server = mkOption {
+          type = types.enum [
+            "nixd"
+            "nil"
+          ];
+          default = "nixd";
+          description = ''
+            nixd evaluates Nix (nixpkgs and option completion, ~700 MiB with
+            LLVM); nil only analyses the file (~80 MiB).
+          '';
+        };
+        nixd.options = mkOption {
+          type = types.attrsOf types.str;
+          default = { };
+          example = {
+            nixos = ''(builtins.getFlake "/home/me/nix-home").nixosConfigurations.laptop.options'';
+          };
+          description = "Nix expressions of option sets nixd completes and documents, by name";
+        };
+      };
+      # Lua is always formatted and highlighted; this adds its language server
+      lua = language "the Lua language server";
       go = language "Go";
       rust = language "Rust";
       typescript = language "TypeScript/JavaScript";

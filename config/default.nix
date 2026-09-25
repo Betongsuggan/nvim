@@ -6,7 +6,7 @@
     ./theme.nix
     ./plugins.nix
     ./keymaps.nix
-    ./languages/kotlin.nix
+    ./languages.nix
   ];
 
   # Shared with every module as arguments
@@ -25,9 +25,11 @@
   withPerl = false;
   withNodeJs = false;
 
-  # gopls runs `go` from PATH like the other toolchains, rather than having
-  # nixvim bundle a Go
+  # gopls runs `go`, and gitsigns/diffview run `git`, from PATH like the
+  # other toolchains, rather than nixvim bundling them (git alone brings
+  # python and perl, ~250 MiB)
   dependencies.go.enable = false;
+  dependencies.git.enable = false;
 
   # Startup speed: Neovim's module loader caches resolved Lua modules, and
   # everything (init.lua, plugins, runtime, lua libs) ships as bytecode.
@@ -50,26 +52,11 @@
     };
   };
 
-  # Language servers, formatters and debuggers the config calls. Compilers
-  # and build tools (go, cargo/clippy, node, gcc, ...) are not bundled: they
-  # come from the project's devShell (direnv) or the user's PATH, so the
-  # editor uses the same toolchain as the project.
-  extraPackages = with pkgs; [
-    ripgrep # Required by Snacks.picker.grep
-    unzip # Required by the kotlin-lsp jar:// reader (languages/kotlin.nix)
-    # Debuggers
-    delve # Go
-    lldb # Rust and C/C++ (lldb-dap)
-    # Formatters
-    stylua # Lua formatter
-    nixfmt # Nix formatter
-    golines # Go line-length formatter (conform)
-    gofumpt # Go formatter, golines base formatter (conform)
-    # Rust language server (rustaceanvim); rustfmt and clippy belong to the
-    # project's toolchain (rustfmt links against rustc, ~1 GB)
-    rust-analyzer
-    # Kotlin formatter (Google), on the regular JDK instead of its own
-    # headless one: the same JDK development environments already install
-    (ktfmt.override { jre_headless = jdk; })
+  # Tools the editor itself calls; each language adds its own servers,
+  # formatters and debuggers (languages.nix). Compilers and build tools are
+  # never bundled: they come from the project's devShell (direnv) or PATH,
+  # so the editor uses the project's toolchain.
+  extraPackages = [
+    pkgs.ripgrep # Snacks.picker.grep
   ];
 }

@@ -29,6 +29,7 @@
         "aarch64-linux"
       ];
 
+      inherit (nixpkgs) lib;
       pkgsFor = system: nixpkgs.legacyPackages.${system};
 
       treefmtFor =
@@ -53,9 +54,30 @@
         };
     in
     {
+      # The configuration as a nixvim module, to import into another
+      # nixvim configuration (programs.nixvim.imports, makeNixvimWithModule)
+      nixvimModules.default = ./config;
+
+      # Core (Nix, Lua, Markdown, data formats). Other languages:
+      #   packages.<system>.default.extend { languages.go.enable = true; }
       packages = forAllSystems (system: rec {
         default = nvim;
         nvim = nvimFor system;
+        # Every language, e.g. to try things out with `nix run .#full`
+        full = nvim.extend {
+          languages =
+            lib.genAttrs
+              [
+                "go"
+                "rust"
+                "typescript"
+                "kotlin"
+                "lua"
+              ]
+              (_: {
+                enable = true;
+              });
+        };
       });
 
       formatter = forAllSystems (
@@ -66,24 +88,41 @@
         system:
         let
           pkgs = pkgsFor system;
-          nvim = self.packages.${system}.default;
+          # Starts the editor on a file of each kind; any error during
+          # startup (init.lua, plugin setup, a filetype's autocmds) fails it
+          smoke =
+            name: nvim:
+            pkgs.runCommand "nvim-smoke-${name}"
+              {
+                # git: gitsigns and diffview expect it on PATH, as it is
+                # wherever code is edited
+                nativeBuildInputs = [
+                  nvim
+                  pkgs.git
+                ];
+              }
+              ''
+                  export HOME=$TMPDIR
+                  cd $TMPDIR
+                  echo 'x = 1' > a.lua
+                  echo '# t' > a.md
+                  echo '{ }' > a.nix
+                  echo 'fn main() {}' > a.rs
+                  echo 'package main' > a.go
+                  echo 'const x = 1;' > a.ts
+                  # Errors that aren't silenced are printed; silenced ones (e.g.
+                # the runtime's own `silent! unmap` in ftplugins) are not
+                nvim --headless a.lua a.md a.nix a.rs a.go a.ts \
+                  +'bufdo doautocmd FileType' +qa > log 2>&1
+                cat log
+                ! grep -E 'Error|E[0-9]+:' log
+                touch $out
+              '';
         in
         {
           formatting = (treefmtFor pkgs).config.build.check self;
-          # The build itself plus an end-to-end startup: --headless "+q"
-          # executes the entire generated init.lua, catching Lua errors that
-          # evaluation can't.
-          inherit nvim;
-          smoke =
-            pkgs.runCommand "nvim-smoke"
-              {
-                nativeBuildInputs = [ nvim ];
-              }
-              ''
-                export HOME=$TMPDIR
-                nvim --headless "+q"
-                touch $out
-              '';
+          smoke = smoke "core" self.packages.${system}.default;
+          smoke-full = smoke "full" self.packages.${system}.full;
         }
       );
 

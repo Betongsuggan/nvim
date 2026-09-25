@@ -6,7 +6,6 @@
     ./plugins/coding/lsp.nix
     ./plugins/coding/completion.nix
     ./plugins/coding/treesitter.nix
-    ./plugins/coding/rust.nix
 
     ./plugins/editor/editing.nix
     ./plugins/editor/extras.nix
@@ -22,7 +21,6 @@
     ./plugins/testing/neotest.nix
     ./plugins/debugging/dap.nix
 
-    ./plugins/tools/markdown.nix
     ./plugins/tools/claudecode.nix
   ];
 

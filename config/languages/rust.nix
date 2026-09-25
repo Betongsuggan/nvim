@@ -1,7 +1,7 @@
-# Rust: rustaceanvim runs rust-analyzer (and finds lldb-dap for its
-# debuggables); crates.nvim manages Cargo.toml dependencies.
-{ ... }:
-{
+# Rust (languages.rust): rustaceanvim runs rust-analyzer (and finds lldb-dap
+# for its debuggables); crates.nvim manages Cargo.toml dependencies.
+{ config, lib, ... }:
+lib.mkIf config.languages.rust.enable {
   plugins.rustaceanvim = {
     enable = true;
     settings = {

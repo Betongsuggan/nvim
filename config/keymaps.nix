@@ -22,6 +22,8 @@ let
 
   k = key: action: desc: { inherit key action desc; };
   inModes = mode: entry: entry // { inherit mode; };
+  # Maps that only exist when `cond` holds (e.g. their plugin is enabled)
+  onlyIf = cond: map (e: e // { when = cond; });
 
   jump =
     count: severity:
@@ -48,8 +50,6 @@ let
     "<leader>c" = "Code";
     "<leader>x" = "Lists";
     "<leader>g" = "Git";
-    "<leader>t" = "Test";
-    "<leader>d" = "Debug";
     "<leader>a" = "AI (Claude)";
     "<leader>b" = "Buffer";
     "<leader>w" = "Window";
@@ -213,7 +213,9 @@ let
     (k "<leader>gL" (cmd "DiffviewFileHistory") "Branch history")
     (k "<leader>gq" (cmd "DiffviewClose") "Close diffview")
 
-    # Test (neotest)
+  ]
+  # Test (neotest; enabled by languages with a test adapter)
+  ++ onlyIf config.plugins.neotest.enable [
     (k "<leader>tt" (lua "${neotest}.run.run()") "Nearest")
     (k "<leader>tf" (lua "${neotest}.run.run(vim.fn.expand('%'))") "File")
     (k "<leader>ta" (lua "${neotest}.run.run(vim.fn.getcwd())") "All")
@@ -232,7 +234,9 @@ let
     )
     (k "<leader>tp" (lua "${neotest}.output_panel.toggle()") "Output panel")
 
-    # Debug (dap, dap-view)
+  ]
+  # Debug (dap, dap-view; enabled by languages with a debugger)
+  ++ onlyIf config.plugins.dap.enable [
     (k "<leader>db" (lua "require('dap').toggle_breakpoint()") "Toggle breakpoint")
     (k "<leader>dB" (prompt "Breakpoint condition" ""
       "require('dap').set_breakpoint(input)"
@@ -253,6 +257,8 @@ let
       "Inspect under cursor"
     )
 
+  ]
+  ++ [
     # AI (claudecode)
     (k "<leader>aa" (cmd "ClaudeCode") "Toggle Claude")
     (k "<leader>af" (cmd "ClaudeCodeFocus") "Focus Claude")
@@ -458,6 +464,7 @@ let
 
   # --- rendering ---------------------------------------------------------
   modesOf = e: lib.toList (e.mode or "n");
+  activeGlobal = lib.filter (e: e.when or true) global;
   activeLocal = lib.filter (s: s.when) local;
 
   duplicates =
@@ -479,7 +486,7 @@ in
       inherit (e) desc;
       silent = true;
     };
-  }) global;
+  }) activeGlobal;
 
   autoGroups.local_keymaps.clear = true;
   autoCmd = map (s: {
@@ -490,10 +497,16 @@ in
   }) activeLocal;
 
   plugins.which-key.settings.spec =
-    lib.mapAttrsToList (prefix: name: {
-      __unkeyed-1 = prefix;
-      group = name;
-    }) groups
+    lib.mapAttrsToList
+      (prefix: name: {
+        __unkeyed-1 = prefix;
+        group = name;
+      })
+      (
+        groups
+        // lib.optionalAttrs config.plugins.neotest.enable { "<leader>t" = "Test"; }
+        // lib.optionalAttrs config.plugins.dap.enable { "<leader>d" = "Debug"; }
+      )
     ++ map (s: {
       __unkeyed-1 = s.group.prefix;
       group = s.group.name;
@@ -513,9 +526,9 @@ in
         [
           {
             name = "global";
-            maps = global;
+            maps = activeGlobal;
           }
         ]
-        ++ local
+        ++ activeLocal
       );
 }

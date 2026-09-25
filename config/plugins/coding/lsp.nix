@@ -158,9 +158,10 @@
         settings = {
           nixd = {
             nixpkgs = {
-              # Pin to the flake's own nixpkgs; <nixpkgs> needs NIX_PATH,
-              # which this flake-built nvim doesn't have.
-              expr = "import ${pkgs.path} { }";
+              # The flake registry's nixpkgs (the system's, on NixOS with
+              # flakes). Interpolating this flake's pkgs.path instead would
+              # put a whole nixpkgs source tree into the editor's closure.
+              expr = "import (builtins.getFlake \"nixpkgs\") { }";
             };
             formatting = {
               command = [ "nixfmt" ];

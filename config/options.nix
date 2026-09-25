@@ -41,6 +41,19 @@ in
       kotlin = language "Kotlin";
     };
 
+    theme.colorscheme = mkOption {
+      type = types.enum [
+        "catppuccin"
+        "gruvbox"
+        "kanagawa"
+      ];
+      default = "catppuccin";
+      description = ''
+        The colorscheme plugin, with its own hand-tuned highlighting.
+        Ignored when `theme.base16` is set (for themes without a plugin).
+      '';
+    };
+
     theme.base16 = mkOption {
       type = types.nullOr (types.attrsOf types.str);
       default = null;
@@ -49,8 +62,9 @@ in
         base0D = "#89b4fa";
       };
       description = ''
-        A base16 palette (base00 … base0F, "#rrggbb") to color the editor with,
-        e.g. the desktop's stylix colors. null uses catppuccin mocha.
+        A base16 palette (base00 … base0F, "#rrggbb") to color the editor with
+        instead of a colorscheme plugin, e.g. the desktop's stylix colors for a
+        theme with no plugin here. null uses `theme.colorscheme`.
       '';
     };
   };

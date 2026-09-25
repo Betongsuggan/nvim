@@ -1,10 +1,12 @@
-# Colors: a base16 palette when one is given (theme.base16, e.g. the
-# desktop's stylix scheme), otherwise catppuccin mocha. mini.base16 covers the
-# highlight groups of the plugins used here (snacks, blink, which-key,
-# gitsigns, neotest, dap, mini.icons); catppuccin lists them below.
+# Colors: a colorscheme plugin (theme.colorscheme: catppuccin mocha, gruvbox
+# dark, kanagawa wave), or a bare base16 palette (theme.base16) through
+# mini.base16 for themes without one. The plugins style the plugins used here
+# (snacks, blink, which-key, gitsigns, neotest, dap, diffview, mini.icons).
 { config, lib, ... }:
 let
+  inherit (config.theme) colorscheme;
   palette = config.theme.base16;
+  use = name: palette == null && colorscheme == name;
 in
 {
   colorschemes.mini-base16 = lib.mkIf (palette != null) {
@@ -12,7 +14,7 @@ in
     settings = { inherit palette; };
   };
 
-  colorschemes.catppuccin = lib.mkIf (palette == null) {
+  colorschemes.catppuccin = lib.mkIf (use "catppuccin") {
     enable = true;
     settings = {
       flavour = "mocha";
@@ -29,5 +31,15 @@ in
         which_key = true;
       };
     };
+  };
+
+  colorschemes.gruvbox = lib.mkIf (use "gruvbox") {
+    enable = true;
+    settings.contrast = "";
+  };
+
+  colorschemes.kanagawa = lib.mkIf (use "kanagawa") {
+    enable = true;
+    settings.theme = "wave";
   };
 }

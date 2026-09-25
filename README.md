@@ -32,7 +32,8 @@ inputs.nvim.packages.${system}.default.extend {
     nix.server = "nixd";       # or "nil" (~600 MiB smaller, no evaluation)
     nix.nixd.options.nixos = ''(builtins.getFlake "/path/to/flake").nixosConfigurations.host.options'';
   };
-  theme.base16 = { base00 = "#1e1e2e"; /* … base0F */ };  # e.g. stylix colors; default catppuccin
+  theme.colorscheme = "kanagawa";  # catppuccin (default), gruvbox or kanagawa
+  # theme.base16 = { base00 = "#1e1e2e"; /* … base0F */ };  # a palette for themes without a plugin
 }
 ```
 
@@ -50,13 +51,13 @@ release can make this input follow its nixpkgs.
 flake.nix               packages (default = core, full), nixvimModules, checks
 config/
   default.nix           entry: imports, startup performance, editor-wide packages
-  options.nix           the flake's options (languages.*, theme.base16)
+  options.nix           the flake's options (languages.*, theme.*)
   core.nix              editor options, diagnostics, clipboard, autocommands
   keymaps.nix           EVERY keymap (global and buffer-local) + which-key groups
   languages.nix         EVERY language: server, formatter, grammars, tests, debugger
   languages/<lang>.nix  what doesn't fit the registry (rustaceanvim, kotlin jar://)
   icons.nix             every icon the config sets (glyphs as codepoints)
-  theme.nix             base16 palette or catppuccin
+  theme.nix             colorscheme plugin, or a base16 palette
   lib.nix               helpers (lua, cmd, floatTerminalWin), the `utils` arg
   plugins.nix           plugin module imports, lazy loading (lz-n)
   plugins/<area>/*.nix  language-independent plugin setup

@@ -1,46 +1,36 @@
-# snacks.nvim — picker/explorer/terminal/notifier/rename/bufdelete replace
-# telescope, neo-tree, toggleterm, and a pile of custom Lua. `terminal` and
-# `win` were already on for claudecode.nvim; everything else is now real.
-{ ... }:
-let
-  shared = import ../../lib.nix;
-in
+# snacks.nvim: pickers, explorer, terminal, notifications, input, status
+# column, scope highlight, and helpers (bufdelete, rename, toggles, git
+# browse) used by the keymaps.
+{ utils, ... }:
 {
   plugins.snacks = {
     enable = true;
     settings = {
       bigfile.enabled = true;
-      dashboard.enabled = false;
+      quickfile.enabled = true;
+      input.enabled = true;
+      words.enabled = true;
+      toggle.enabled = true;
+      gitbrowse.enabled = true;
+      picker = {
+        enabled = true;
+        ui_select = true;
+      };
+      # Highlight the scope at the cursor, no indent guides or animation
       indent = {
         enabled = true;
-        indent = {
-          enabled = false;
-        }; # no full-height indent guide lines
-        scope = {
-          enabled = true;
-        }; # keep the scope highlight at the cursor
+        indent.enabled = false;
+        animate.enabled = false;
+        scope.enabled = true;
       };
-      input.enabled = true;
-      # notifier and statuscolumn each run a timer for as long as nvim
-      # does (50 ms by default: ~40 idle wake-ups/s together). The notifier's
-      # checks its queue, the statuscolumn's expires its sign cache, so the
-      # only cost of slowing them is a notification or sign change showing up
-      # to 0.5 / 0.25 s later.
+      # The notifier and the status column each run a timer for as long as
+      # nvim does (50 ms by default: ~40 idle wake-ups/s together). Slowing
+      # them only delays a notification or a sign change by up to 0.5 / 0.25 s.
       notifier = {
         enabled = true;
         timeout = 3000;
         refresh = 500;
       };
-      picker = {
-        enabled = true;
-        ui_select = true;
-        layout = {
-          preset = "default";
-        };
-      };
-      quickfile.enabled = true;
-      scope.enabled = false;
-      scroll.enabled = false;
       statuscolumn = {
         enabled = true;
         refresh = 250;
@@ -52,19 +42,12 @@ in
           "fold"
           "git"
         ];
-        git = {
-          patterns = [
-            "GitSign"
-            "MiniDiffSign"
-          ];
-        };
+        git.patterns = [ "GitSign" ];
       };
-      words.enabled = true;
       terminal = {
         enabled = true;
-        win = shared.floatTerminalWin;
+        win = utils.floatTerminalWin;
       };
-      win.enabled = true;
     };
   };
 }

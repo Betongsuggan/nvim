@@ -1,16 +1,15 @@
-# diffview.nvim — full-screen tab-based diff/history browser.
-# This is the "Path A" companion to the custom floating diff in
-# floating-diff.nix: use it for branch comparison, file history, and
-# the merge tool. It is architecturally locked to a tabpage and cannot
-# be wrapped in a floating window — closing the tab (or running
-# `:DiffviewClose`) returns to the previous layout intact.
+# diffview.nvim: tab-based diffs against any ref, file/branch history and
+# the 3-way merge tool for conflicts. Closing its tab returns to the previous
+# layout. Loaded by its commands.
 { ... }:
-let
-  inherit (import ../../lib.nix) nmapSilent;
-in
 {
   plugins.diffview = {
     enable = true;
+    lazyLoad.settings.cmd = [
+      "DiffviewOpen"
+      "DiffviewFileHistory"
+      "DiffviewClose"
+    ];
     settings = {
       enhanced_diff_hl = true;
       use_icons = true;
@@ -46,36 +45,4 @@ in
       };
     };
   };
-
-  keymaps = [
-    (nmapSilent "<leader>gD" "<cmd>DiffviewOpen<CR>"
-      "Diffview: working tree vs HEAD"
-    )
-    {
-      mode = "n";
-      key = "<leader>gR";
-      action.__raw = ''
-        function()
-          vim.ui.input({ prompt = "Diffview against ref: ", default = "HEAD" }, function(rev)
-            if rev and rev ~= "" then
-              vim.cmd("DiffviewOpen " .. rev)
-            end
-          end)
-        end
-      '';
-      options = {
-        desc = "Diffview: working tree vs <ref>";
-        silent = true;
-      };
-    }
-    (nmapSilent "<leader>gH" "<cmd>DiffviewFileHistory %<CR>"
-      "Diffview: history of current file"
-    )
-    (nmapSilent "<leader>gL" "<cmd>DiffviewFileHistory<CR>"
-      "Diffview: history of branch"
-    )
-    (nmapSilent "<leader>gq" "<cmd>DiffviewClose<CR>"
-      "Diffview: close current view"
-    )
-  ];
 }

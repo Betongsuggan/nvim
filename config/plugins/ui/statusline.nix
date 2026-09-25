@@ -1,6 +1,14 @@
 # Lualine status bar configuration
 { icons, ... }:
 {
+  plugins.navic = {
+    enable = true;
+    settings = {
+      lsp.auto_attach = true;
+      highlight = true;
+    };
+  };
+
   plugins.lualine = {
     enable = true;
     settings = {
@@ -75,24 +83,8 @@
               removed = "- ";
             };
           }
-          {
-            __unkeyed-1 = {
-              __raw = ''
-                function()
-                  local aerial_ok, aerial = pcall(require, "aerial")
-                  if aerial_ok then
-                    local symbol = aerial.get_location(true)
-                    if symbol and symbol ~= "" then
-                      return "> " .. symbol
-                    end
-                  end
-                  return ""
-                end
-              '';
-            };
-            # No `cond`: it repeated the lookup, and lualine already hides a
-            # component that returns ""
-          }
+          # Symbol breadcrumb from the language server
+          "navic"
         ];
         lualine_x = [
           {

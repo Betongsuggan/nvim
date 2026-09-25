@@ -1,28 +1,27 @@
 # LSP server configurations
-{ pkgs, ... }:
+{ pkgs, icons, ... }:
 {
-  # Fidget surfaces $/progress notifications from LSP servers in the corner of
-  # the screen — important for the JetBrains kotlin-lsp, which takes ~9 s on a
-  # warm cache (and ~25 s cold) to finish Gradle re-validation and workspace
-  # model load before completion/hover/goto-def respond. Leaves vim.notify
-  # alone so snacks.notifier remains the toast renderer.
-  plugins.fidget = {
-    enable = true;
-    settings = {
-      progress = {
-        display = {
-          done_icon = "";
-          progress_icon = {
-            pattern = "dots";
-            period = 1;
-          };
-        };
-      };
-      notification = {
-        override_vim_notify = false;
-      };
-    };
-  };
+  # LSP progress ($/progress, e.g. kotlin-lsp's ~10 s Gradle import) as one
+  # updating snacks notification with a spinner
+  autoCmd = [
+    {
+      desc = "Show LSP progress";
+      event = "LspProgress";
+      callback.__raw = ''
+        function(ev)
+          local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+          vim.notify(vim.lsp.status(), vim.log.levels.INFO, {
+            id = "lsp_progress",
+            title = "LSP",
+            opts = function(notif)
+              notif.icon = ev.data.params.value.kind == "end" and "${icons.glyph "f00c"} "
+                or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
+            end,
+          })
+        end
+      '';
+    }
+  ];
 
   plugins.lsp = {
     enable = true;

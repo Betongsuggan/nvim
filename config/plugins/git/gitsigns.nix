@@ -25,10 +25,8 @@
       current_line_blame = false;
       sign_priority = 6;
       update_debounce = 300;
-      status_formatter = null;
       max_file_length = 40000;
       preview_config = {
-        border = "rounded";
         style = "minimal";
         relative = "cursor";
         row = 0;

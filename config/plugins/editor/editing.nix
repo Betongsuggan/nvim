@@ -1,79 +1,57 @@
-# Text editing plugins (autopairs, surround, formatting)
-# Note: Native Neovim 0.10+ commenting (gc/gcc) is used instead of comment.nvim
-{ ... }: {
+# Text editing: pairs, surround, formatting. Commenting is Neovim's own gc.
+{ ... }:
+{
   plugins = {
-    nvim-autopairs = {
-      enable = true;
-      settings = {
-        check_ts = true;
-        disable_filetype = [ "TelescopePrompt" ];
-        map_cr = true;
-        map_bs = true;
-        enable_check_bracket_line = false;
-      };
-    };
+    # Bracket and quote pairs (Rust matcher, treesitter-aware)
+    blink-pairs.enable = true;
 
-    nvim-surround = {
-      enable = true;
-      # v4 removed the `keymaps` setup option; defaults (ys/cs/ds/S/...) are auto-mapped.
-      # To customize, use vim.keymap.set with the <Plug>(nvim-surround.*) mappings.
-    };
+    # ys/cs/ds/S with the default mappings
+    nvim-surround.enable = true;
 
+    # Format on save and on <leader>cf, loaded with the first write
     conform-nvim = {
       enable = true;
+      lazyLoad.settings = {
+        event = "BufWritePre";
+        cmd = "ConformInfo";
+      };
       settings = {
         formatters_by_ft = {
           lua = [ "stylua" ];
           nix = [ "nixfmt" ];
-          go = [
-            "golines"
-            "gofumpt"
-          ];
+          # golines runs gofumpt itself (--base-formatter)
+          go = [ "golines" ];
           kotlin = [ "ktfmt" ];
+          # Formatted by their language server (lsp_format fallback)
+          rust = [ ];
+          typescript = [ ];
+          typescriptreact = [ ];
+          javascript = [ ];
+          javascriptreact = [ ];
+          # Trailing spaces are line breaks in markdown
+          markdown = [ ];
+          # Everything without a formatter of its own
+          "_" = [ "trim_whitespace" ];
         };
-        format_on_save = {
-          lsp_fallback = true;
-          timeout_ms = 2000;
-        };
+        default_format_opts.lsp_format = "fallback";
+        format_on_save.timeout_ms = 2000;
         formatters = {
-          stylua = {
-            prepend_args = [
-              "--indent-type"
-              "Spaces"
-              "--indent-width"
-              "2"
-            ];
-          };
-          nixfmt = {
-            prepend_args = [
-              "--width"
-              "80"
-            ];
-          };
-          golines = {
-            prepend_args = [
-              "--max-len=120"
-              "--base-formatter=gofumpt"
-            ];
-          };
+          stylua.prepend_args = [
+            "--indent-type"
+            "Spaces"
+            "--indent-width"
+            "2"
+          ];
+          nixfmt.prepend_args = [
+            "--width"
+            "80"
+          ];
+          golines.prepend_args = [
+            "--max-len=120"
+            "--base-formatter=gofumpt"
+          ];
         };
       };
     };
   };
-
-  autoCmd = [
-    {
-      event = [ "BufWritePre" ];
-      pattern = [ "*" ];
-      callback = {
-        __raw = ''
-          function()
-            local save = vim.fn.winsaveview()
-            vim.cmd([[%s/\s\+$//e]])
-            vim.fn.winrestview(save)
-          end
-        '';
-      };
-    }
-  ];
 }

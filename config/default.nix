@@ -12,14 +12,7 @@
   # Shared with every module as arguments
   _module.args = {
     icons = import ./icons.nix;
-    helpers = import ./lib.nix;
-  };
-
-  # Helpers still called by keymaps.nix (folded into it with the keymap
-  # registry)
-  extraFiles = {
-    "lua/config/keymaps.lua".source = ../lua/config/keymaps.lua;
-    "lua/config/floating_diff.lua".source = ../lua/config/floating_diff.lua;
+    utils = import ./lib.nix;
   };
 
   viAlias = true;

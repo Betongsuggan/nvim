@@ -4,71 +4,8 @@
     blink-cmp = {
       enable = true;
       settings = {
-        keymap = {
-          preset = "default";
-          "<C-n>" = [
-            "select_next"
-            "fallback"
-          ];
-          "<C-p>" = [
-            "select_prev"
-            "fallback"
-          ];
-          "<C-j>" = [
-            "select_next"
-            "fallback"
-          ];
-          "<C-k>" = [
-            "select_prev"
-            "fallback"
-          ];
-          "<Down>" = [
-            "select_next"
-            "fallback"
-          ];
-          "<Up>" = [
-            "select_prev"
-            "fallback"
-          ];
-          "<C-d>" = [
-            "scroll_documentation_down"
-            "fallback"
-          ];
-          "<C-u>" = [
-            "scroll_documentation_up"
-            "fallback"
-          ];
-          "<C-y>" = [
-            "select_and_accept"
-            "fallback"
-          ];
-          "<C-e>" = [
-            "cancel"
-            "fallback"
-          ];
-          "<C-Space>" = [
-            "show"
-            "show_documentation"
-            "hide_documentation"
-          ];
-          "<CR>" = [
-            "accept"
-            "fallback"
-          ];
-          "<Tab>" = [
-            "snippet_forward"
-            "select_next"
-            "fallback"
-          ];
-          "<S-Tab>" = [
-            "snippet_backward"
-            "select_prev"
-            "fallback"
-          ];
-        };
-
+        # Keys: keymaps.nix
         appearance = {
-          use_nvim_cmp_as_default = true;
           nerd_font_variant = "mono";
         };
 
@@ -87,7 +24,6 @@
             };
           };
           menu = {
-            border = "rounded";
             draw = {
               treesitter = [ "lsp" ];
               columns = [
@@ -115,7 +51,6 @@
         signature = {
           enabled = true;
           window = {
-            border = "rounded";
           };
         };
 

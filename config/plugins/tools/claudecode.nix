@@ -1,11 +1,10 @@
 # claudecode.nvim — Claude Code integration (IDE server + diff review).
-{ ... }:
-let
-  shared = import ../../lib.nix;
-in
+{ utils, ... }:
 {
   plugins.claudecode = {
     enable = true;
+    # Its IDE server starts once the UI is up, not during startup
+    lazyLoad.settings.event = "DeferredUIEnter";
     settings = {
       # The IDE server Claude Code connects to; its only timer is a 30 s ping
       auto_start = true;
@@ -14,7 +13,7 @@ in
       terminal = {
         provider = "snacks";
         auto_close = false;
-        snacks_win_opts = shared.floatTerminalWin;
+        snacks_win_opts = utils.floatTerminalWin;
       };
 
       diff_opts = {

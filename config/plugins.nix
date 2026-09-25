@@ -1,5 +1,5 @@
-# Aggregates all plugin modules. Each file is a regular nixvim module;
-# the module system merges plugins/keymaps/autoCmd/extraConfigLua/etc.
+# Every plugin module; each is a regular nixvim module and the module system
+# merges them. Keymaps for all of them are in keymaps.nix.
 { ... }:
 {
   imports = [
@@ -9,7 +9,6 @@
     ./plugins/coding/rust.nix
 
     ./plugins/editor/editing.nix
-    ./plugins/editor/navigation.nix
     ./plugins/editor/extras.nix
 
     ./plugins/ui/statusline.nix
@@ -19,14 +18,16 @@
 
     ./plugins/git/gitsigns.nix
     ./plugins/git/diffview.nix
-    ./plugins/git/floating-diff.nix
-    ./plugins/git/git-conflict.nix
-
-    ./plugins/diagnostics/trouble.nix
 
     ./plugins/testing/neotest.nix
+    ./plugins/debugging/dap.nix
 
     ./plugins/tools/markdown.nix
     ./plugins/tools/claudecode.nix
   ];
+
+  # Lazy loading: plugins with lazyLoad.settings load on their trigger, and a
+  # require() of a not-yet-loaded plugin (e.g. from a keymap) loads it
+  plugins.lz-n.enable = true;
+  plugins.lzn-auto-require.enable = true;
 }

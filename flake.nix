@@ -29,16 +29,7 @@
         "aarch64-linux"
       ];
 
-      pkgsFor =
-        system:
-        import nixpkgs {
-          inherit system;
-          # git-conflict.nvim is marked unfree in nixpkgs (license metadata
-          # quirk, not a real restriction). Allow it specifically rather
-          # than opening the gate to all unfree packages.
-          config.allowUnfreePredicate =
-            pkg: builtins.elem (nixpkgs.lib.getName pkg) [ "git-conflict.nvim" ];
-        };
+      pkgsFor = system: nixpkgs.legacyPackages.${system};
 
       treefmtFor =
         pkgs:

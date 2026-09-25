@@ -16,10 +16,28 @@
           right = "";
         };
         globalstatus = true;
+        # lualine redraws on editor events; its queue is drained every
+        # refresh_time ms, for as long as nvim runs (default 16 ms, ~60
+        # wake-ups/s per instance even when idle). 100 ms still feels
+        # instant. The periodic statusline redraw only catches state that
+        # changes without an event, so it can be slow. No tabline/winbar.
         refresh = {
-          statusline = 1000;
-          tabline = 1000;
-          winbar = 1000;
+          refresh_time = 100;
+          statusline = 5000;
+          events = [
+            "WinEnter"
+            "BufEnter"
+            "BufWritePost"
+            "SessionLoadPost"
+            "FileChangedShellPost"
+            "VimResized"
+            "Filetype"
+            "CursorMoved"
+            "CursorMovedI"
+            "ModeChanged"
+            "DiagnosticChanged"
+            "LspProgress"
+          ];
         };
       };
       sections = {
@@ -71,14 +89,8 @@
                 end
               '';
             };
-            cond = {
-              __raw = ''
-                function()
-                  local aerial_ok, aerial = pcall(require, "aerial")
-                  return aerial_ok and aerial.get_location(true) ~= ""
-                end
-              '';
-            };
+            # No `cond`: it repeated the lookup, and lualine already hides a
+            # component that returns ""
           }
         ];
         lualine_x = [
